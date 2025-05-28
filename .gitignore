@@ -1,0 +1,14 @@
+# Archivos y carpetas de IntelliJ IDEA
+.idea/
+*.iml
+out/
+# Archivos compilados de Java
+*.class
+# Archivos temporales
+*.log
+*.tmp
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+# Otros archivos que no se deberían subir
+*.swp
