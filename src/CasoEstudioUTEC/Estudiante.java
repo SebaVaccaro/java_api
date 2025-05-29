@@ -3,7 +3,7 @@ package CasoEstudioUTEC;
 public class Estudiante extends Usuario{
 
     private String historialAcademico;
-    //private List<ArchivoAdjunto> informesMedicos;
+    private List<ArchivoAdjunto> informesMedicos;
     private String observaciones;
     private Estado estado;
 
@@ -33,4 +33,46 @@ public class Estudiante extends Usuario{
         this.estado = estado;
         
     }
+
+    public String getHistorialAcademico() {
+        return historialAcademico;
+    }
+
+    public void setHistorialAcademico(String historialAcademico) {
+        this.historialAcademico = historialAcademico;
+    }
+
+    public List<ArchivoAdjunto> getInformesMedicos() {
+        return informesMedicos;
+    }
+
+    public void setInformesMedicos(List<ArchivoAdjunto> informesMedicos) {
+        this.informesMedicos = informesMedicos;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
+    @Override
+    public toString() {
+        return "Estudiante{" +
+                "historialAcademico='" + historialAcademico + '\'' +
+                ", observaciones='" + observaciones + '\'' +
+                ", estado=" + estado +
+                '}';
+    }
+
 }
