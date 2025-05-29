@@ -1,6 +1,9 @@
 package CasoEstudioUTEC;
 import java.time.LocalDateTime;
 
+import java.util.List;
+
+
 public class InstanciaApoyo {
     private String id;
     private String tipo;
@@ -29,7 +32,7 @@ public class InstanciaApoyo {
 
 
     public String getTipo() {
-        return this.tipo:
+        return this.tipo;
     }
 
     public void setTipo(String tipo) {
@@ -85,4 +88,3 @@ public class InstanciaApoyo {
     }
 }
 
-}

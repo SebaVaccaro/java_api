@@ -1,5 +1,9 @@
 package CasoEstudioUTEC;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.ArrayList;
+
 public class Usuario{
 
         private String id;
@@ -131,8 +135,8 @@ public class Usuario{
     public String toString() {
         return "Usuario: " +
                 "id= '" + id + '\'' +
-                ", nombres= '" + nombres + '\'' +
-                ", apellidos= '" + apellidos + '\'' +
+                ", nombres= '" + nombre + '\'' +
+                ", apellidos= '" + apellido + '\'' +
                 ", correo= '" + correo + '\'';
     }
 

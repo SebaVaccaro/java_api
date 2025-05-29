@@ -1,5 +1,8 @@
 package CasoEstudioUTEC;
 
+import java.util.List;
+
+
 public class Estudiante extends Usuario{
 
     private String historialAcademico;
@@ -67,7 +70,7 @@ public class Estudiante extends Usuario{
     }
 
     @Override
-    public toString() {
+    public String toString() {
         return "Estudiante{" +
                 "historialAcademico='" + historialAcademico + '\'' +
                 ", observaciones='" + observaciones + '\'' +
