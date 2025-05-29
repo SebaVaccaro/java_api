@@ -1,0 +1,54 @@
+package CasoEstudioUTEC;
+
+import java.time.LocalDateTime;
+
+class Notificacion {
+    private String id;
+    private Usuario destinatario;
+    private String asunto;
+    private String mensaje;
+    private LocalDateTime fechaEnvio;
+
+    public Notificacion(String id,
+                        Usuario destinatario,
+                        String asunto,
+                        String mensaje,
+                        LocalDateTime fechaEnvio) {
+        this.id = id;
+        this.destinatario = destinatario;
+        this.asunto = asunto;
+        this.mensaje = mensaje;
+        this.fechaEnvio = fechaEnvio;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Usuario getDestinatario() {
+        return destinatario;
+    }
+
+    public String getAsunto() {
+        return asunto;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public LocalDateTime getFechaEnvio() {
+        return fechaEnvio;
+    }
+
+    @Override
+    public String toString() {
+        return "Notificacion: " +
+                "id= '" + id + '\'' +
+                ", destinatario= " + destinatario +
+                ", asunto= '" + asunto + '\'' +
+                ", mensaje= '" + mensaje + '\'' +
+                ", fechaEnvio= " + fechaEnvio;
+    }
+
+}
