@@ -32,10 +32,10 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 | Nombre completo     | Usuario GitLab       | Aporte principal           	       |
 |-----------------------------|--------------------------|-----------------------------------------------|
 | Ignacio Arévalo     	| @ignacio.arevalo   | Clase Usuario, Clase Estudiantes |
-| Estefany Moreira    	| @estefany.moreira | Clase , ArchivoAdjunto 	       |
-| Paulo Vaccaro   	| @paulo.vaccaro     | 10anios 			       |
-| Cleris Mill    		| @cleris.mill             | Clase , ArchivoAdjunto                  |
-| Wilmar Hellbusch     | @wilmar.hellbusch  | Clase , ArchivoAdjunto,                 |
+| Estefany Moreira    	| @estefany.moreira | Clase Rol, Clase Notificacion	       |
+| Paulo Vaccaro   	| @paulo.vaccaro     | Clase InformeFinal		       |
+| Cleris Mill    		| @cleris.mill             | Clase InstanciaApoyo                 |
+| Wilmar Hellbusch     | @wilmar.hellbusch  | Clase Seguimiento, Clase ArchivoAdjunto                |
 
 
 > La participación puede verificarse en el historial de commits del repositorio.
