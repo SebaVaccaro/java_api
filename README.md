@@ -59,7 +59,10 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 - `Rol.java`  
 - `ArchivoAdjunto.java`  
 - `InformeFinal.java`  
+- `Notificacion.java`  
+- `Seguimiento.java`
+- `InstanciaApoyo.java`  
 - `EstadoEstudiante.java` (enum)  
-- `EstadoSeguimiento.java` (enum)
+- `EstadoSeguimiento.java` (enum) 
 
 ---
