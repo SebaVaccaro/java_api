@@ -8,6 +8,7 @@ class Notificacion {
     private String asunto;
     private String mensaje;
     private LocalDateTime fechaEnvio;
+    private boolean estadoActivo = true;
 
     public Notificacion(String id,
                         Usuario destinatario,
@@ -39,6 +40,14 @@ class Notificacion {
 
     public LocalDateTime getFechaEnvio() {
         return fechaEnvio;
+    }
+
+    public boolean isEstadoActivo() {
+        return estadoActivo;
+    }
+
+    public void setEstadoActivo(boolean estadoActivo) {
+        this.estadoActivo = estadoActivo;
     }
 
     @Override
