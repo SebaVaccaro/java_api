@@ -15,6 +15,7 @@ public class Usuario{
         private String telefono;
         private String direccion;
         private Rol rol;
+        private boolean estadoActivo = true;
 
         public enum Rol {
             ADMINISTRADOR,
@@ -127,8 +128,16 @@ public class Usuario{
         }
 
         public void setRol(Rol rol) {
-            this.rol = rol; }
+            this.rol = rol;
+        }
 
+        public boolean isEstadoActivo() {
+            return estadoActivo;
+        }
+
+        public void setEstadoActivo(boolean estadoActivo) {
+            this.estadoActivo = estadoActivo;
+        }
 
     // metodo toString del segundo constructor
     @Override

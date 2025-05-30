@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Estudiante extends Usuario{
 
-    private String historialAcademico;
-    private List<ArchivoAdjunto> informesMedicos;
-    private String observaciones;
+    private List<ArchivoAdjunto> historialAcademico; //Archivos adjuntos sobre el historial académico del estudiante.
+    private List<ArchivoAdjunto> informesMedicos; //Archivos adjuntos que muestran el estado de salud.
     private Estado estado;
+    private List<Observaciones> observaciones;
 
     public enum Estado {
         CREADO,
@@ -26,40 +26,15 @@ public class Estudiante extends Usuario{
                       String telefono,
                       String direccion,
                       Rol rol,
-                      String historialAcademico,
-                      String observaciones,
+                      List<ArchivoAdjunto> historialAcademico,
                       Estado estado) {
 
         super(id, username, passwordHash, nombre, apellido, correo, telefono, direccion, rol);
         this.historialAcademico = historialAcademico;
-        this.observaciones = observaciones;
         this.estado = estado;
         
     }
 
-    public String getHistorialAcademico() {
-        return historialAcademico;
-    }
-
-    public void setHistorialAcademico(String historialAcademico) {
-        this.historialAcademico = historialAcademico;
-    }
-
-    public List<ArchivoAdjunto> getInformesMedicos() {
-        return informesMedicos;
-    }
-
-    public void setInformesMedicos(List<ArchivoAdjunto> informesMedicos) {
-        this.informesMedicos = informesMedicos;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
 
     public Estado getEstado() {
         return estado;
@@ -69,13 +44,42 @@ public class Estudiante extends Usuario{
         this.estado = estado;
     }
 
+    public List<ArchivoAdjunto> getHistorialAcademico() {
+        return historialAcademico;
+    }
+
+    public void addHistorialAcademico(ArchivoAdjunto historialAcademico){
+        this.historialAcademico.add(historialAcademico);
+    }
+
+
+    public List<ArchivoAdjunto> getInformesMedicos() {
+        return informesMedicos;
+    }
+
+
+    public void addInformesMedicos(ArchivoAdjunto informesMedicos){
+        this.informesMedicos.add(informesMedicos);
+    }
+
+
+    public List<Observaciones> getObservaciones() {
+        return observaciones;
+    }
+
+
+    public void addObservaciones(Observaciones observaciones){
+        this.observaciones.add(observaciones);
+    }
+
+
     @Override
     public String toString() {
         return "Estudiante{" +
-                "historialAcademico='" + historialAcademico + '\'' +
-                ", observaciones='" + observaciones + '\'' +
+                "historialAcademico=" + historialAcademico +
+                ", informesMedicos=" + informesMedicos +
                 ", estado=" + estado +
+                ", observaciones=" + observaciones +
                 '}';
     }
-
 }
