@@ -18,14 +18,14 @@ public class ArchivoAdjunto {
         this.id = id;
         this.usuario = usuario;
         this.ruta = ruta;
-        this.tipo = tipoArchivo;
+        this.tipoArchivo = tipoArchivo;
     }
 
     public String getRuta() {
         return this.ruta;
     }
 
-    public String getTipoArchivo() {
+    public TipoArchivo getTipoArchivo() {
         return this.tipoArchivo;
     }
 
