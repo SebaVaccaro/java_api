@@ -78,7 +78,6 @@ public class InstanciaApoyo {
                 ", fechaHora=" + fechaHora +
                 ", descripcion='" + descripcion + '\'' +
                 ", participantes=" + participantes +
-                ", archivosAdjuntos=" + archivosAdjuntos +
                 '}';
     }
 }
