@@ -72,8 +72,15 @@ public class Estudiante extends Usuario{
         this.observaciones.add(observaciones);
     }
 
+/**
+*    public String generarReporte(){
+*        return ??
+*    Metodo para generar reportes que no sabemos como implementar aún.
+*    Pensamos que puede ser una query a la DB directamente, o un metodo de clase.
+*   };
+*/
 
-    @Override
+@Override
     public String toString() {
         return "Estudiante{" +
                 "historialAcademico=" + historialAcademico +
