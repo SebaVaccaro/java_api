@@ -23,7 +23,7 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 - Se considera que un estudiante puede tener una lista vacía de informes médicos al ser creado.
 - Un `InformeFinal` siempre está asociado a un `Seguimiento` válido.
 - Los archivos adjuntos están asociados a un único `Usuario` y contienen metadatos como ruta y tipo.
-- Los valores de estado (`EstadoEstudiante`, `EstadoSeguimiento`) se modelan con enumeraciones para garantizar consistencia.
+- Los valores de estado (`EstadoEstudiante`, `EstadoSeguimiento`) y `Rol`, se modelan con enumeraciones para garantizar consistencia.
 
 ---
 
@@ -31,8 +31,8 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 
 | Nombre completo     | Usuario GitLab       | Aporte principal           	       |
 |-----------------------------|--------------------------|-----------------------------------------------|
-| Ignacio Arévalo     	| @ignacio.arevalo   | Clase Usuario, Clase Estudiantes |
-| Estefany Moreira    	| @estefany.moreira | Clase Rol, Clase Notificacion	       |
+| Ignacio Arévalo     	| @ignacio.arevalo   | Clase Usuario, Clase Estudiantes, Clase Observaciones |
+| Estefany Moreira    	| @estefany.moreira | Clase Notificacion	       |
 | Paulo Vaccaro   	| @paulo.vaccaro     | Clase InformeFinal		       |
 | Cleris Mill    		| @cleris.mill             | Clase InstanciaApoyo                 |
 | Wilmar Hellbusch     | @wilmar.hellbusch  | Clase Seguimiento, Clase ArchivoAdjunto                |
@@ -56,7 +56,6 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 
 - `Usuario.java`  
 - `Estudiante.java`  
-- `Rol.java`  
 - `ArchivoAdjunto.java`  
 - `InformeFinal.java`  
 - `Notificacion.java`  
@@ -66,5 +65,6 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 - `EstadoEstudiante.java` (enum)  
 - `EstadoSeguimiento.java` (enum) 
 - `TipoArchivo` (enum)
+- `Rol` (enum)
 
 ---
