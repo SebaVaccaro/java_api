@@ -61,8 +61,10 @@ Este proyecto consiste en la implementación de clases en Java a partir de un co
 - `InformeFinal.java`  
 - `Notificacion.java`  
 - `Seguimiento.java`
-- `InstanciaApoyo.java`  
+- `InstanciaApoyo.java`
+- `Observaciones.java`
 - `EstadoEstudiante.java` (enum)  
 - `EstadoSeguimiento.java` (enum) 
+- `TipoArchivo` (enum)
 
 ---

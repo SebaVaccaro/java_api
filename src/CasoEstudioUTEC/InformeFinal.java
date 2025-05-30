@@ -10,7 +10,6 @@ public class InformeFinal {
     private int valoracion;
     private String contenido;
     private LocalDate fechaCreacion;
-    private List<ArchivoAdjunto> archivosAdjuntos;
 
     public InformeFinal(String id, Seguimiento seguimiento, int valoracion, String contenido, LocalDate fechaCreacion) {
         this.id = id;
