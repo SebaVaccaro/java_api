@@ -17,7 +17,7 @@ public class InformeFinal {
         this.valoracion = valoracion;
         this.contenido = contenido;
         this.fechaCreacion = fechaCreacion;
-        this.archivosAdjuntos = new ArrayList<>();
+
     }
 
     public String getId() {
@@ -40,15 +40,6 @@ public class InformeFinal {
         return fechaCreacion;
     }
 
-    public List<ArchivoAdjunto> getArchivosAdjuntos() {
-        return archivosAdjuntos;
-    }
-
-
-    public void setArchivosAdjuntos(List<ArchivoAdjunto> archivosAdjuntos) {
-        this.archivosAdjuntos = archivosAdjuntos;
-    }
-
     @Override
     public String toString() {
         return "InformeFinal{" +
@@ -57,7 +48,6 @@ public class InformeFinal {
                 ", valoracion=" + valoracion +
                 ", contenido='" + contenido + '\'' +
                 ", fechaCreacion=" + fechaCreacion +
-                ", archivosAdjuntos=" + archivosAdjuntos.size() + " attachments" +
                 '}';
     }
 }
