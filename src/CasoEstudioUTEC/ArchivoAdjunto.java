@@ -1,10 +1,12 @@
 package CasoEstudioUTEC;
+import java.time.LocalDateTime;
 
 public class ArchivoAdjunto {
     private String id;
     private Usuario usuario;
     private String ruta;
     private TipoArchivo tipoArchivo;
+    private LocalDateTime fechaHora;
     private boolean estadoActivo = true;
 
     public enum TipoArchivo {
@@ -43,6 +45,9 @@ public class ArchivoAdjunto {
         return usuario;
     }
 
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
 
     @Override
     public String toString() {
