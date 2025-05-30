@@ -10,16 +10,15 @@ public class InstanciaApoyo {
     private LocalDateTime fechaHora;
     private String descripcion;
     private List<Usuario> participantes;
-    private List<ArchivoAdjunto> archivosAdjuntos;
+    private boolean estadoActivo = true;
 
 
-    public InstanciaApoyo(String id, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes, List<ArchivoAdjunto> archivosAdjuntos) {
+    public InstanciaApoyo(String id, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
         this.id = id;
         this.tipo = tipo;
         this.fechaHora = fechaHora;
         this.descripcion = descripcion;
         this.participantes = participantes;
-        this.archivosAdjuntos = archivosAdjuntos;
     }
 
     public void setId(String id) {
@@ -59,20 +58,16 @@ public class InstanciaApoyo {
         return this.participantes;
     }
 
-    public void setParticipantes(List<Usuario> participantes) {
-        this.participantes = participantes;
+    public void addParticipante(Usuario participantes){
+        this.participantes.add(participantes);
     }
 
-    public void setArchivosAdjuntos(List<ArchivoAdjunto> archivosAdjuntos) {
-        this.archivosAdjuntos = archivosAdjuntos;
+    public boolean isEstadoActivo() {
+        return estadoActivo;
     }
 
-    public List<ArchivoAdjunto> getArchivosAdjuntos() {
-        return this.archivosAdjuntos;
-    }
-
-    public void addAchivoAdjunto(ArchivoAdjunto archivoAdjunto){
-        this.archivosAdjuntos.add(archivoAdjunto);
+    public void setEstadoActivo(boolean estadoActivo) {
+        this.estadoActivo = estadoActivo;
     }
 
     @Override
