@@ -8,8 +8,9 @@ class Notificacion {
     private String asunto;
     private String mensaje;
     private LocalDateTime fechaEnvio;
-    private boolean estadoActivo = true;
+    private boolean estadoActivo = true; // hace referencia a que la notificacion está activa
 
+    //Constructor
     public Notificacion(String id,
                         Usuario destinatario,
                         String asunto,
@@ -22,6 +23,7 @@ class Notificacion {
         this.fechaEnvio = fechaEnvio;
     }
 
+    // Métodos
     public String getId() {
         return id;
     }

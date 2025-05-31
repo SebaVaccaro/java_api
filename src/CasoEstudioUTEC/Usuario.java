@@ -61,19 +61,11 @@ public class Usuario{
 
         public String getId() {
             return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
+        } // no se reaiza setter porque el id no puede cambiarse una vez creado
 
         public String getUsername() {
             return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
+        } // no se reaiza setter porque el username no puede cambiarse una vez creado
 
         public String getPasswordHash() {
             return passwordHash;
