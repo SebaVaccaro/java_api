@@ -1,12 +1,12 @@
 package CasoEstudioUTEC;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
 public class Estudiante extends Usuario{
 
-    private List<ArchivoAdjunto> historialAcademico; //Archivos adjuntos sobre el historial académico del estudiante.
-    private List<ArchivoAdjunto> informesMedicos; //Archivos adjuntos que muestran el estado de salud.
+    private List<ArchivoAdjunto> archivoAdjuntoList; //Archivos adjuntos que muestran el estado de salud.
     private Estado estado;
     private List<Observaciones> observaciones;
 
@@ -26,11 +26,11 @@ public class Estudiante extends Usuario{
                       String telefono,
                       String direccion,
                       Rol rol,
-                      List<ArchivoAdjunto> historialAcademico,
+                      List<ArchivoAdjunto> archivoAdjuntoList,
                       Estado estado) {
 
         super(id, username, passwordHash, nombre, apellido, correo, telefono, direccion, rol);
-        this.historialAcademico = historialAcademico;
+        this.archivoAdjuntoList = archivoAdjuntoList;
         this.estado = estado;
         
     }
@@ -44,22 +44,12 @@ public class Estudiante extends Usuario{
         this.estado = estado;
     }
 
-    public List<ArchivoAdjunto> getHistorialAcademico() {
-        return historialAcademico;
+    public List<ArchivoAdjunto> getArchivoAdjuntoList() {
+        return archivoAdjuntoList;
     }
 
-    public void addHistorialAcademico(ArchivoAdjunto historialAcademico){
-        this.historialAcademico.add(historialAcademico);
-    }
-
-
-    public List<ArchivoAdjunto> getInformesMedicos() {
-        return informesMedicos;
-    }
-
-
-    public void addInformesMedicos(ArchivoAdjunto informesMedicos){
-        this.informesMedicos.add(informesMedicos);
+    public void addArchivoAdjunto(ArchivoAdjunto archivoAdjunto){
+        this.archivoAdjuntoList.add(archivoAdjunto);
     }
 
 
@@ -82,9 +72,9 @@ public class Estudiante extends Usuario{
 
 @Override
     public String toString() {
+
         return "Estudiante{" +
-                "historialAcademico=" + historialAcademico +
-                ", informesMedicos=" + informesMedicos +
+                "archivoAdjuntoList" + archivoAdjuntoList +
                 ", estado=" + estado +
                 ", observaciones=" + observaciones +
                 '}';
