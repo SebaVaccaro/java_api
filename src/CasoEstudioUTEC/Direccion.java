@@ -1,3 +1,5 @@
+package CasoEstudioUTEC;
+
 public class Direccion {
 
     private Ciudad ciudad;

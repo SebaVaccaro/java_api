@@ -8,7 +8,7 @@ public class Seguimiento {
     private String id;
     private Estudiante estudiante;
     private EstadoSeguimiento estado;
-    private List<InstanciaApoyo> instanciasApoyo;
+    private List<Instancia> instancias;
     private LocalDate fechaInicio;
     private LocalDate fechaCierre;
 
@@ -21,7 +21,7 @@ public class Seguimiento {
         this.estudiante = estudiante;
         this.estado = estado;
         this.fechaInicio = fechaInicio;
-        this.instanciasApoyo = new ArrayList<>();
+        this.instancias = new ArrayList<>();
         this.fechaCierre = null; // opcional, puede establecerse luego
     }
 
@@ -42,12 +42,12 @@ public class Seguimiento {
         this.estado = estado;
     }
 
-    public List<InstanciaApoyo> getInstanciasApoyo() {
-        return instanciasApoyo;
+    public List<Instancia> getInstancias() {
+        return instancias;
     }
 
-    public void addInstanciaApoyo(InstanciaApoyo instancia) {
-        this.instanciasApoyo.add(instancia);
+    public void addInstancia(Instancia instancia) {
+        this.instancias.add(instancia);
     }
 
     public LocalDate getFechaInicio() {

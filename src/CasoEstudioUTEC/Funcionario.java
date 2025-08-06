@@ -1,4 +1,4 @@
-
+package CasoEstudioUTEC;
 
 public class Funcionario extends Usuario {
 
@@ -9,8 +9,8 @@ public class Funcionario extends Usuario {
         ADMINISTRADOR, PSICOPEDAGOGO, ANALISTA_EDUCATIVO, RESPONSABLE_EDUCATIVO, AREA_LEGAL
     }
 
-    public Funcionario(Rol rol, String id, String username, String password, String nombre, String apellido, String correo, String telefono) {
-        super(username, password, nombre, apellido, correo, telefono);
+    public Funcionario(Rol rol, String id, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
+        super(id, username, password, nombre, apellido, correo, telefono, direccion);
         this.rol = rol;
     }
 

@@ -1,3 +1,5 @@
+package CasoEstudioUTEC;
+
 public class Ciudad {
 
     private int id;

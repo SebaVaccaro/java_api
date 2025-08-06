@@ -18,7 +18,7 @@ public class Usuario {
     private LinkedList<Notificacion> listaNotificaciones;
     private List<Direccion> direcciones;
 
-    public Usuario(String id, String username, String password, String nombre, String apellido, String correo, String telefono) {
+    public Usuario(String id, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -26,6 +26,7 @@ public class Usuario {
         this.apellido = apellido;
         this.correo = correo;
         telefonos.add(telefono);
+        direcciones.add(direccion);
     }
 
     //Constructor para llamarlo en la clase Notificacion
@@ -43,18 +44,18 @@ public class Usuario {
 
     public String getId() {
         return id;
-    } // no se reaiza setter porque el id no puede cambiarse una vez creado
+    } // no se realiza setter porque el id no puede cambiarse una vez creado
 
     public String getUsername() {
         return username;
-    } // no se reaiza setter porque el username no puede cambiarse una vez creado
+    } // no se realiza setter porque el username no puede cambiarse una vez creado
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password= password;
     }
 
     public String getNombre() {
@@ -101,10 +102,18 @@ public class Usuario {
         listaNotificaciones.add(notificacion);
     }
 
+    public List<Direccion> getDirecciones() {
+        return direcciones;
+    }
+
+    public void addDireccion(Direccion direccion) {
+        direcciones.add(direccion);
+    }
+
     // metodo toString del segundo constructor
     @Override
     public String toString() {
-        return "Usuario: " + "id= '" + id + '\'' + ", nombres= '" + nombre + '\'' + ", apellidos= '" + apellido + '\'' + ", correo= '" + correo + '\'';
+        return "Usuario: " + "id= '" + id + '\'' + ", nombres= '" + nombre + '\'' + ", apellidos= '" + apellido + '\'' + ", correo= '" + correo + '\''+", Direcciones: '" + direcciones;
     }
 
 

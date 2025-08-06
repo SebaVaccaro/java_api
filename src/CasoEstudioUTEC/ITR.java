@@ -1,3 +1,6 @@
+package CasoEstudioUTEC;
+import java.util.List;
+
 public class ITR {
 
     private int id;
@@ -33,8 +36,8 @@ public class ITR {
         return telefonos;
     }
 
-    public void addTelefonos(List<String> telefono) {
-        telefonos.add(telefonos);
+    public void addTelefonos(String telefono) {
+        telefonos.add(telefono);
     }
 
     public Direccion getDireccion() {
@@ -46,10 +49,10 @@ public class ITR {
     }
 
     public List<Carrera> getCarreras() {
-        return "Carreras: \n" + carreras;
+        return carreras;
     }
 
-    public void addCarreras(List<Carrera> carrera) {
+    public void addCarreras(Carrera carrera) {
         carreras.add(carrera);
     }
 

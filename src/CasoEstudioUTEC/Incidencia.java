@@ -1,9 +1,14 @@
+package CasoEstudioUTEC;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class Incidencia extends Instancia {
 
     private String lugar;
 
-    public Incidencia(String lugar, String id, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
-        super(id, tipo, fechaHora, descripcion, participantes);
+    public Incidencia(String lugar, String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
+        super(id, titulo, tipo, fechaHora, descripcion, participantes);
         this.lugar = lugar;
     }
 

@@ -19,17 +19,16 @@ public class Estudiante extends Usuario{
 
     public Estudiante(String id,
                       String username,
-                      String passwordHash,
+                      String password,
                       String nombre,
                       String apellido,
                       String correo,
                       String telefono,
-                      String direccion,
-                      Rol rol,
+                      Direccion direccion,
                       List<ArchivoAdjunto> archivoAdjuntoList,
                       Estado estado) {
 
-        super(id, username, passwordHash, nombre, apellido, correo, telefono, direccion, rol);
+        super(id, username, password, nombre, apellido, correo, telefono, direccion);
         this.archivoAdjuntoList = archivoAdjuntoList;
         this.estado = estado;
         
