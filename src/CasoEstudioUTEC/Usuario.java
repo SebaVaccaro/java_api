@@ -9,57 +9,37 @@ public class Usuario {
 
     private String id;
     private String username;
-    private String passwordHash;
+    private String password;
     private String nombre;
     private String apellido;
     private String correo;
-    private String telefono;
-    private String direccion;
-    private Rol rol;
+    private List<String> telefonos;
     private boolean estadoActivo = true;
     private LinkedList<Notificacion> listaNotificaciones;
+    private List<Direccion> direcciones;
 
-    public enum Rol {
-        ADMINISTRADOR,
-        ESTUDIANTE,
-        PSICOPEDAGOGO,
-        ANALISTA_EDUCATIVO,
-        RESPONSABLE_EDUCATIVO,
-        AREA_LEGAL,
-        FUNCIONARIO,
-        TUTOR
-    }
-
-    public Usuario(String id,
-                   String username,
-                   String passwordHash,
-                   String nombre,
-                   String apellido,
-                   String correo,
-                   String telefono,
-                   String direccion,
-                   Rol rol) {
+    public Usuario(String id, String username, String password, String nombre, String apellido, String correo, String telefono) {
         this.id = id;
         this.username = username;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
-        this.telefono = telefono;
-        this.direccion = direccion;
-        this.rol = rol;
+        telefonos.add(telefono);
     }
 
     //Constructor para llamarlo en la clase Notificacion
-    public Usuario(String id,
-                   String nombre,
-                   String apellido,
-                   String correo) {
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-    }
+    //Se va a usar para el constructor de Notificaciones, super()
+    //Para usarlo en el futuro
+//    public Usuario(String id,
+//                   String nombre,
+//                   String apellido,
+//                   String correo) {
+//        this.id = id;
+//        this.nombre = nombre;
+//        this.apellido = apellido;
+//        this.correo = correo;
+//    }
 
     public String getId() {
         return id;
@@ -101,28 +81,12 @@ public class Usuario {
         this.correo = correo;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getTelefonos() {
+        return telefonos.toString();
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public Rol getRol() {
-        return rol;
-    }
-
-    public void setRol(Rol rol) {
-        this.rol = rol;
+    public void addTelefono(String telefono) {
+        telefonos.add(telefono);
     }
 
     public boolean isEstadoActivo() {
@@ -140,11 +104,7 @@ public class Usuario {
     // metodo toString del segundo constructor
     @Override
     public String toString() {
-        return "Usuario: " +
-                "id= '" + id + '\'' +
-                ", nombres= '" + nombre + '\'' +
-                ", apellidos= '" + apellido + '\'' +
-                ", correo= '" + correo + '\'';
+        return "Usuario: " + "id= '" + id + '\'' + ", nombres= '" + nombre + '\'' + ", apellidos= '" + apellido + '\'' + ", correo= '" + correo + '\'';
     }
 
 
