@@ -1,12 +1,11 @@
 package CasoEstudioUTEC;
-
 import java.time.LocalDateTime;
-
 import java.util.List;
 
 
-public class InstanciaApoyo {
+public class Instancia {
     private String id;
+    private String titulo;
     private String tipo;
     private LocalDateTime fechaHora;
     private String descripcion;
@@ -14,8 +13,9 @@ public class InstanciaApoyo {
     private boolean estadoActivo = true;
 
 
-    public InstanciaApoyo(String id, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
+    public Instancia(String id,String titulo, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
         this.id = id;
+        this.titulo = titulo;
         this.tipo = tipo;
         this.fechaHora = fechaHora;
         this.descripcion = descripcion;
@@ -25,21 +25,25 @@ public class InstanciaApoyo {
             generarNotificacion(id, usuario, tipo, descripcion, fechaHoy);
             /*
             Este id no puede ser el mismo para ambos objetos, esto es un simple ejemplo forzado para que el código no presente errores,
-            ya que el constructor de Notificación pide un parámetro "id", le pasamos el mismo de InstanciaApoyo pero sabemos que no pueden repetirse.
+            ya que el constructor de Notificación pide un parámetro "id", le pasamos el mismo de Instancia pero sabemos que no pueden repetirse.
             Es la manera que encontramos de representar este proceso donde se genera una notificación automáticamente para cada Usuario participante de
-            dicha Instancia de Apoyo.
+            dicha Instancia.
              */
         }
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getId() {
         return this.id;
     }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
 
     public String getTipo() {
         return this.tipo;
@@ -66,7 +70,7 @@ public class InstanciaApoyo {
     }
 
     public List<Usuario> getParticipantes() {
-        return this.participantes;
+        return "Participantes: \n" + this.participantes;
     }
 
     public void addParticipante(Usuario participantes) {
@@ -88,13 +92,7 @@ public class InstanciaApoyo {
 
     @Override
     public String toString() {
-        return "InstanciaApoyo{" +
-                "id='" + id + '\'' +
-                ", tipo='" + tipo + '\'' +
-                ", fechaHora=" + fechaHora +
-                ", descripcion='" + descripcion + '\'' +
-                ", participantes=" + participantes +
-                '}';
+        return "Instancia{" + "id='" + id + '\'' + ", tipo='" + tipo + '\'' + ", fechaHora=" + fechaHora + ", descripcion='" + descripcion + '\'' + ", participantes=" + participantes + '}';
     }
 }
 
