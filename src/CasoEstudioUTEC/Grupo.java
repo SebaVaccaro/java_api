@@ -1,23 +1,21 @@
 package CasoEstudioUTEC;
 
+import java.util.List;
+
 public class Grupo {
 
     private int id;
     private String nombre;
     private Carrera carrera;
-    private Estudiante estudiante;
 
-    public Grupo(int id, String nombre) {
+    public Grupo(int id, String nombre, Carrera carrera) {
         this.id = id;
         this.nombre = nombre;
+        this.carrera = carrera;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getNombre() {
@@ -28,11 +26,17 @@ public class Grupo {
         this.nombre = nombre;
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+
+    @Override
+    public String toString() {
         return "Grupo{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
+                "id= " +'\''+ id +'\''+
+                ", nombre= " + '\''+nombre + '\'' +
+                ", carrera= " + '\''+carrera +'\''+
                 '}';
     }
 }

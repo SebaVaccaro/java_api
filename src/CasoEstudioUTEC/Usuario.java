@@ -8,6 +8,7 @@ import java.util.ArrayList;
 public class Usuario {
 
     private String id;
+    private String ci;
     private String username;
     private String password;
     private String nombre;
@@ -18,8 +19,9 @@ public class Usuario {
     private LinkedList<Notificacion> listaNotificaciones;
     private List<Direccion> direcciones;
 
-    public Usuario(String id, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
+    public Usuario(String id, String ci, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
         this.id = id;
+        this.ci = ci;
         this.username = username;
         this.password = password;
         this.nombre = nombre;
@@ -102,8 +104,16 @@ public class Usuario {
         listaNotificaciones.add(notificacion);
     }
 
+    public LinkedList<Notificacion> getListaNotificaciones() {
+        return listaNotificaciones;
+    }
+
     public List<Direccion> getDirecciones() {
         return direcciones;
+    }
+
+    public String getCi() {
+        return ci;
     }
 
     public void addDireccion(Direccion direccion) {
@@ -113,7 +123,7 @@ public class Usuario {
     // metodo toString del segundo constructor
     @Override
     public String toString() {
-        return "Usuario: " + "id= '" + id + '\'' + ", nombres= '" + nombre + '\'' + ", apellidos= '" + apellido + '\'' + ", correo= '" + correo + '\''+", Direcciones: '" + direcciones;
+        return "Usuario: " + "id= '" + id + '\'' + "CI= '"+ci+"' , nombre= '" + nombre + '\'' + ", apellidos= '" + apellido + '\'' + ", correo= '" + correo + '\''+", Direcciones: '" + direcciones + '\'';
     }
 
 

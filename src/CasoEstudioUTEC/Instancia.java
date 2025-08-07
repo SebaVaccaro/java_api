@@ -9,20 +9,23 @@ public class Instancia {
     private String tipo;
     private LocalDateTime fechaHora;
     private String descripcion;
-    private List<Usuario> participantes;
+    private Estudiante estudiante;
+    private List<Funcionario> funcionarios;
     private boolean estadoActivo = true;
 
 
-    public Instancia(String id,String titulo, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
+    public Instancia(String id,String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
         this.id = id;
         this.titulo = titulo;
         this.tipo = tipo;
         this.fechaHora = fechaHora;
         this.descripcion = descripcion;
-        this.participantes = participantes;
+        this.estudiante = estudiante;
+        this.funcionarios = funcionarios;
         LocalDateTime fechaHoy = LocalDateTime.now();
-        for (Usuario usuario : participantes) {
-            generarNotificacion(id, usuario, tipo, descripcion, fechaHoy);
+        generarNotificacion(id, estudiante, tipo, descripcion, fechaHoy);
+        for (Funcionario funcionario : funcionarios) {
+            generarNotificacion(id, funcionario, tipo, descripcion, fechaHoy);
             /*
             Este id no puede ser el mismo para ambos objetos, esto es un simple ejemplo forzado para que el código no presente errores,
             ya que el constructor de Notificación pide un parámetro "id", le pasamos el mismo de Instancia pero sabemos que no pueden repetirse.
@@ -69,12 +72,12 @@ public class Instancia {
         this.descripcion = descripcion;
     }
 
-    public List<Usuario> getParticipantes() {
-        return "Participantes: \n" + this.participantes;
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
     }
 
-    public void addParticipante(Usuario participantes) {
-        this.participantes.add(participantes);
+    public void addFuncionario(Funcionario funcionario) {
+        funcionarios.add(funcionario);
     }
 
     public boolean isEstadoActivo() {
@@ -92,7 +95,7 @@ public class Instancia {
 
     @Override
     public String toString() {
-        return "Instancia{" + "id='" + id + '\'' + ", tipo='" + tipo + '\'' + ", fechaHora=" + fechaHora + ", descripcion='" + descripcion + '\'' + ", participantes=" + participantes + '}';
+        return "Instancia{" + "id='" + id + '\'' + ", tipo='" + tipo + '\'' + ", fechaHora=" + fechaHora + ", descripcion='" + descripcion + '\'' + ", funcionarios=" + funcionarios + '}';
     }
 }
 

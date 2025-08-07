@@ -7,11 +7,11 @@ public class Observaciones {
     private String titulo;
     private String contenido;
     private LocalDateTime fechaHora;
-    private Usuario autor;
+    private Funcionario autor;
     private Estudiante estudiante;
     private boolean estadoActivo = true;
 
-    public Observaciones(String id, String titulo, String contenido, LocalDateTime fechaHora, Usuario autor, Estudiante estudiante) {
+    public Observaciones(String id, String titulo, String contenido, LocalDateTime fechaHora, Funcionario autor, Estudiante estudiante) {
         this.id = id;
         this.titulo = titulo;
         this.contenido = contenido;
@@ -22,10 +22,6 @@ public class Observaciones {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getTitulo() {
@@ -66,6 +62,10 @@ public class Observaciones {
 
     public void setEstadoActivo(boolean estadoActivo) {
         this.estadoActivo = estadoActivo;
+    }
+
+    public Funcionario getAutor() {
+        return autor;
     }
 
     @Override

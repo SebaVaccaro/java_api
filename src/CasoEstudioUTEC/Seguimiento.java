@@ -11,18 +11,22 @@ public class Seguimiento {
     private List<Instancia> instancias;
     private LocalDate fechaInicio;
     private LocalDate fechaCierre;
+    private List<Funcionario> funcionarios;
 
     // Constructor
     public Seguimiento(String id,
                        Estudiante estudiante,
                        EstadoSeguimiento estado,
-                       LocalDate fechaInicio) {
+                       LocalDate fechaInicio,
+                       List<Funcionario> funcionarios
+                       ) {
         this.id = id;
         this.estudiante = estudiante;
         this.estado = estado;
         this.fechaInicio = fechaInicio;
         this.instancias = new ArrayList<>();
         this.fechaCierre = null; // opcional, puede establecerse luego
+        this.funcionarios = funcionarios;
     }
 
     // Getters y setters

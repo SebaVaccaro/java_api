@@ -7,8 +7,8 @@ public class Incidencia extends Instancia {
 
     private String lugar;
 
-    public Incidencia(String lugar, String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, List<Usuario> participantes) {
-        super(id, titulo, tipo, fechaHora, descripcion, participantes);
+    public Incidencia(String lugar, String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
+        super(id, titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
         this.lugar = lugar;
     }
 
@@ -20,8 +20,9 @@ public class Incidencia extends Instancia {
         this.lugar = lugar;
     }
 
-    @java.lang.Override
-    public java.lang.String toString() {
-        return "Incidencia{" + "lugar='" + lugar + '\'' + '}';
+    @Override
+    public String toString() {
+        return super.toString() +
+                "lugar='" + '\'' +lugar + '\'';
     }
 }

@@ -18,33 +18,18 @@ public class Carrera {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNombre() {
         return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public int getCodigo() {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-
     public String getPlan() {
         return plan;
     }
 
-    public void setPlan(String plan) {
-        this.plan = plan;
-    }
 
     @java.lang.Override
     public java.lang.String toString() {

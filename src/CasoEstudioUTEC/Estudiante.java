@@ -9,6 +9,7 @@ public class Estudiante extends Usuario{
     private List<ArchivoAdjunto> archivoAdjuntoList; //Archivos adjuntos que muestran el estado de salud.
     private Estado estado;
     private List<Observaciones> observaciones;
+    private Grupo grupo;
 
     public enum Estado {
         CREADO,
@@ -18,6 +19,7 @@ public class Estudiante extends Usuario{
     }
 
     public Estudiante(String id,
+                      String ci,
                       String username,
                       String password,
                       String nombre,
@@ -26,9 +28,10 @@ public class Estudiante extends Usuario{
                       String telefono,
                       Direccion direccion,
                       List<ArchivoAdjunto> archivoAdjuntoList,
-                      Estado estado) {
+                      Estado estado,
+                      Grupo grupo) {
 
-        super(id, username, password, nombre, apellido, correo, telefono, direccion);
+        super(id, ci, username, password, nombre, apellido, correo, telefono, direccion);
         this.archivoAdjuntoList = archivoAdjuntoList;
         this.estado = estado;
         
@@ -61,7 +64,15 @@ public class Estudiante extends Usuario{
         this.observaciones.add(observaciones);
     }
 
-/**
+    public Grupo getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(Grupo grupo) {
+        this.grupo = grupo;
+    }
+
+    /**
 *    public String generarReporte(){
 *        return ??
 *    Metodo para generar reportes que no sabemos como implementar aún.
@@ -72,10 +83,9 @@ public class Estudiante extends Usuario{
 @Override
     public String toString() {
 
-        return "Estudiante{" +
-                "archivoAdjuntoList" + archivoAdjuntoList +
-                ", estado=" + estado +
-                ", observaciones=" + observaciones +
-                '}';
+        return super.toString() +
+                "archivoAdjuntoList" + '\'' +archivoAdjuntoList +'\'' +
+                ", estado=" + '\'' +estado +'\'' +
+                ", observaciones=" + '\'' +observaciones +'\'';
     }
 }

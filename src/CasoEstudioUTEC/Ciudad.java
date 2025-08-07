@@ -21,24 +21,12 @@ public class Ciudad {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getDepartamento() {
         return departamento;
     }
 
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
-    }
-
     public int getCodPostal() {
         return codPostal;
-    }
-
-    public void setCodPostal(int codPostal) {
-        this.codPostal = codPostal;
     }
 
     @java.lang.Override
