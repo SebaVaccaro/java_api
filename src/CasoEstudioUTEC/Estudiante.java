@@ -1,14 +1,15 @@
 package CasoEstudioUTEC;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class Estudiante extends Usuario{
 
-    private List<ArchivoAdjunto> archivoAdjuntoList; //Archivos adjuntos que muestran el estado de salud.
+    private List<ArchivoAdjunto> archivoAdjuntoList = new ArrayList<ArchivoAdjunto>(); //Archivos adjuntos que muestran el estado de salud.
     private Estado estado;
-    private List<Observaciones> observaciones;
+    private List<Observaciones> observaciones = new ArrayList<Observaciones>();
     private Grupo grupo;
 
     public enum Estado {
@@ -34,6 +35,7 @@ public class Estudiante extends Usuario{
         super(id, ci, username, password, nombre, apellido, correo, telefono, direccion);
         this.archivoAdjuntoList = archivoAdjuntoList;
         this.estado = estado;
+        this.grupo = grupo;
         
     }
 
@@ -60,8 +62,8 @@ public class Estudiante extends Usuario{
     }
 
 
-    public void addObservaciones(Observaciones observaciones){
-        this.observaciones.add(observaciones);
+    public void addObservacion(Observaciones observacion){
+        observaciones.add(observacion);
     }
 
     public Grupo getGrupo() {

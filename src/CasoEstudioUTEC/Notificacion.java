@@ -2,7 +2,7 @@ package CasoEstudioUTEC;
 
 import java.time.LocalDateTime;
 
-class Notificacion {
+public class Notificacion {
     private String id;
     private Usuario destinatario;
     private String asunto;

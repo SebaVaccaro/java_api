@@ -1,5 +1,6 @@
 package CasoEstudioUTEC;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,7 +11,7 @@ public class Instancia {
     private LocalDateTime fechaHora;
     private String descripcion;
     private Estudiante estudiante;
-    private List<Funcionario> funcionarios;
+    private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
     private boolean estadoActivo = true;
 
 

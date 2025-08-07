@@ -14,10 +14,10 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private String correo;
-    private List<String> telefonos;
+    private List<String> telefonos = new ArrayList<String>();
     private boolean estadoActivo = true;
-    private LinkedList<Notificacion> listaNotificaciones;
-    private List<Direccion> direcciones;
+    private LinkedList<Notificacion> listaNotificaciones = new LinkedList<Notificacion>();
+    private List<Direccion> direcciones = new ArrayList<Direccion>();
 
     public Usuario(String id, String ci, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
         this.id = id;

@@ -8,10 +8,10 @@ public class Seguimiento {
     private String id;
     private Estudiante estudiante;
     private EstadoSeguimiento estado;
-    private List<Instancia> instancias;
+    private List<Instancia> instancias = new ArrayList<Instancia>();
     private LocalDate fechaInicio;
     private LocalDate fechaCierre;
-    private List<Funcionario> funcionarios;
+    private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
 
     // Constructor
     public Seguimiento(String id,

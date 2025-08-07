@@ -1,4 +1,5 @@
 package CasoEstudioUTEC;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ITR {
@@ -7,7 +8,7 @@ public class ITR {
     private int numITR;
     private List<String> telefonos;
     private Direccion direccion;
-    private List<Carrera> carreras;
+    private List<Carrera> carreras = new ArrayList<Carrera>();
 
     public ITR(int id, int numITR, String telefono, Direccion direccion) {
         this.id = id;
