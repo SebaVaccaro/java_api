@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Grupo {
 
-    private int id;
+    private String id;
     private String nombre;
     private Carrera carrera;
 
-    public Grupo(int id, String nombre, Carrera carrera) {
+    public Grupo(String id, String nombre, Carrera carrera) {
         this.id = id;
         this.nombre = nombre;
         this.carrera = carrera;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

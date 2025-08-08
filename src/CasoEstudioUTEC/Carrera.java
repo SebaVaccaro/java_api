@@ -2,19 +2,19 @@ package CasoEstudioUTEC;
 
 public class Carrera {
 
-    private int id;
+    private String id;
     private String nombre;
     private int codigo;
     private String plan;
 
-    public Carrera(int id, String nombre, int codigo, String plan) {
+    public Carrera(String id, String nombre, int codigo, String plan) {
         this.id = id;
         this.nombre = nombre;
         this.codigo = codigo;
         this.plan = plan;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

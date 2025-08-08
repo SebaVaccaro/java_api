@@ -2,19 +2,19 @@ package CasoEstudioUTEC;
 
 public class Ciudad {
 
-    private int id;
+    private String id;
     private String nombre;
     private String departamento;
     private int codPostal;
 
-    public Ciudad(int id, String nombre, String departamento, int codPostal) {
+    public Ciudad(String id, String nombre, String departamento, int codPostal) {
         this.id = id;
         this.departamento = departamento;
         this.nombre = nombre;
         this.codPostal = codPostal;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

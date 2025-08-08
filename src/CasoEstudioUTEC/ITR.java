@@ -4,20 +4,20 @@ import java.util.List;
 
 public class ITR {
 
-    private int id;
+    private String id;
     private int numITR;
     private List<String> telefonos = new ArrayList<>();
     private Direccion direccion;
     private List<Carrera> carreras = new ArrayList<Carrera>();
 
-    public ITR(int id, int numITR, String telefono, Direccion direccion) {
+    public ITR(String id, int numITR, String telefono, Direccion direccion) {
         this.id = id;
         this.numITR = numITR;
         telefonos.add(telefono);
         this.direccion = direccion;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
