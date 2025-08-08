@@ -6,7 +6,7 @@ public class ITR {
 
     private int id;
     private int numITR;
-    private List<String> telefonos;
+    private List<String> telefonos = new ArrayList<>();
     private Direccion direccion;
     private List<Carrera> carreras = new ArrayList<Carrera>();
 
@@ -14,7 +14,7 @@ public class ITR {
         this.id = id;
         this.numITR = numITR;
         telefonos.add(telefono);
-        direccion = direccion;
+        this.direccion = direccion;
     }
 
     public int getId() {

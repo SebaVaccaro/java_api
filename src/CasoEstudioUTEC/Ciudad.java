@@ -8,6 +8,7 @@ public class Ciudad {
     private int codPostal;
 
     public Ciudad(int id, String nombre, String departamento, int codPostal) {
+        this.id = id;
         this.departamento = departamento;
         this.nombre = nombre;
         this.codPostal = codPostal;
