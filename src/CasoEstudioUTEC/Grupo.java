@@ -3,40 +3,23 @@ package CasoEstudioUTEC;
 import java.util.List;
 
 public class Grupo {
-
-    private String id;
-    private String nombre;
+    private int id;
+    private String nomGrupo;
     private Carrera carrera;
 
-    public Grupo(String id, String nombre, Carrera carrera) {
+    public Grupo(int id, String nomGrupo, Carrera carrera) {
         this.id = id;
-        this.nombre = nombre;
+        this.nomGrupo = nomGrupo;
         this.carrera = carrera;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Carrera getCarrera() {
-        return carrera;
-    }
-
+    public int getId() { return id; }
+    public String getNomGrupo() { return nomGrupo; }
+    public void setNomGrupo(String nomGrupo) { this.nomGrupo = nomGrupo; }
+    public Carrera getCarrera() { return carrera; }
 
     @Override
     public String toString() {
-        return "Grupo{" +
-                "id= " +'\''+ id +'\''+
-                ", nombre= " + '\''+nombre + '\'' +
-                ", carrera= " + '\''+carrera +'\''+
-                '}';
+        return "Grupo{" + "id=" + id + ", nomGrupo='" + nomGrupo + '\'' + ", carrera=" + carrera + '}';
     }
 }
