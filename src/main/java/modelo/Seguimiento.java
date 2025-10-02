@@ -5,76 +5,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Seguimiento {
-    private String id;
+    private Integer id; // id de tabla seguimientos
     private Estudiante estudiante;
-    private EstadoSeguimiento estado;
-    private List<Instancia> instancias = new ArrayList<Instancia>();
     private LocalDate fechaInicio;
     private LocalDate fechaCierre;
-    private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
+    private List<Funcionario> participantes = new ArrayList<>();
+    private List<InstanciaComun> instancias = new ArrayList<>();
+    private boolean estadoActivo = true;
 
-    // Constructor
-    public Seguimiento(String id,
-                       Estudiante estudiante,
-                       EstadoSeguimiento estado,
-                       LocalDate fechaInicio,
-                       List<Funcionario> funcionarios
-                       ) {
+    public Seguimiento(Integer id, Estudiante estudiante, LocalDate fechaInicio, List<Funcionario> participantes) {
         this.id = id;
         this.estudiante = estudiante;
-        this.estado = estado;
         this.fechaInicio = fechaInicio;
-        this.instancias = new ArrayList<>();
-        this.fechaCierre = null; // opcional, puede establecerse luego
-        this.funcionarios = funcionarios;
+        this.participantes = participantes;
     }
 
-    // Getters y setters
-    public String getId() {
-        return id;
-    }
-
-    public Estudiante getEstudiante() {
-        return estudiante;
-    }
-
-    public EstadoSeguimiento getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoSeguimiento estado) {
-        this.estado = estado;
-    }
-
-    public List<Instancia> getInstancias() {
-        return instancias;
-    }
-
-    public void addInstancia(Instancia instancia) {
-        this.instancias.add(instancia);
-    }
-
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public LocalDate getFechaCierre() {
-        return fechaCierre;
-    }
-
-    public void setFechaCierre(LocalDate fechaCierre) {
-        this.fechaCierre = fechaCierre;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Estudiante getEstudiante() { return estudiante; }
+    public void setEstudiante(Estudiante estudiante) { this.estudiante = estudiante; }
+    public LocalDate getFechaInicio() { return fechaInicio; }
+    public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }
+    public LocalDate getFechaCierre() { return fechaCierre; }
+    public void setFechaCierre(LocalDate fechaCierre) { this.fechaCierre = fechaCierre; }
+    public List<Funcionario> getParticipantes() { return participantes; }
+    public void addParticipante(Funcionario funcionario) { participantes.add(funcionario); }
+    public List<InstanciaComun> getInstancias() { return instancias; }
+    public void addInstancia(InstanciaComun instancia) { instancias.add(instancia); }
+    public boolean isEstadoActivo() { return estadoActivo; }
+    public void setEstadoActivo(boolean estadoActivo) { this.estadoActivo = estadoActivo; }
 
     @Override
     public String toString() {
-        return "Seguimiento de " + estudiante.getNombre() + " [" + estado + "] desde " + fechaInicio +
-                (fechaCierre != null ? " hasta " + fechaCierre : "");
-    }
-
-    public enum EstadoSeguimiento {
-        EN_PROCESO,
-        FINALIZADO,
-        PENDIENTE
+        return "Seguimiento{" +
+                "id=" + id +
+                ", estudiante=" + estudiante +
+                ", fechaInicio=" + fechaInicio +
+                ", fechaCierre=" + fechaCierre +
+                ", participantes=" + participantes +
+                ", instancias=" + instancias +
+                ", estadoActivo=" + estadoActivo +
+                '}';
     }
 }

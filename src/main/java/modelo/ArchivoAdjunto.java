@@ -3,60 +3,41 @@ package main.java.modelo;
 import java.time.LocalDateTime;
 
 public class ArchivoAdjunto {
-    private String id;
+    private Integer id; // id de tabla arch_adjuntos
+    private Estudiante estudiante;
     private Usuario usuario;
     private String ruta;
-    private TipoArchivo tipoArchivo;
-    private LocalDateTime fechaHora;
+    private String categoria;
     private boolean estadoActivo = true;
 
-    public enum TipoArchivo {
-        HISTORIAL_ACADEMICO,
-        INFORME_MEDICO
-    }
-
-    public ArchivoAdjunto(String id, Usuario usuario, String ruta, TipoArchivo tipoArchivo) {
+    public ArchivoAdjunto(Integer id, Estudiante estudiante, Usuario usuario, String ruta, String categoria) {
         this.id = id;
+        this.estudiante = estudiante;
         this.usuario = usuario;
         this.ruta = ruta;
-        this.tipoArchivo = tipoArchivo;
+        this.categoria = categoria;
     }
 
-    public String getRuta() {
-        return this.ruta;
-    }
-
-    public TipoArchivo getTipoArchivo() {
-        return this.tipoArchivo;
-    }
-
-    public boolean isEstadoActivo() {
-        return estadoActivo;
-    }
-
-    public void setEstadoActivo(boolean estadoActivo) {
-        this.estadoActivo = estadoActivo;
-    }
-
-    public void setRuta(String ruta) {
-        this.ruta = ruta;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Estudiante getEstudiante() { return estudiante; }
+    public Usuario getUsuario() { return usuario; }
+    public String getRuta() { return ruta; }
+    public void setRuta(String ruta) { this.ruta = ruta; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public boolean isEstadoActivo() { return estadoActivo; }
+    public void setEstadoActivo(boolean estadoActivo) { this.estadoActivo = estadoActivo; }
 
     @Override
     public String toString() {
         return "ArchivoAdjunto{" +
-                "id='" + id + '\'' +
-                ", usuario=" + (usuario != null ? usuario.toString() : "null") +
+                "id=" + id +
+                ", estudiante=" + estudiante +
+                ", usuario=" + usuario +
                 ", ruta='" + ruta + '\'' +
-                ", tipo='" + tipoArchivo + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", estadoActivo=" + estadoActivo +
                 '}';
     }
 }
