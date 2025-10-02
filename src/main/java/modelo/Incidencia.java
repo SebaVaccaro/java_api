@@ -4,12 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class Incidencia extends Instancia {
-
     private String lugar;
+    private Funcionario registrante; // Funcionario que registra la incidencia
 
-    public Incidencia(String lugar, String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
-        super(id, titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
+    public Incidencia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios, String lugar, Funcionario registrante) {
+        super(titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
         this.lugar = lugar;
+        this.registrante = registrante;
     }
 
     public String getLugar() {
@@ -20,9 +21,18 @@ public class Incidencia extends Instancia {
         this.lugar = lugar;
     }
 
+    public Funcionario getRegistrante() {
+        return registrante;
+    }
+
+    public void setRegistrante(Funcionario registrante) {
+        this.registrante = registrante;
+    }
+
     @Override
     public String toString() {
         return super.toString() +
-                "lugar='" + '\'' +lugar + '\'';
+                ", lugar='" + lugar + '\'' +
+                ", registrante=" + (registrante != null ? registrante.getNombre() : "null");
     }
 }

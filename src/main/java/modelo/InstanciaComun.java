@@ -2,11 +2,10 @@ package main.java.modelo;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.ArrayList;
 
 public class InstanciaComun extends Instancia {
 
-    private List<Funcionario> funcionarios = new ArrayList<>();
+    private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
 
     public InstanciaComun(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
         super(titulo, tipo, fechaHora, descripcion, estudiante);
@@ -42,3 +41,4 @@ public class InstanciaComun extends Instancia {
 
 
 }
+

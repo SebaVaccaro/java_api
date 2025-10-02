@@ -1,6 +1,7 @@
 package main.java.modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Instancia {
@@ -12,12 +13,13 @@ public abstract class Instancia {
     protected Estudiante estudiante;
     protected boolean estadoActivo = true;
 
-    public Instancia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante) {
+    public Instancia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
         this.titulo = titulo;
         this.tipo = tipo;
         this.fechaHora = fechaHora;
         this.descripcion = descripcion;
         this.estudiante = estudiante;
+        this.funcionarios = funcionarios;
     }
 
     public int getId() {
@@ -83,6 +85,5 @@ public abstract class Instancia {
                 ", estadoActivo=" + estadoActivo +
                 '}';
     }
-}
 
 

@@ -1,65 +1,36 @@
 package main.java.modelo;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 public class ITR {
-
-    private String id;
-    private int numITR;
-    private List<String> telefonos = new ArrayList<>();
+    private Integer id;
     private Direccion direccion;
-    private List<Carrera> carreras = new ArrayList<Carrera>();
+    private List<String> telefonos = new ArrayList<>();
+    private List<Carrera> carreras = new ArrayList<>();
 
-    public ITR(String id, int numITR, String telefono, Direccion direccion) {
+    public ITR(Integer id, Direccion direccion, String telefono) {
         this.id = id;
-        this.numITR = numITR;
-        telefonos.add(telefono);
         this.direccion = direccion;
+        this.telefonos.add(telefono);
     }
 
-    public String getId() {
-        return id;
-    }
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+    public Direccion getDireccion() { return direccion; }
+    public void setDireccion(Direccion direccion) { this.direccion = direccion; }
+    public List<String> getTelefonos() { return telefonos; }
+    public void addTelefono(String telefono) { telefonos.add(telefono); }
+    public List<Carrera> getCarreras() { return carreras; }
+    public void addCarrera(Carrera carrera) { carreras.add(carrera); }
 
-    public int getNumITR() {
-        return numITR;
-    }
-
-    public void setNumITR(int numITR) {
-        this.numITR = numITR;
-    }
-
-    public List<String> getTelefonos() {
-        return telefonos;
-    }
-
-    public void addTelefonos(String telefono) {
-        telefonos.add(telefono);
-    }
-
-    public Direccion getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(Direccion direccion) {
-        this.direccion = direccion;
-    }
-
-    public List<Carrera> getCarreras() {
-        return carreras;
-    }
-
-    public void addCarreras(Carrera carrera) {
-        carreras.add(carrera);
-    }
-
-    @java.lang.Override
-    public java.lang.String toString() {
+    @Override
+    public String toString() {
         return "ITR{" +
                 "id=" + id +
-                ", numITR=" + numITR +
+                ", direccion=" + direccion +
                 ", telefonos=" + telefonos +
+                ", carreras=" + carreras +
                 '}';
     }
 }
