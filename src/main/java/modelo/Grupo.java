@@ -1,6 +1,4 @@
-package CasoEstudioUTEC;
-
-import java.util.List;
+package main.java.modelo;
 
 public class Grupo {
     private int id;

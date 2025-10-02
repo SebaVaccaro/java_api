@@ -1,4 +1,4 @@
-package CasoEstudioUTEC;
+package main.java.modelo;
 
 public class Carrera {
     private int id;

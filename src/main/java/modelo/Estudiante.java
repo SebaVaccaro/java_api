@@ -1,11 +1,10 @@
-package CasoEstudioUTEC;
+package main.java.modelo;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 
-public class Estudiante extends Usuario{
+public class Estudiante extends Usuario {
 
     private List<ArchivoAdjunto> archivoAdjuntoList = new ArrayList<ArchivoAdjunto>(); //Archivos adjuntos que muestran el estado de salud.
     private Estado estado;

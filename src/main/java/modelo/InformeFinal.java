@@ -1,8 +1,6 @@
-package CasoEstudioUTEC;
+package main.java.modelo;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class InformeFinal {
     private String id;

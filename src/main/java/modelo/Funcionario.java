@@ -1,4 +1,4 @@
-package CasoEstudioUTEC;
+package main.java.modelo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ public class Funcionario extends Usuario {
     }
 
     public void generarInstancia(String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios){
-        Instancia instancia = new Instancia(id, titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
+        Instancia instancia = new InstanciaComun(titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
     }
 
     public void generarIncidencia(String lugar, String id, String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios){

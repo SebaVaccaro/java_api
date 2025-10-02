@@ -1,4 +1,4 @@
-package CasoEstudioUTEC;
+package main.java.modelo;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
