@@ -53,7 +53,7 @@ public class FuncionarioDAO {
             if (rs.next()) f.setId(rs.getInt("id_usuario"));
         }
 
-        String sqlFunc = "INSERT INTO funcionarios(id_usuario, id_rol, estado_activo) VALUES (?, ?, ?)";
+        String sqlFunc = "INSERT INTO funcionarios(id_usuario, id_rol, est_activo) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sqlFunc)) {
             ps.setInt(1, f.getId());
             if (f.getRol() != null) {
@@ -71,7 +71,7 @@ public class FuncionarioDAO {
     // Obtener funcionario por id
     public Funcionario obtenerFuncionario(int id) throws SQLException {
         String sql = "SELECT u.id_usuario, u.cedula, u.username, u.password, u.nombre, u.apellido, u.correo, " +
-                "f.id_rol, f.estado_activo " +
+                "f.id_rol, f.est_activo " +
                 "FROM usuarios u JOIN funcionarios f ON u.id_usuario=f.id_usuario " +
                 "WHERE u.id_usuario=?";
         Funcionario fun = null;
@@ -97,7 +97,7 @@ public class FuncionarioDAO {
                         null, // telefono
                         null  // direccion
                 );
-                fun.setEstadoActivo(rs.getBoolean("estado_activo"));
+                fun.setEstadoActivo(rs.getBoolean("est_activo"));
             }
         }
         return fun;
@@ -107,7 +107,7 @@ public class FuncionarioDAO {
     public List<Funcionario> listarFuncionarios() throws SQLException {
         List<Funcionario> funcionarios = new ArrayList<>();
         String sql = "SELECT u.id_usuario, u.cedula, u.username, u.password, u.nombre, u.apellido, u.correo, " +
-                "f.id_rol, f.estado_activo " +
+                "f.id_rol, f.est_activo " +
                 "FROM usuarios u JOIN funcionarios f ON u.id_usuario=f.id_usuario";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
@@ -130,7 +130,7 @@ public class FuncionarioDAO {
                         null,
                         null
                 );
-                f.setEstadoActivo(rs.getBoolean("estado_activo"));
+                f.setEstadoActivo(rs.getBoolean("est_activo"));
                 funcionarios.add(f);
             }
         }
@@ -156,7 +156,7 @@ public class FuncionarioDAO {
             filasUsuarios = psUsuario.executeUpdate();
         }
 
-        String sqlFunc = "UPDATE funcionarios SET id_rol=?, estado_activo=? WHERE id_usuario=?";
+        String sqlFunc = "UPDATE funcionarios SET id_rol=?, est_activo=? WHERE id_usuario=?";
         try (PreparedStatement psFunc = conn.prepareStatement(sqlFunc)) {
             if (f.getRol() != null) {
                 psFunc.setInt(1, mapRolToId(f.getRol()));
@@ -175,7 +175,7 @@ public class FuncionarioDAO {
 
     // Baja lógica
     public boolean eliminarFuncionario(int id) throws SQLException {
-        String sql = "UPDATE funcionarios SET estado_activo=false WHERE id_usuario=?";
+        String sql = "UPDATE funcionarios SET est_activo=false WHERE id_usuario=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;

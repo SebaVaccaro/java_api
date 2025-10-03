@@ -2,6 +2,7 @@ package SINGLETON;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class ConexionSingleton {
@@ -15,10 +16,13 @@ public class ConexionSingleton {
     private ConexionSingleton() throws SQLException {
         try {
             conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+            // Establecemos el esquema por defecto para todas las consultas
+            try (Statement stmt = conexion.createStatement()) {
+                stmt.execute("SET search_path TO proyecto_desarrollo_sienep");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new SQLException("Error al conectar a la base de datos", e);
-
         }
     }
 
