@@ -1,4 +1,4 @@
-package main.java.modelo;
+package modelo;
 
 public class Carrera {
     private int id;

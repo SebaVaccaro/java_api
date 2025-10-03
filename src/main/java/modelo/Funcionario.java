@@ -1,4 +1,4 @@
-package main.java.modelo;
+package modelo;
 
 /**
  * Clase Funcionario que hereda de Usuario.
@@ -34,6 +34,11 @@ public class Funcionario extends Usuario {
 
     public void setRol(Rol rol) {
         this.rol = rol;
+    }
+
+    @Override
+    public String getTipo() {
+        return "FUNCIONARIO";
     }
 
     @Override

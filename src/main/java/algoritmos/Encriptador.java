@@ -1,6 +1,6 @@
-package main.java.algoritmos;
+package algoritmos;
 
-class Encriptador {
+public class Encriptador {
 
     // Encriptar completo
     public static String encriptar(String texto) {

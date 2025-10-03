@@ -1,4 +1,7 @@
-package main.java.modelo;
+package modelo;
+
+import modelo.Funcionario;
+import modelo.InstanciaComun;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

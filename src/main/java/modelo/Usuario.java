@@ -1,4 +1,7 @@
-package main.java.modelo;
+package modelo;
+
+import modelo.Direccion;
+import modelo.Notificacion;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -58,6 +61,7 @@ public abstract class Usuario {
     public void addDireccion(Direccion direccion) { direcciones.add(direccion); }
     public void addNotificacion(Notificacion n) { listaNotificaciones.add(n); }
     public LinkedList<Notificacion> getListaNotificaciones() { return listaNotificaciones; }
+    public abstract String getTipo();
 
     @Override
     public String toString() {

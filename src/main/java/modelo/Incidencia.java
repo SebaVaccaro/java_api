@@ -1,4 +1,10 @@
-package main.java.modelo;
+package modelo;
+
+
+import modelo.*;
+import modelo.Instancia;
+
+
 
 import java.time.LocalDateTime;
 import java.util.List;

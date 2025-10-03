@@ -1,6 +1,7 @@
-package main.java.modelo;
+package modelo;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class InstanciaComun extends Instancia {
@@ -8,7 +9,7 @@ public class InstanciaComun extends Instancia {
     private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
 
     public InstanciaComun(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
-        super(titulo, tipo, fechaHora, descripcion, estudiante);
+        super(titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
         this.funcionarios = funcionarios;
         LocalDateTime fechaHoy = LocalDateTime.now();
 
@@ -34,7 +35,7 @@ public class InstanciaComun extends Instancia {
         funcionarios.add(funcionario);
     }
 
-    public void generarNotificacion(String id, Usuario destinatario, String asunto, String mensaje, LocalDateTime fechaEnvio) {
+    public void generarNotificacion(int id, Usuario destinatario, String asunto, String mensaje, LocalDateTime fechaEnvio) {
         Notificacion notificacion = new Notificacion(id, destinatario, asunto, mensaje, fechaEnvio);
         destinatario.addNotificacion(notificacion);
     }

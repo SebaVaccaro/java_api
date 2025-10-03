@@ -1,5 +1,6 @@
-package main.java.modelo;
+package modelo;
 
+import modelo.Seguimiento;
 import java.time.LocalDate;
 
 public class InformeFinal {

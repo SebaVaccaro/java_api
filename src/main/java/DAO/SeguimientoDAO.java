@@ -1,7 +1,7 @@
-package main.java.DAO;
+package DAO;
 
-import main.java.SINGLETON.ConexionSingleton;
-import main.java.modelo.Seguimiento;
+import SINGLETON.ConexionSingleton;
+import modelo.Seguimiento;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

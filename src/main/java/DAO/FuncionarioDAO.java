@@ -1,7 +1,7 @@
-package main.java.DAO;
+package DAO;
 
-import main.java.SINGLETON.ConexionSingleton;
-import main.java.modelo.Funcionario;
+import SINGLETON.ConexionSingleton;
+import modelo.Funcionario;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
-package main.java.DAO;
+package DAO;
 
-import main.java.SINGLETON.ConexionSingleton;
-import main.java.modelo.Estudiante;
-import main.java.modelo.Grupo;
+import SINGLETON.ConexionSingleton;
+import modelo.Estudiante;
+import modelo.Grupo;
 
 import java.sql.*;
 import java.util.ArrayList;

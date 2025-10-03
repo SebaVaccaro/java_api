@@ -1,4 +1,4 @@
-package main.java.SINGLETON;
+package SINGLETON;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -8,15 +8,17 @@ public class ConexionSingleton {
     private static ConexionSingleton instancia;
     private Connection conexion;
 
-    private final String URL = "jdbc:postgresql://localhost:5432/utecdb";
+    private final String URL = "jdbc:postgresql://db.epcuoytpsskxbhiubyrc.supabase.co:5432/postgres?sslmode=require";
     private final String USUARIO = "postgres";
-    private final String PASSWORD = "postgres";
+    private final String PASSWORD = "maZsud-tanbaw-3nomtu";
 
     private ConexionSingleton() throws SQLException {
         try {
             conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new SQLException("Error al conectar a la base de datos", e);
+
         }
     }
 

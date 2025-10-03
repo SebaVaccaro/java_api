@@ -1,5 +1,9 @@
-package main.java.modelo;
+package modelo;
 
+import modelo.ArchivoAdjunto;
+import modelo.Observaciones;
+import modelo.Direccion;
+import modelo.Grupo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +40,11 @@ public class Estudiante extends Usuario {
         if (archivo != null) {
             this.archivosAdjuntos.add(archivo);
         }
+    }
+
+    @Override
+    public String getTipo() {
+        return "ESTUDIANTE";
     }
 
     public List<Observaciones> getObservaciones() {

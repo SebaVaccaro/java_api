@@ -1,5 +1,6 @@
-package main.java.modelo;
+package modelo;
 
+import modelo.Funcionario;
 import java.time.LocalDateTime;
 
 public class Observaciones {

@@ -1,4 +1,4 @@
-package main.java.algoritmos;
+package algoritmos;
 
 public class ValidadorCI {
     public static boolean validarCI(String ci) {

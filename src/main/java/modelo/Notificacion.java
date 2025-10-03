@@ -1,9 +1,9 @@
-package main.java.modelo;
+package modelo;
 
 import java.time.LocalDateTime;
 
 public class Notificacion {
-    private String id;
+    private int id;
     private Usuario destinatario;
     private String asunto;
     private String mensaje;
@@ -11,7 +11,7 @@ public class Notificacion {
     private boolean estadoActivo = true; // hace referencia a que la notificacion está activa
 
     //Constructor
-    public Notificacion(String id,
+    public Notificacion(int id,
                         Usuario destinatario,
                         String asunto,
                         String mensaje,
@@ -24,7 +24,7 @@ public class Notificacion {
     }
 
     // Métodos
-    public String getId() {
+    public int getId() {
         return id;
     }
 
