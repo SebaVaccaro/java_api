@@ -2,17 +2,17 @@ package main.java.modelo;
 
 public class Grupo {
 
-    private String id;
+    private int id;
     private String nombre;
     private Carrera carrera;
 
-    public Grupo(String id, String nombre, Carrera carrera) {
+    public Grupo(int id, String nombre, Carrera carrera) {
         this.id = id;
         this.nombre = nombre;
         this.carrera = carrera;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
