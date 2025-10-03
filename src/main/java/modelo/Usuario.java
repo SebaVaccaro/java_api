@@ -51,6 +51,8 @@ public abstract class Usuario {
     public void setApellido(String apellido) { this.apellido = apellido; }
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
+    public String getCi() { return correo; }
+    public void setCi(String ci) { this.ci = ci; }
     public void addTelefono(String telefono) { telefonos.add(telefono); }
     public List<Direccion> getDirecciones() { return direcciones; }
     public void addDireccion(Direccion direccion) { direcciones.add(direccion); }

@@ -3,66 +3,49 @@ package main.java.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Estudiante extends Usuario {
 
-    private List<ArchivoAdjunto> archivoAdjuntoList = new ArrayList<ArchivoAdjunto>(); //Archivos adjuntos que muestran el estado de salud.
-    private Estado estado;
-    private List<Observaciones> observaciones = new ArrayList<Observaciones>();
+    private boolean activo = false; // Indica si el estudiante está activo o fue eliminado
+    private List<ArchivoAdjunto> archivosAdjuntos;
+    private List<Observaciones> observaciones;
     private Grupo grupo;
 
-    public enum Estado {
-        CREADO,
-        ELIMINADO,
-        EN_SEGUIMIENTO,
-        FINALIZADO
-    }
-
-    public Estudiante(String id,
-                      String ci,
-                      String username,
-                      String password,
-                      String nombre,
-                      String apellido,
-                      String correo,
-                      String telefono,
-                      Direccion direccion,
-                      List<ArchivoAdjunto> archivoAdjuntoList,
-                      Estado estado,
-                      Grupo grupo) {
-
+    public Estudiante(int id, String ci, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion, Grupo grupo) {
         super(id, ci, username, password, nombre, apellido, correo, telefono, direccion);
-        this.archivoAdjuntoList = archivoAdjuntoList;
-        this.estado = estado;
-        this.grupo = grupo;
-        
+        this.archivosAdjuntos = new ArrayList<>();
+        this.observaciones = new ArrayList<>();
+        if(grupo!=null){
+            this.grupo = grupo;
+        } // puede ser null si aún no está asignado
     }
 
-
-    public Estado getEstado() {
-        return estado;
+    // Getter / Setter activo
+    public boolean isActivo() {
+        return activo;
     }
 
-    public void setEstado(Estado estado) {
-        this.estado = estado;
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
 
-    public List<ArchivoAdjunto> getArchivoAdjuntoList() {
-        return archivoAdjuntoList;
+    public List<ArchivoAdjunto> getArchivosAdjuntos() {
+        return archivosAdjuntos;
     }
 
-    public void addArchivoAdjunto(ArchivoAdjunto archivoAdjunto){
-        this.archivoAdjuntoList.add(archivoAdjunto);
+    public void addArchivoAdjunto(ArchivoAdjunto archivo) {
+        if (archivo != null) {
+            this.archivosAdjuntos.add(archivo);
+        }
     }
-
 
     public List<Observaciones> getObservaciones() {
         return observaciones;
     }
 
-
-    public void addObservacion(Observaciones observacion){
-        observaciones.add(observacion);
+    public void addObservacion(Observaciones obs) {
+        if (obs != null) {
+            this.observaciones.add(obs);
+        }
     }
 
     public Grupo getGrupo() {
@@ -73,20 +56,12 @@ public class Estudiante extends Usuario {
         this.grupo = grupo;
     }
 
-    /**
-*    public String generarReporte(){
-*        return ??
-*    Metodo para generar reportes que no sabemos como implementar aún.
-*    Pensamos que puede ser una query a la DB directamente, o un metodo de clase.
-*   };
-*/
-
-@Override
+    @Override
     public String toString() {
-
         return super.toString() +
-                "archivoAdjuntoList" + '\'' +archivoAdjuntoList +'\'' +
-                ", estado=" + '\'' +estado +'\'' +
-                ", observaciones=" + '\'' +observaciones +'\'';
+                ", activo=" + activo +
+                ", grupo=" + grupo +
+                ", archivosAdjuntos=" + archivosAdjuntos +
+                ", observaciones=" + observaciones;
     }
 }
