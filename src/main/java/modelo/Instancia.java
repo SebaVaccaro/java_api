@@ -12,6 +12,7 @@ public abstract class Instancia {
     protected String descripcion;
     protected Estudiante estudiante;
     protected boolean estadoActivo = true;
+    List<Funcionario> funcionarios;
 
     public Instancia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
         this.titulo = titulo;
@@ -86,4 +87,5 @@ public abstract class Instancia {
                 '}';
     }
 
+}
 
