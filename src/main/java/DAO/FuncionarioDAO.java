@@ -40,6 +40,11 @@ public class FuncionarioDAO {
 
     // Crear funcionario
     public Funcionario crearFuncionario(Funcionario f) throws SQLException {
+
+        try {
+            conn.setAutoCommit(false); // inicio transacción
+
+
         String sqlUsuario = "INSERT INTO usuarios(cedula, nombre, apellido, username, password, correo) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_usuario";
         try (PreparedStatement ps = conn.prepareStatement(sqlUsuario)) {
@@ -64,6 +69,15 @@ public class FuncionarioDAO {
             ps.setBoolean(3, f.isEstadoActivo());
             ps.executeUpdate();
         }
+
+            conn.commit(); // confirmamos todo
+        } catch (SQLException e) {
+            conn.rollback(); // revertimos todo si algo falla
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+
 
         return f;
     }

@@ -10,8 +10,8 @@ public class ConexionSingleton {
     private Connection conexion;
 
     private final String URL = "jdbc:postgresql://db.epcuoytpsskxbhiubyrc.supabase.co:5432/postgres?sslmode=require";
-    private final String USUARIO = "postgres";
-    private final String PASSWORD = "maZsud-tanbaw-3nomtu";
+    private final String USUARIO = "postgres"; // Esto lo vamos a mejorar luego para tener integridad de seguridad.
+    private final String PASSWORD = "maZsud-tanbaw-3nomtu"; // Vamos a usar un archivo local que maneje las credenciales.
 
     private ConexionSingleton() throws SQLException {
         try {
