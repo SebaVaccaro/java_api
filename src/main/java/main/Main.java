@@ -178,9 +178,6 @@ public class Main {
                     System.out.print("Ingrese fecha de nacimiento (YYYY-MM-DD): ");
                     LocalDate fechaNacimiento = LocalDate.parse(sc.nextLine().trim());
 
-                    System.out.print("Ingrese username: ");
-                    String username = sc.nextLine().trim();
-
                     System.out.print("Ingrese contraseña: ");
                     String password = sc.nextLine().trim();
 
@@ -189,7 +186,7 @@ public class Main {
 
                     // Llamamos al servicio que usa el EstudianteServicio interno
                     Estudiante nuevo = funService.crearEstudianteDesdeFuncionario(
-                            fun, ci, username, password, nombre, apellido, fechaNacimiento, idGrupo
+                            fun, ci, nombre + "." + apellido, password, nombre, apellido, fechaNacimiento, idGrupo
                     );
 
                     System.out.println("✅ Estudiante creado: " + nuevo.getCorreo());
