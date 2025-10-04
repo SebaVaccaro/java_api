@@ -84,7 +84,7 @@ public class Main {
         while (true) {
             System.out.println("\n---- Menú Estudiante ----");
             System.out.println("1. Consultar datos personales");
-            System.out.println("2. Consultar seguimientos");
+            System.out.println("2. Consultar estado del estudiante");
             System.out.println("3. Cerrar sesión");
             System.out.println("4. Salir del sistema");
 
@@ -124,9 +124,13 @@ public class Main {
             int num = 1;
             Map<Integer, String> opciones = new HashMap<>();
 
+            // Opciones según permisos
             if (funService.puedeCrearUsuario(fun)) {
                 System.out.println(num + ". Crear estudiante");
-                opciones.put(num++, "CREAR");
+                opciones.put(num++, "CREAR_ESTUDIANTE");
+
+                System.out.println(num + ". Crear funcionario");
+                opciones.put(num++, "CREAR_FUNCIONARIO");
             }
             if (funService.puedeModificar(fun)) {
                 System.out.println(num + ". Modificar usuario");
@@ -161,11 +165,11 @@ public class Main {
         }
     }
 
+
     private static void ejecutarAccionFuncionario(String accion, Scanner sc, Funcionario fun, FuncionarioServicio funService) {
         switch (accion) {
-            case "CREAR" -> {
+            case "CREAR_ESTUDIANTE" -> {
                 try {
-                    // Pedimos todos los datos necesarios
                     System.out.print("Ingrese CI del estudiante: ");
                     String ci = sc.nextLine().trim();
 
@@ -184,7 +188,6 @@ public class Main {
                     System.out.print("Ingrese ID de grupo: ");
                     int idGrupo = Integer.parseInt(sc.nextLine().trim());
 
-                    // Llamamos al servicio que usa el EstudianteServicio interno
                     Estudiante nuevo = funService.crearEstudianteDesdeFuncionario(
                             fun, ci, nombre + "." + apellido, password, nombre, apellido, fechaNacimiento, idGrupo
                     );
@@ -194,6 +197,54 @@ public class Main {
                     System.out.println("❌ No se pudo crear el estudiante: " + e.getMessage());
                 }
             }
+
+            case "CREAR_FUNCIONARIO" -> {
+                try {
+                    System.out.print("Ingrese CI del funcionario: ");
+                    String ci = sc.nextLine().trim();
+
+                    System.out.print("Ingrese nombre: ");
+                    String nombre = sc.nextLine().trim();
+
+                    System.out.print("Ingrese apellido: ");
+                    String apellido = sc.nextLine().trim();
+
+                    System.out.print("Ingrese fecha de nacimiento (YYYY-MM-DD): ");
+                    LocalDate fechaNacimiento = LocalDate.parse(sc.nextLine().trim());
+
+                    System.out.print("Ingrese username: ");
+                    String username = sc.nextLine().trim();
+
+                    System.out.print("Ingrese contraseña: ");
+                    String password = sc.nextLine().trim();
+
+                    System.out.println("Seleccione rol:");
+                    System.out.println("1. ADMINISTRADOR");
+                    System.out.println("2. PSICOPEDAGOGO");
+                    System.out.println("3. ANALISTA_EDUCATIVO");
+                    System.out.println("4. RESPONSABLE_EDUCATIVO");
+                    System.out.println("5. AREA_LEGAL");
+                    int rolNum = Integer.parseInt(sc.nextLine().trim());
+
+                    Funcionario.Rol rol = switch (rolNum) {
+                        case 1 -> Funcionario.Rol.ADMINISTRADOR;
+                        case 2 -> Funcionario.Rol.PSICOPEDAGOGO;
+                        case 3 -> Funcionario.Rol.ANALISTA_EDUCATIVO;
+                        case 4 -> Funcionario.Rol.RESPONSABLE_EDUCATIVO;
+                        case 5 -> Funcionario.Rol.AREA_LEGAL;
+                        default -> throw new Exception("Rol inválido");
+                    };
+
+                    Funcionario nuevo = funService.registrarFuncionario(
+                            rol, ci, username, password, nombre, apellido, fechaNacimiento
+                    );
+
+                    System.out.println("✅ Funcionario creado: " + nuevo.getCorreo());
+                } catch (Exception e) {
+                    System.out.println("❌ No se pudo crear el funcionario: " + e.getMessage());
+                }
+            }
+
             case "MODIFICAR" -> System.out.println("✏️ Modificar usuario (simulado)");
             case "CONFIDENCIAL" -> System.out.println("🔒 Accediendo a datos confidenciales...");
         }

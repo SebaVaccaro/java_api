@@ -66,7 +66,8 @@ public class FuncionarioDAO {
             } else {
                 ps.setNull(2, Types.INTEGER);
             }
-            ps.setBoolean(3, f.isEstadoActivo());
+            ps.setBoolean(3, f.isActivo());
+
             ps.executeUpdate();
         }
 
@@ -111,7 +112,8 @@ public class FuncionarioDAO {
                         null, // telefono
                         null  // direccion
                 );
-                fun.setEstadoActivo(rs.getBoolean("est_activo"));
+                fun.setActivo(rs.getBoolean("est_activo"));
+
             }
         }
         return fun;
@@ -144,7 +146,8 @@ public class FuncionarioDAO {
                         null,
                         null
                 );
-                f.setEstadoActivo(rs.getBoolean("est_activo"));
+                f.setActivo(rs.getBoolean("est_activo"));
+
                 funcionarios.add(f);
             }
         }
@@ -177,7 +180,7 @@ public class FuncionarioDAO {
             } else {
                 psFunc.setNull(1, Types.INTEGER);
             }
-            psFunc.setBoolean(2, f.isEstadoActivo());
+            psFunc.setBoolean(2, f.isActivo());
             psFunc.setInt(3, f.getId());
             filasFuncionario = psFunc.executeUpdate();
         }
