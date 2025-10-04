@@ -212,8 +212,6 @@ public class Main {
                     System.out.print("Ingrese fecha de nacimiento (YYYY-MM-DD): ");
                     LocalDate fechaNacimiento = LocalDate.parse(sc.nextLine().trim());
 
-                    System.out.print("Ingrese username: ");
-                    String username = sc.nextLine().trim();
 
                     System.out.print("Ingrese contraseña: ");
                     String password = sc.nextLine().trim();
@@ -236,7 +234,7 @@ public class Main {
                     };
 
                     Funcionario nuevo = funService.registrarFuncionario(
-                            rol, ci, username, password, nombre, apellido, fechaNacimiento
+                            rol, ci, nombre + "." + apellido, password, nombre, apellido, fechaNacimiento
                     );
 
                     System.out.println("✅ Funcionario creado: " + nuevo.getCorreo());
