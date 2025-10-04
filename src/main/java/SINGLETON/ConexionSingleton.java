@@ -9,13 +9,14 @@ public class ConexionSingleton {
     private static ConexionSingleton instancia;
     private Connection conexion;
 
-    private final String URL = "jdbc:postgresql://db.epcuoytpsskxbhiubyrc.supabase.co:5432/postgres?sslmode=require";
-    private final String USUARIO = "postgres"; // Esto lo vamos a mejorar luego para tener integridad de seguridad.
-    private final String PASSWORD = "maZsud-tanbaw-3nomtu"; // Vamos a usar un archivo local que maneje las credenciales.
+
+    private final String dbHost = System.getenv("DB_HOST");
+    private final String dbUser = System.getenv("DB_USER");
+    private final String dbPassword = System.getenv("DB_PASSWORD");
 
     private ConexionSingleton() throws SQLException {
         try {
-            conexion = DriverManager.getConnection(URL, USUARIO, PASSWORD);
+            conexion = DriverManager.getConnection(dbHost, dbUser, dbPassword);
             // Establecemos el esquema por defecto para todas las consultas
             try (Statement stmt = conexion.createStatement()) {
                 stmt.execute("SET search_path TO proyecto_desarrollo_sienep");
