@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Estudiante extends Usuario {
 
-    private boolean activo = false; // Indica si el estudiante está activo o fue eliminado
+
     private List<ArchivoAdjunto> archivosAdjuntos;
     private List<Observaciones> observaciones;
     private Grupo grupo;
@@ -24,13 +24,7 @@ public class Estudiante extends Usuario {
     }
 
     // Getter / Setter activo
-    public boolean isActivo() {
-        return activo;
-    }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
 
     public List<ArchivoAdjunto> getArchivosAdjuntos() {
         return archivosAdjuntos;
@@ -68,8 +62,7 @@ public class Estudiante extends Usuario {
     @Override
     public String toString() {
         return super.toString() +
-                ", activo=" + activo +
-                ", grupo=" + grupo +
+                ", grupo=" + (grupo != null ? grupo.getId() : "null") +
                 ", archivosAdjuntos=" + archivosAdjuntos +
                 ", observaciones=" + observaciones;
     }

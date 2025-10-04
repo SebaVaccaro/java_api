@@ -6,7 +6,7 @@ package modelo;
  */
 public class Funcionario extends Usuario {
 
-    private boolean estadoActivo = true;
+
     private Rol rol;
 
     public enum Rol {
@@ -20,13 +20,7 @@ public class Funcionario extends Usuario {
         }
     }
 
-    public boolean isEstadoActivo() {
-        return estadoActivo;
-    }
 
-    public void setEstadoActivo(boolean estadoActivo) {
-        this.estadoActivo = estadoActivo;
-    }
 
     public Rol getRol() {
         return rol;
@@ -41,10 +35,8 @@ public class Funcionario extends Usuario {
         return "FUNCIONARIO";
     }
 
-    @Override
     public String toString() {
         return super.toString() +
-                ", estadoActivo=" + estadoActivo +
                 ", rol=" + rol;
     }
 }
