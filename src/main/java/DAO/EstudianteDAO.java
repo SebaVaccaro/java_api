@@ -18,9 +18,14 @@ public class EstudianteDAO {
 
     // Crear estudiante
     public Estudiante crearEstudiante(Estudiante est) throws SQLException {
-        // 🚨 Insertamos en usuarios (sin est_activo porque está en estudiantes)
+
+        try {
+            conn.setAutoCommit(false); // inicio transacción
+
+            // 🚨 Insertamos en usuarios (sin est_activo porque está en estudiantes)
         String sqlUsuario = "INSERT INTO usuarios(cedula, nombre, apellido, username, password, correo) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_usuario";
+
         try (PreparedStatement ps = conn.prepareStatement(sqlUsuario)) {
             ps.setString(1, est.getCi());
             ps.setString(2, est.getNombre());
@@ -43,6 +48,14 @@ public class EstudianteDAO {
             }
             ps.setBoolean(3, est.isActivo());
             ps.executeUpdate();
+        }
+
+            conn.commit(); // confirmamos todo
+        } catch (SQLException e) {
+            conn.rollback(); // revertimos todo si algo falla
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
         }
 
         return est;

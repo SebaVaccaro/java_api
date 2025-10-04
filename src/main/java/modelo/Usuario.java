@@ -24,7 +24,7 @@ public abstract class Usuario {
     private List<Direccion> direcciones = new ArrayList<>();
     private LinkedList<Notificacion> listaNotificaciones = new LinkedList<>();
 
-    public Usuario(int id, String ci, String username, String password,String nombre, String apellido, String correo,String telefono, Direccion direccion) {
+    public Usuario(int id, String ci, String username, String password, String nombre, String apellido, String correo,String telefono, Direccion direccion) {
         this.id = id;
         this.ci = ci;
         this.username = username;
@@ -54,7 +54,7 @@ public abstract class Usuario {
     public void setApellido(String apellido) { this.apellido = apellido; }
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
-    public String getCi() { return correo; }
+    public String getCi() { return ci; }
     public void setCi(String ci) { this.ci = ci; }
     public void addTelefono(String telefono) { telefonos.add(telefono); }
     public List<Direccion> getDirecciones() { return direcciones; }
