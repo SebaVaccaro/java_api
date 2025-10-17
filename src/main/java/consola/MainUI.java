@@ -1,5 +1,6 @@
 package consola;
 
+import consola.Estudiante.EstudianteUI;
 import consola.Login.LoginUI;
 import consola.Admin.AdminUI;
 import modelo.Usuario;
@@ -14,17 +15,18 @@ public class MainUI {
         Usuario usuario = null;
 
         while (true) {
-            while (usuario == null) {
-                usuario = loginUI.iniciar();
-            }
 
+            usuario = loginUI.iniciar();
+            if(usuario == null){
+                return;
+            }
             if (usuario instanceof Estudiante est) {
                 System.out.println("\n🎓 Bienvenido, estudiante " + est.getNombre() + "!");
-                // Aquí podrías abrir una interfaz de estudiante si la tienes
+                EstudianteUI estudianteUI= new EstudianteUI(est);
+                estudianteUI.iniciar();
             }
             else if (usuario instanceof Funcionario func) {
                 System.out.println("\n🏢 Bienvenido, funcionario " + func.getNombre() + "!");
-                // 👇 Pasamos el objeto func (Funcionario) al constructor
                 AdminUI adminUI = new AdminUI(func);
                 adminUI.iniciar();
             }

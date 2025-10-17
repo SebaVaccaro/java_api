@@ -1,5 +1,6 @@
 package servicios;
 
+import algoritmos.Encriptador;
 import modelo.Usuario;
 import modelo.Estudiante;
 import modelo.Funcionario;
@@ -29,7 +30,10 @@ public class LoginService {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos");
         }
-
+        String pass = Encriptador.desencriptar(usuario.getPassword());
+        if(!pass.equals(password)){
+            throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
+        }
 
         String correo = usuario.getCorreo().toLowerCase();
 
@@ -42,8 +46,7 @@ public class LoginService {
             if (est == null) {
                 throw new IllegalArgumentException("No se encontró el estudiante en la base de datos.");
             }
-
-            return est; // Retornamos el estudiante completo
+            return est;
 
         } else if (correo.endsWith("@utec.edu.uy")) {
 
