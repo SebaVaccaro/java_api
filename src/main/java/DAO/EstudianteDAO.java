@@ -2,7 +2,6 @@ package DAO;
 
 import SINGLETON.ConexionSingleton;
 import modelo.Estudiante;
-import modelo.Grupo;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,46 +12,46 @@ public class EstudianteDAO {
     private final Connection conn;
 
     public EstudianteDAO() throws SQLException {
-        conn = ConexionSingleton.getInstance().getConexion();
+        this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // Crear estudiante
+    // 🟢 Crear estudiante (inserta en usuarios y estudiantes)
     public Estudiante crearEstudiante(Estudiante est) throws SQLException {
-
         try {
-            conn.setAutoCommit(false); // inicio transacción
+            conn.setAutoCommit(false);
 
-            // 🚨 Insertamos en usuarios (sin est_activo porque está en estudiantes)
-        String sqlUsuario = "INSERT INTO usuarios(cedula, nombre, apellido, username, password, correo) " +
-                "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_usuario";
-
-        try (PreparedStatement ps = conn.prepareStatement(sqlUsuario)) {
-            ps.setString(1, est.getCi());
-            ps.setString(2, est.getNombre());
-            ps.setString(3, est.getApellido());
-            ps.setString(4, est.getUsername());
-            ps.setString(5, est.getPassword());
-            ps.setString(6, est.getCorreo());
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) est.setId(rs.getInt("id_usuario"));
-        }
-
-        // 🚨 Insertamos en estudiantes
-        String sqlEst = "INSERT INTO estudiantes(id_usuario, id_grupo, est_activo) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = conn.prepareStatement(sqlEst)) {
-            ps.setInt(1, est.getId());
-            if (est.getGrupo() != null) {
-                ps.setInt(2, est.getGrupo().getId());
-            } else {
-                ps.setNull(2, Types.INTEGER);
+            // Insertamos primero en usuarios
+            String sqlUsuario = "INSERT INTO usuarios (cedula, nombre, apellido, username, password, correo) " +
+                    "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_usuario";
+            try (PreparedStatement ps = conn.prepareStatement(sqlUsuario)) {
+                ps.setString(1, est.getCedula());
+                ps.setString(2, est.getNombre());
+                ps.setString(3, est.getApellido());
+                ps.setString(4, est.getUsername());
+                ps.setString(5, est.getPassword());
+                ps.setString(6, est.getCorreo());
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    est.setIdUsuario(rs.getInt("id_usuario"));
+                }
             }
-            ps.setBoolean(3, est.isActivo());
-            ps.executeUpdate();
-        }
 
-            conn.commit(); // confirmamos todo
+            // Luego insertamos en estudiantes
+            String sqlEst = "INSERT INTO estudiantes (id_usuario, id_grupo, est_activo) VALUES (?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sqlEst)) {
+                ps.setInt(1, est.getIdUsuario());
+                if (est.getIdGrupo() > 0) {
+                    ps.setInt(2, est.getIdGrupo());
+                } else {
+                    ps.setNull(2, Types.INTEGER);
+                }
+                ps.setBoolean(3, est.isEstActivo());
+                ps.executeUpdate();
+            }
+
+            conn.commit();
         } catch (SQLException e) {
-            conn.rollback(); // revertimos todo si algo falla
+            conn.rollback();
             throw e;
         } finally {
             conn.setAutoCommit(true);
@@ -61,130 +60,119 @@ public class EstudianteDAO {
         return est;
     }
 
-    // Obtener estudiante por id
-    public Estudiante obtenerEstudiante(int id) throws SQLException {
-        String sql = "SELECT u.id_usuario, u.cedula, u.username, u.password, u.nombre, u.apellido, u.correo, " +
-                "e.id_grupo, e.est_activo " +
-                "FROM usuarios u JOIN estudiantes e ON u.id_usuario=e.id_usuario " +
-                "WHERE u.id_usuario=?";
+    // 🟡 Obtener estudiante por ID
+    public Estudiante obtenerEstudiante(int idUsuario) throws SQLException {
+        String sql = """
+            SELECT u.id_usuario, u.cedula, u.nombre, u.apellido, u.username, u.password, u.correo,
+                   e.id_grupo, e.est_activo
+            FROM usuarios u
+            JOIN estudiantes e ON u.id_usuario = e.id_usuario
+            WHERE u.id_usuario = ?
+        """;
+
         Estudiante est = null;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Grupo grupo = null;
-                int idGrupo = rs.getInt("id_grupo");
-                if (idGrupo != 0) {
-                    grupo = new Grupo(idGrupo, null, null); // inicialización mínima
-                }
-
                 est = new Estudiante(
                         rs.getInt("id_usuario"),
                         rs.getString("cedula"),
-                        rs.getString("username"),
-                        rs.getString("password"),
                         rs.getString("nombre"),
                         rs.getString("apellido"),
+                        rs.getString("username"),
+                        rs.getString("password"),
                         rs.getString("correo"),
-                        null, // telefono
-                        null, // direccion
-                        grupo
+                        rs.getInt("id_grupo"),
+                        rs.getBoolean("est_activo")
                 );
-                est.setActivo(rs.getBoolean("est_activo"));
             }
         }
         return est;
     }
 
-    // Listar todos los estudiantes
+    // 🟠 Listar todos los estudiantes
     public List<Estudiante> listarEstudiantes() throws SQLException {
-        List<Estudiante> estudiantes = new ArrayList<>();
-        String sql = "SELECT u.id_usuario, u.cedula, u.username, u.password, u.nombre, u.apellido, u.correo, " +
-                "e.id_grupo, e.est_activo " +
-                "FROM usuarios u JOIN estudiantes e ON u.id_usuario=e.id_usuario";
+        List<Estudiante> lista = new ArrayList<>();
+
+        String sql = """
+            SELECT u.id_usuario, u.cedula, u.nombre, u.apellido, u.username, u.password, u.correo,
+                   e.id_grupo, e.est_activo
+            FROM usuarios u
+            JOIN estudiantes e ON u.id_usuario = e.id_usuario
+        """;
+
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Grupo grupo = null;
-                int idGrupo = rs.getInt("id_grupo");
-                if (idGrupo != 0) {
-                    grupo = new Grupo(idGrupo, null, null);
-                }
-
                 Estudiante est = new Estudiante(
                         rs.getInt("id_usuario"),
                         rs.getString("cedula"),
-                        rs.getString("username"),
-                        rs.getString("password"),
                         rs.getString("nombre"),
                         rs.getString("apellido"),
+                        rs.getString("username"),
+                        rs.getString("password"),
                         rs.getString("correo"),
-                        null,
-                        null,
-                        grupo
+                        rs.getInt("id_grupo"),
+                        rs.getBoolean("est_activo")
                 );
-                est.setActivo(rs.getBoolean("est_activo"));
-                estudiantes.add(est);
+                lista.add(est);
             }
         }
-        return estudiantes;
+        return lista;
     }
 
-    // Actualizar Estudiante
+    // 🔵 Actualizar estudiante
     public boolean actualizarEstudiante(Estudiante est) throws SQLException {
-        int filasUsuarios = 0;
-        int filasEstudiantes = 0;
+        int filasUsuarios;
+        int filasEstudiantes;
 
-        String sqlUsuario = "UPDATE usuarios SET cedula=?, nombre=?, apellido=?, username=?, password=?, correo=? " +
-                "WHERE id_usuario=?";
-        try (PreparedStatement psUsuario = conn.prepareStatement(sqlUsuario)) {
-            psUsuario.setString(1, est.getCi());
-            psUsuario.setString(2, est.getNombre());
-            psUsuario.setString(3, est.getApellido());
-            psUsuario.setString(4, est.getUsername());
-            psUsuario.setString(5, est.getPassword());
-            psUsuario.setString(6, est.getCorreo());
-            psUsuario.setInt(7, est.getId());
-            filasUsuarios = psUsuario.executeUpdate();
+        String sqlUsuario = "UPDATE usuarios SET cedula=?, nombre=?, apellido=?, username=?, password=?, correo=? WHERE id_usuario=?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlUsuario)) {
+            ps.setString(1, est.getCedula());
+            ps.setString(2, est.getNombre());
+            ps.setString(3, est.getApellido());
+            ps.setString(4, est.getUsername());
+            ps.setString(5, est.getPassword());
+            ps.setString(6, est.getCorreo());
+            ps.setInt(7, est.getIdUsuario());
+            filasUsuarios = ps.executeUpdate();
         }
 
         String sqlEst = "UPDATE estudiantes SET id_grupo=?, est_activo=? WHERE id_usuario=?";
-        try (PreparedStatement psEst = conn.prepareStatement(sqlEst)) {
-            if (est.getGrupo() != null) {
-                psEst.setInt(1, est.getGrupo().getId());
+        try (PreparedStatement ps = conn.prepareStatement(sqlEst)) {
+            if (est.getIdGrupo() > 0) {
+                ps.setInt(1, est.getIdGrupo());
             } else {
-                psEst.setNull(1, Types.INTEGER);
+                ps.setNull(1, Types.INTEGER);
             }
-            psEst.setBoolean(2, est.isActivo());
-            psEst.setInt(3, est.getId());
-            filasEstudiantes = psEst.executeUpdate();
+            ps.setBoolean(2, est.isEstActivo());
+            ps.setInt(3, est.getIdUsuario());
+            filasEstudiantes = ps.executeUpdate();
         }
 
-        return (filasUsuarios > 0) && (filasEstudiantes > 0);
+        return filasUsuarios > 0 && filasEstudiantes > 0;
     }
 
-
-
-    // Baja lógica
-    public boolean eliminarEstudiante(int id) throws SQLException {
-        String sql = "UPDATE estudiantes SET est_activo=false WHERE id_usuario=?";
+    // 🔴 Baja lógica (desactiva estudiante)
+    public boolean eliminarEstudiante(int idUsuario) throws SQLException {
+        String sql = "UPDATE estudiantes SET est_activo = false WHERE id_usuario = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, id);
+            ps.setInt(1, idUsuario);
             return ps.executeUpdate() > 0;
         }
     }
 
-    // Estados de seguimientos
-    public List<Boolean> obtenerEstadoSeguimientos(int idEstudiante) throws SQLException {
-        List<Boolean> lista = new ArrayList<>();
-        String sql = "SELECT est_activo FROM seguimientos WHERE id_estudiante=?";
+    // ⚪ Verificar si un estudiante está activo
+    public boolean estaActivo(int idUsuario) throws SQLException {
+        String sql = "SELECT est_activo FROM estudiantes WHERE id_usuario = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idEstudiante);
+            ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                lista.add(rs.getBoolean("est_activo"));
+            if (rs.next()) {
+                return rs.getBoolean("est_activo");
             }
         }
-        return lista;
+        return false;
     }
 }

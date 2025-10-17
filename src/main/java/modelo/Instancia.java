@@ -1,31 +1,48 @@
 package modelo;
 
-import modelo.Funcionario;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.OffsetDateTime;
 
-public abstract class Instancia {
-    protected int id;
-    protected String titulo;
-    protected String tipo;
-    protected LocalDateTime fechaHora;
-    protected String descripcion;
-    protected Estudiante estudiante;
-    protected boolean estadoActivo = true;
-    List<Funcionario> funcionarios;
+public class Instancia {
+    private int idInstancia;
+    private String titulo;
+    private String tipo;
+    private OffsetDateTime fecHora;
+    private String descripcion;
+    private boolean estActivo;  // corresponde a activo_flag
+    private int idFuncionario;  // FK hacia Funcionario
 
-    public Instancia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
-        this.titulo = titulo;
-        this.tipo = tipo;
-        this.fechaHora = fechaHora;
-        this.descripcion = descripcion;
-        this.estudiante = estudiante;
-        this.funcionarios = funcionarios;
+    // Constructor vacío
+    public Instancia() {
     }
 
-    public int getId() {
-        return id;
+    // Constructor sin id (para insertar)
+    public Instancia(String titulo, String tipo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
+        this.titulo = titulo;
+        this.tipo = tipo;
+        this.fecHora = fecHora;
+        this.descripcion = descripcion;
+        this.estActivo = estActivo;
+        this.idFuncionario = idFuncionario;
+    }
+
+    // Constructor completo
+    public Instancia(int idInstancia, String titulo, String tipo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
+        this.idInstancia = idInstancia;
+        this.titulo = titulo;
+        this.tipo = tipo;
+        this.fecHora = fecHora;
+        this.descripcion = descripcion;
+        this.estActivo = estActivo;
+        this.idFuncionario = idFuncionario;
+    }
+
+    // Getters y Setters
+    public int getIdInstancia() {
+        return idInstancia;
+    }
+
+    public void setIdInstancia(int idInstancia) {
+        this.idInstancia = idInstancia;
     }
 
     public String getTitulo() {
@@ -44,12 +61,12 @@ public abstract class Instancia {
         this.tipo = tipo;
     }
 
-    public LocalDateTime getFechaHora() {
-        return fechaHora;
+    public OffsetDateTime getFecHora() {
+        return fecHora;
     }
 
-    public void setFechaHora(LocalDateTime fechaHora) {
-        this.fechaHora = fechaHora;
+    public void setFecHora(OffsetDateTime fecHora) {
+        this.fecHora = fecHora;
     }
 
     public String getDescripcion() {
@@ -60,33 +77,33 @@ public abstract class Instancia {
         this.descripcion = descripcion;
     }
 
-    public List<Funcionario> getFuncionarios() {
-        return funcionarios;
+    public boolean isEstActivo() {
+        return estActivo;
     }
 
-    public void addFuncionario(Funcionario funcionario) {
-        funcionarios.add(funcionario);
+    public void setEstActivo(boolean estActivo) {
+        this.estActivo = estActivo;
     }
 
-    public boolean isEstadoActivo() {
-        return estadoActivo;
+    public int getIdFuncionario() {
+        return idFuncionario;
     }
 
-    public void setEstadoActivo(boolean estadoActivo) {
-        this.estadoActivo = estadoActivo;
+    public void setIdFuncionario(int idFuncionario) {
+        this.idFuncionario = idFuncionario;
     }
 
     @Override
     public String toString() {
         return "Instancia{" +
-                "id=" + id +
+                "idInstancia=" + idInstancia +
                 ", titulo='" + titulo + '\'' +
                 ", tipo='" + tipo + '\'' +
-                ", fechaHora=" + fechaHora +
+                ", fecHora=" + fecHora +
                 ", descripcion='" + descripcion + '\'' +
-                ", estadoActivo=" + estadoActivo +
+                ", estActivo=" + estActivo +
+                ", idFuncionario=" + idFuncionario +
                 '}';
     }
-
 }
 

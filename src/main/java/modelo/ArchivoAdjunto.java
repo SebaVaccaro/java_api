@@ -1,43 +1,94 @@
 package modelo;
 
-import java.time.LocalDateTime;
-
 public class ArchivoAdjunto {
-    private Integer id; // id de tabla arch_adjuntos
-    private Estudiante estudiante;
-    private Usuario usuario;
+    private int idArchivoAdjunto;
+    private int idUsuario;      // FK hacia Usuario
+    private int idEstudiante;   // FK hacia Estudiante
     private String ruta;
     private String categoria;
-    private boolean estadoActivo = true;
+    private boolean estActivo;  // corresponde a activo_flag
 
-    public ArchivoAdjunto(Integer id, Estudiante estudiante, Usuario usuario, String ruta, String categoria) {
-        this.id = id;
-        this.estudiante = estudiante;
-        this.usuario = usuario;
+    // Constructor vacío
+    public ArchivoAdjunto() {
+    }
+
+    // Constructor sin id (para insertar)
+    public ArchivoAdjunto(int idUsuario, int idEstudiante, String ruta, String categoria, boolean estActivo) {
+        this.idUsuario = idUsuario;
+        this.idEstudiante = idEstudiante;
         this.ruta = ruta;
+        this.categoria = categoria;
+        this.estActivo = estActivo;
+    }
+
+    // Constructor completo
+    public ArchivoAdjunto(int idArchivoAdjunto, int idUsuario, int idEstudiante, String ruta, String categoria, boolean estActivo) {
+        this.idArchivoAdjunto = idArchivoAdjunto;
+        this.idUsuario = idUsuario;
+        this.idEstudiante = idEstudiante;
+        this.ruta = ruta;
+        this.categoria = categoria;
+        this.estActivo = estActivo;
+    }
+
+    // Getters y Setters
+    public int getIdArchivoAdjunto() {
+        return idArchivoAdjunto;
+    }
+
+    public void setIdArchivoAdjunto(int idArchivoAdjunto) {
+        this.idArchivoAdjunto = idArchivoAdjunto;
+    }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public int getIdEstudiante() {
+        return idEstudiante;
+    }
+
+    public void setIdEstudiante(int idEstudiante) {
+        this.idEstudiante = idEstudiante;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public Estudiante getEstudiante() { return estudiante; }
-    public Usuario getUsuario() { return usuario; }
-    public String getRuta() { return ruta; }
-    public void setRuta(String ruta) { this.ruta = ruta; }
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
-    public boolean isEstadoActivo() { return estadoActivo; }
-    public void setEstadoActivo(boolean estadoActivo) { this.estadoActivo = estadoActivo; }
+    public boolean isEstActivo() {
+        return estActivo;
+    }
+
+    public void setEstActivo(boolean estActivo) {
+        this.estActivo = estActivo;
+    }
 
     @Override
     public String toString() {
         return "ArchivoAdjunto{" +
-                "id=" + id +
-                ", estudiante=" + estudiante +
-                ", usuario=" + usuario +
+                "idArchivoAdjunto=" + idArchivoAdjunto +
+                ", idUsuario=" + idUsuario +
+                ", idEstudiante=" + idEstudiante +
                 ", ruta='" + ruta + '\'' +
                 ", categoria='" + categoria + '\'' +
-                ", estadoActivo=" + estadoActivo +
+                ", estActivo=" + estActivo +
                 '}';
     }
 }

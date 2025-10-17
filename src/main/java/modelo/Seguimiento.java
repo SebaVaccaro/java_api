@@ -1,102 +1,96 @@
 package modelo;
 
-import modelo.Funcionario;
-import modelo.InstanciaComun;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Seguimiento {
-    private int id; // id de tabla seguimientos
-    private Estudiante estudiante;
-    private LocalDate fechaInicio;
-    private LocalDate fechaCierre;
-    private List<Funcionario> participantes = new ArrayList<>();
-    private List<InstanciaComun> instancias = new ArrayList<>();
-    //  private boolean estadoActivo = true; //
-    private boolean activo = true;
+    private int idSeguimiento;
+    private int idInforme;      // FK hacia InformeFinal (puede ser null)
+    private int idEstudiante;   // FK hacia Estudiante
+    private LocalDate fecInicio;
+    private LocalDate fecCierre; // puede ser null
+    private boolean estActivo;   // corresponde a activo_flag
 
-
-    public Seguimiento(Integer id, Estudiante estudiante, LocalDate fechaInicio, List<Funcionario> participantes) {
-        this.id = id;
-        this.estudiante = estudiante;
-        this.fechaInicio = fechaInicio;
-        this.participantes = participantes;
+    // Constructor vacío
+    public Seguimiento() {
     }
 
-    public Integer getId() {
-        return id;
+    // Constructor sin id (para insertar)
+    public Seguimiento(int idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
+        this.idInforme = idInforme;
+        this.idEstudiante = idEstudiante;
+        this.fecInicio = fecInicio;
+        this.fecCierre = fecCierre;
+        this.estActivo = estActivo;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    // Constructor completo
+    public Seguimiento(int idSeguimiento, int idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
+        this.idSeguimiento = idSeguimiento;
+        this.idInforme = idInforme;
+        this.idEstudiante = idEstudiante;
+        this.fecInicio = fecInicio;
+        this.fecCierre = fecCierre;
+        this.estActivo = estActivo;
     }
 
-    public Estudiante getEstudiante() {
-        return estudiante;
+    // Getters y Setters
+    public int getIdSeguimiento() {
+        return idSeguimiento;
     }
 
-    public void setEstudiante(Estudiante estudiante) {
-        this.estudiante = estudiante;
+    public void setIdSeguimiento(int idSeguimiento) {
+        this.idSeguimiento = idSeguimiento;
     }
 
-    public LocalDate getFechaInicio() {
-        return fechaInicio;
+    public int getIdInforme() {
+        return idInforme;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
-        this.fechaInicio = fechaInicio;
+    public void setIdInforme(int idInforme) {
+        this.idInforme = idInforme;
     }
 
-    public LocalDate getFechaCierre() {
-        return fechaCierre;
+    public int getIdEstudiante() {
+        return idEstudiante;
     }
 
-    public void setFechaCierre(LocalDate fechaCierre) {
-        this.fechaCierre = fechaCierre;
+    public void setIdEstudiante(int idEstudiante) {
+        this.idEstudiante = idEstudiante;
     }
 
-    public List<Funcionario> getParticipantes() {
-        return participantes;
+    public LocalDate getFecInicio() {
+        return fecInicio;
     }
 
-    public void addParticipante(Funcionario funcionario) {
-        participantes.add(funcionario);
+    public void setFecInicio(LocalDate fecInicio) {
+        this.fecInicio = fecInicio;
     }
 
-    public List<InstanciaComun> getInstancias() {
-        return instancias;
+    public LocalDate getFecCierre() {
+        return fecCierre;
     }
 
-    public void addInstancia(InstanciaComun instancia) {
-        instancias.add(instancia);
+    public void setFecCierre(LocalDate fecCierre) {
+        this.fecCierre = fecCierre;
     }
 
-    // public boolean isEstadoActivo() { return estadoActivo; }
-//
-    public boolean isActivo() {
-        return activo;
+    public boolean isEstActivo() {
+        return estActivo;
     }
 
-
-    // public void setEstadoActivo(boolean estadoActivo) { this.estadoActivo = estadoActivo; }
-//
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setEstActivo(boolean estActivo) {
+        this.estActivo = estActivo;
     }
-
 
     @Override
     public String toString() {
         return "Seguimiento{" +
-                "id=" + id +
-                ", estudiante=" + estudiante +
-                ", fechaInicio=" + fechaInicio +
-                ", fechaCierre=" + fechaCierre +
-                ", participantes=" + participantes +
-                ", instancias=" + instancias +
-                ", activo=" + activo +
+                "idSeguimiento=" + idSeguimiento +
+                ", idInforme=" + idInforme +
+                ", idEstudiante=" + idEstudiante +
+                ", fecInicio=" + fecInicio +
+                ", fecCierre=" + fecCierre +
+                ", estActivo=" + estActivo +
                 '}';
     }
 }

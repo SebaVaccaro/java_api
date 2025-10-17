@@ -1,40 +1,59 @@
 package modelo;
 
+
 public class Grupo {
+    private int idGrupo;
+    private String nomGrupo;
+    private int idCarrera; // FK hacia Carrera
 
-    private int id;
-    private String nombre;
-    private Carrera carrera;
-
-    public Grupo(int id, String nombre, Carrera carrera) {
-        this.id = id;
-        this.nombre = nombre;
-        this.carrera = carrera;
+    // Constructor vacío
+    public Grupo() {
     }
 
-    public int getId() {
-        return id;
+    // Constructor sin id (para insertar)
+    public Grupo(String nomGrupo, int idCarrera) {
+        this.nomGrupo = nomGrupo;
+        this.idCarrera = idCarrera;
     }
 
-    public String getNombre() {
-        return nombre;
+    // Constructor completo
+    public Grupo(int idGrupo, String nomGrupo, int idCarrera) {
+        this.idGrupo = idGrupo;
+        this.nomGrupo = nomGrupo;
+        this.idCarrera = idCarrera;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    // Getters y Setters
+    public int getIdGrupo() {
+        return idGrupo;
     }
 
-    public Carrera getCarrera() {
-        return carrera;
+    public void setIdGrupo(int idGrupo) {
+        this.idGrupo = idGrupo;
     }
 
+    public String getNomGrupo() {
+        return nomGrupo;
+    }
+
+    public void setNomGrupo(String nomGrupo) {
+        this.nomGrupo = nomGrupo;
+    }
+
+    public int getIdCarrera() {
+        return idCarrera;
+    }
+
+    public void setIdCarrera(int idCarrera) {
+        this.idCarrera = idCarrera;
+    }
 
     @Override
     public String toString() {
         return "Grupo{" +
-                "id= " +'\''+ id +'\''+
-                ", nombre= " + '\''+nombre + '\'' +
-                ", carrera= " + '\''+carrera +'\''+
+                "idGrupo=" + idGrupo +
+                ", nomGrupo='" + nomGrupo + '\'' +
+                ", idCarrera=" + idCarrera +
                 '}';
     }
 }

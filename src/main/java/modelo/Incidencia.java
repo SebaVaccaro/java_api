@@ -1,22 +1,36 @@
 package modelo;
 
-
-import modelo.*;
-import modelo.Instancia;
-
-
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-public class Incidencia extends Instancia {
+public class Incidencia {
+    private int idInstancia;    // PK y FK hacia Instancia
+    private int idFuncionario;  // FK hacia Funcionario
     private String lugar;
-    private Funcionario registrante; // Funcionario que registra la incidencia
 
-    public Incidencia(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios, String lugar, Funcionario registrante) {
-        super(titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
+    // Constructor vacío
+    public Incidencia() {
+    }
+
+    // Constructor completo
+    public Incidencia(int idInstancia, int idFuncionario, String lugar) {
+        this.idInstancia = idInstancia;
+        this.idFuncionario = idFuncionario;
         this.lugar = lugar;
-        this.registrante = registrante;
+    }
+
+    // Getters y Setters
+    public int getIdInstancia() {
+        return idInstancia;
+    }
+
+    public void setIdInstancia(int idInstancia) {
+        this.idInstancia = idInstancia;
+    }
+
+    public int getIdFuncionario() {
+        return idFuncionario;
+    }
+
+    public void setIdFuncionario(int idFuncionario) {
+        this.idFuncionario = idFuncionario;
     }
 
     public String getLugar() {
@@ -27,18 +41,12 @@ public class Incidencia extends Instancia {
         this.lugar = lugar;
     }
 
-    public Funcionario getRegistrante() {
-        return registrante;
-    }
-
-    public void setRegistrante(Funcionario registrante) {
-        this.registrante = registrante;
-    }
-
     @Override
     public String toString() {
-        return super.toString() +
+        return "Incidencia{" +
+                "idInstancia=" + idInstancia +
+                ", idFuncionario=" + idFuncionario +
                 ", lugar='" + lugar + '\'' +
-                ", registrante=" + (registrante != null ? registrante.getNombre() : "null");
+                '}';
     }
 }

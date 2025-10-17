@@ -1,142 +1,57 @@
 package modelo;
 
-import modelo.Direccion;
-import modelo.Notificacion;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-/**
- * Clase abstracta Usuario.
- * Nunca se instancia directamente; siempre es Estudiante o Funcionario.
- */
 public abstract class Usuario {
-
-    private int id;
-    private boolean activo = false;
-    private String ci;
-    private String username;
-    private String password;
+    private int idUsuario;
+    private String cedula;
     private String nombre;
     private String apellido;
+    private String username;
+    private String password;
     private String correo;
-    private List<String> telefonos = new ArrayList<>();
-    private List<Direccion> direcciones = new ArrayList<>();
-    private LinkedList<Notificacion> listaNotificaciones = new LinkedList<>();
 
-    public Usuario(int id, String ci, String username, String password, String nombre, String apellido, String correo, String telefono, Direccion direccion) {
-        this.id = id;
-        this.ci = ci;
+    public Usuario() {}
+
+    public Usuario(int idUsuario, String cedula, String nombre, String apellido, String username, String password, String correo) {
+        this.idUsuario = idUsuario;
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
         this.username = username;
         this.password = password;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
-        if (telefono != null) {
-            telefonos.add(telefono);
-        }
-        if (direccion != null) {
-            direcciones.add(direccion);
-        }
-    }
-
-    // Getters / setters principales
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
         this.correo = correo;
     }
 
-    public String getCi() {
-        return ci;
-    }
+    // Getters y Setters
+    public int getIdUsuario() { return idUsuario; }
+    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
 
-    public void setCi(String ci) {
-        this.ci = ci;
-    }
+    public String getCedula() { return cedula; }
+    public void setCedula(String cedula) { this.cedula = cedula; }
 
-    public void addTelefono(String telefono) {
-        telefonos.add(telefono);
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public List<Direccion> getDirecciones() {
-        return direcciones;
-    }
+    public String getApellido() { return apellido; }
+    public void setApellido(String apellido) { this.apellido = apellido; }
 
-    public void addDireccion(Direccion direccion) {
-        direcciones.add(direccion);
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void addNotificacion(Notificacion n) {
-        listaNotificaciones.add(n);
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public LinkedList<Notificacion> getListaNotificaciones() {
-        return listaNotificaciones;
-    }
-
-    public abstract String getTipo();
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 
     @Override
     public String toString() {
         return "Usuario{" +
-                "id='" + id + '\'' +
-                ", ci='" + ci + '\'' +
-                ", username='" + username + '\'' +
+                "idUsuario=" + idUsuario +
+                ", cedula='" + cedula + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
+                ", username='" + username + '\'' +
                 ", correo='" + correo + '\'' +
-                ", telefonos=" + telefonos +
-                ", activo=" + isActivo() +
                 '}';
     }
-
 }

@@ -1,43 +1,72 @@
 package modelo;
 
-import modelo.Seguimiento;
 import java.time.LocalDate;
 
 public class InformeFinal {
-    private Integer id;
-    private Seguimiento seguimiento;
+    private int idInfFinal;
     private String contenido;
     private int valoracion;
-    private LocalDate fechaCreacion;
+    private LocalDate fecCreacion;
 
-    public InformeFinal(Integer id, Seguimiento seguimiento, String contenido,
-                        int valoracion, LocalDate fechaCreacion) {
-        this.id = id;
-        this.seguimiento = seguimiento;
-        this.contenido = contenido;
-        this.valoracion = valoracion;
-        this.fechaCreacion = fechaCreacion;
+    // Constructor vacío
+    public InformeFinal() {
     }
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public Seguimiento getSeguimiento() { return seguimiento; }
-    public void setSeguimiento(Seguimiento seguimiento) { this.seguimiento = seguimiento; }
-    public String getContenido() { return contenido; }
-    public void setContenido(String contenido) { this.contenido = contenido; }
-    public int getValoracion() { return valoracion; }
-    public void setValoracion(int valoracion) { this.valoracion = valoracion; }
-    public LocalDate getFechaCreacion() { return fechaCreacion; }
-    public void setFechaCreacion(LocalDate fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+    // Constructor sin id (para insertar)
+    public InformeFinal(String contenido, int valoracion, LocalDate fecCreacion) {
+        this.contenido = contenido;
+        this.valoracion = valoracion;
+        this.fecCreacion = fecCreacion;
+    }
+
+    // Constructor completo
+    public InformeFinal(int idInfFinal, String contenido, int valoracion, LocalDate fecCreacion) {
+        this.idInfFinal = idInfFinal;
+        this.contenido = contenido;
+        this.valoracion = valoracion;
+        this.fecCreacion = fecCreacion;
+    }
+
+    // Getters y Setters
+    public int getIdInfFinal() {
+        return idInfFinal;
+    }
+
+    public void setIdInfFinal(int idInfFinal) {
+        this.idInfFinal = idInfFinal;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public int getValoracion() {
+        return valoracion;
+    }
+
+    public void setValoracion(int valoracion) {
+        this.valoracion = valoracion;
+    }
+
+    public LocalDate getFecCreacion() {
+        return fecCreacion;
+    }
+
+    public void setFecCreacion(LocalDate fecCreacion) {
+        this.fecCreacion = fecCreacion;
+    }
 
     @Override
     public String toString() {
         return "InformeFinal{" +
-                "id=" + id +
-                ", seguimiento=" + seguimiento +
+                "idInfFinal=" + idInfFinal +
                 ", contenido='" + contenido + '\'' +
                 ", valoracion=" + valoracion +
-                ", fechaCreacion=" + fechaCreacion +
+                ", fecCreacion=" + fecCreacion +
                 '}';
     }
 }

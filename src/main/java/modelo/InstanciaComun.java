@@ -1,45 +1,41 @@
 package modelo;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+public class InstanciaComun {
+    private int idInstancia;    // PK y FK hacia Instancia
+    private int idSeguimiento;  // FK hacia Seguimiento
 
-public class InstanciaComun extends Instancia {
-
-    private List<Funcionario> funcionarios = new ArrayList<Funcionario>();
-
-    public InstanciaComun(String titulo, String tipo, LocalDateTime fechaHora, String descripcion, Estudiante estudiante, List<Funcionario> funcionarios) {
-        super(titulo, tipo, fechaHora, descripcion, estudiante, funcionarios);
-        this.funcionarios = funcionarios;
-        LocalDateTime fechaHoy = LocalDateTime.now();
-
-        generarNotificacion(id, estudiante, tipo, descripcion, fechaHoy);
-        for (Funcionario funcionario : funcionarios) {
-            generarNotificacion(id, funcionario, tipo, descripcion, fechaHoy);
-            /*
-            Este id no puede ser el mismo para ambos objetos, esto es un simple ejemplo forzado para que el código no presente errores,
-            ya que el constructor de Notificación pide un parámetro "id", le pasamos el mismo de Instancia pero sabemos que no pueden repetirse.
-            Es la manera que encontramos de representar este proceso donde se genera una notificación automáticamente para cada Usuario participante de
-            dicha Instancia.
-             */
-        }
-
-
+    // Constructor vacío
+    public InstanciaComun() {
     }
 
-    public List<Funcionario> getFuncionarios() {
-        return funcionarios;
+    // Constructor completo
+    public InstanciaComun(int idInstancia, int idSeguimiento) {
+        this.idInstancia = idInstancia;
+        this.idSeguimiento = idSeguimiento;
     }
 
-    public void addFuncionario(Funcionario funcionario) {
-        funcionarios.add(funcionario);
+    // Getters y Setters
+    public int getIdInstancia() {
+        return idInstancia;
     }
 
-    public void generarNotificacion(int id, Usuario destinatario, String asunto, String mensaje, LocalDateTime fechaEnvio) {
-        Notificacion notificacion = new Notificacion(id, destinatario, asunto, mensaje, fechaEnvio);
-        destinatario.addNotificacion(notificacion);
+    public void setIdInstancia(int idInstancia) {
+        this.idInstancia = idInstancia;
     }
 
+    public int getIdSeguimiento() {
+        return idSeguimiento;
+    }
 
+    public void setIdSeguimiento(int idSeguimiento) {
+        this.idSeguimiento = idSeguimiento;
+    }
+
+    @Override
+    public String toString() {
+        return "InstanciaComun{" +
+                "idInstancia=" + idInstancia +
+                ", idSeguimiento=" + idSeguimiento +
+                '}';
+    }
 }
-
