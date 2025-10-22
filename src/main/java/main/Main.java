@@ -3,7 +3,7 @@ package main;
 import consola.MainUI;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args){
         MainUI ui = new MainUI();
         ui.iniciar();
     }
