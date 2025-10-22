@@ -30,15 +30,16 @@ public class LoginService {
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos");
         }
+
         String pass = Encriptador.desencriptar(usuario.getPassword());
-        if(!pass.equals(password)){
+        if (!pass.equals(password)) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
         }
 
         String correo = usuario.getCorreo().toLowerCase();
 
-        if (correo.endsWith("@estudiante.utec.edu.uy")) {
-
+        // ✅ Corregido: dominio correcto de estudiantes
+        if (correo.endsWith("@estudiantes.utec.edu.uy")) {
 
             EstudianteService estService = new EstudianteService();
             Estudiante est = estService.obtenerPorId(usuario.getIdUsuario());
@@ -50,7 +51,6 @@ public class LoginService {
 
         } else if (correo.endsWith("@utec.edu.uy")) {
 
-
             FuncionarioService funcService = new FuncionarioService();
             Funcionario func = funcService.obtenerPorId(usuario.getIdUsuario());
 
@@ -58,11 +58,10 @@ public class LoginService {
                 throw new IllegalArgumentException("No se encontró el funcionario en la base de datos.");
             }
 
-            return func; // Retornamos el funcionario completo
+            return func;
 
         } else {
             throw new IllegalArgumentException("No se encontró un tipo de usuario válido para el correo: " + correo);
         }
-
     }
 }
