@@ -14,19 +14,19 @@ public class IncidenciaService {
         this.incidenciaDAO = new IncidenciaDAO();
     }
 
-    // 🔹 Crear nueva incidencia
-    public Incidencia crearIncidencia(int idInstancia, int idFuncionario, String lugar) throws SQLException {
-        Incidencia incidencia = new Incidencia(idInstancia, idFuncionario, lugar);
+    // 🔹 Crear nueva incidencia (requiere objeto completo)
+    public Incidencia crearIncidencia(Incidencia incidencia) throws SQLException {
+        // Aquí podrías validar idFuncionario o campos obligatorios
         return incidenciaDAO.crearIncidencia(incidencia);
     }
 
     // 🔹 Obtener incidencia por ID de instancia
-    public Incidencia obtenerPorInstancia(int idInstancia) throws SQLException {
+    public Incidencia obtenerIncidencia(int idInstancia) throws SQLException {
         return incidenciaDAO.obtenerIncidencia(idInstancia);
     }
 
     // 🔹 Listar todas las incidencias
-    public List<Incidencia> listarTodas() throws SQLException {
+    public List<Incidencia> listarIncidencias() throws SQLException {
         return incidenciaDAO.listarIncidencias();
     }
 
@@ -36,8 +36,8 @@ public class IncidenciaService {
     }
 
     // 🔹 Actualizar incidencia
-    public boolean actualizarIncidencia(int idInstancia, int idFuncionario, String lugar) throws SQLException {
-        Incidencia incidencia = new Incidencia(idInstancia, idFuncionario, lugar);
+    public boolean actualizarIncidencia(Incidencia incidencia) throws SQLException {
+        // Validar campos si es necesario
         return incidenciaDAO.actualizarIncidencia(incidencia);
     }
 

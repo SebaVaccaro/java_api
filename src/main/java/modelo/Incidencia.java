@@ -1,38 +1,28 @@
 package modelo;
 
-public class Incidencia {
-    private int idInstancia;    // PK y FK hacia Instancia
-    private int idFuncionario;  // FK hacia Funcionario
+import java.time.OffsetDateTime;
+
+public class Incidencia extends Instancia {
     private String lugar;
 
     // Constructor vacío
     public Incidencia() {
+        super();
     }
 
-    // Constructor completo
-    public Incidencia(int idInstancia, int idFuncionario, String lugar) {
-        this.idInstancia = idInstancia;
-        this.idFuncionario = idFuncionario;
+    // Constructor sin idInstancia (para insertar)
+    public Incidencia(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, String lugar) {
+        super(titulo, fecHora, descripcion, estActivo, idFuncionario);
         this.lugar = lugar;
     }
 
-    // Getters y Setters
-    public int getIdInstancia() {
-        return idInstancia;
+    // Constructor completo
+    public Incidencia(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, String lugar) {
+        super(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario);
+        this.lugar = lugar;
     }
 
-    public void setIdInstancia(int idInstancia) {
-        this.idInstancia = idInstancia;
-    }
-
-    public int getIdFuncionario() {
-        return idFuncionario;
-    }
-
-    public void setIdFuncionario(int idFuncionario) {
-        this.idFuncionario = idFuncionario;
-    }
-
+    // Getter y Setter
     public String getLugar() {
         return lugar;
     }
@@ -44,8 +34,7 @@ public class Incidencia {
     @Override
     public String toString() {
         return "Incidencia{" +
-                "idInstancia=" + idInstancia +
-                ", idFuncionario=" + idFuncionario +
+                super.toString() +
                 ", lugar='" + lugar + '\'' +
                 '}';
     }

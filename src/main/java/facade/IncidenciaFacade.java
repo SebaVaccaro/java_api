@@ -17,22 +17,22 @@ public class IncidenciaFacade {
     // ============================================================
     // CREAR INCIDENCIA
     // ============================================================
-    public Incidencia crearIncidencia(int idInstancia, int idFuncionario, String lugar) throws SQLException {
-        return incidenciaService.crearIncidencia(idInstancia, idFuncionario, lugar);
+    public Incidencia crearIncidencia(Incidencia incidencia) throws SQLException {
+        return incidenciaService.crearIncidencia(incidencia);
     }
 
     // ============================================================
     // OBTENER INCIDENCIA
     // ============================================================
-    public Incidencia obtenerPorInstancia(int idInstancia) throws SQLException {
-        return incidenciaService.obtenerPorInstancia(idInstancia);
+    public Incidencia obtenerIncidencia(int idInstancia) throws SQLException {
+        return incidenciaService.obtenerIncidencia(idInstancia);
     }
 
     // ============================================================
     // LISTAR INCIDENCIAS
     // ============================================================
-    public List<Incidencia> listarTodas() throws SQLException {
-        return incidenciaService.listarTodas();
+    public List<Incidencia> listarIncidencias() throws SQLException {
+        return incidenciaService.listarIncidencias();
     }
 
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws SQLException {
@@ -42,8 +42,8 @@ public class IncidenciaFacade {
     // ============================================================
     // ACTUALIZAR INCIDENCIA
     // ============================================================
-    public boolean actualizarIncidencia(int idInstancia, int idFuncionario, String lugar) throws SQLException {
-        return incidenciaService.actualizarIncidencia(idInstancia, idFuncionario, lugar);
+    public boolean actualizarIncidencia(Incidencia incidencia) throws SQLException {
+        return incidenciaService.actualizarIncidencia(incidencia);
     }
 
     // ============================================================

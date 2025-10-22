@@ -2,23 +2,20 @@ package modelo;
 
 import java.time.OffsetDateTime;
 
-public class Instancia {
+public abstract class Instancia {
     private int idInstancia;
     private String titulo;
-    private String tipo;
     private OffsetDateTime fecHora;
     private String descripcion;
-    private boolean estActivo;  // corresponde a activo_flag
-    private int idFuncionario;  // FK hacia Funcionario
+    private boolean estActivo;
+    private int idFuncionario;
 
     // Constructor vacío
-    public Instancia() {
-    }
+    public Instancia() {}
 
     // Constructor sin id (para insertar)
-    public Instancia(String titulo, String tipo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
+    public Instancia(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
         this.titulo = titulo;
-        this.tipo = tipo;
         this.fecHora = fecHora;
         this.descripcion = descripcion;
         this.estActivo = estActivo;
@@ -26,10 +23,9 @@ public class Instancia {
     }
 
     // Constructor completo
-    public Instancia(int idInstancia, String titulo, String tipo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
+    public Instancia(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
         this.idInstancia = idInstancia;
         this.titulo = titulo;
-        this.tipo = tipo;
         this.fecHora = fecHora;
         this.descripcion = descripcion;
         this.estActivo = estActivo;
@@ -51,14 +47,6 @@ public class Instancia {
 
     public void setTitulo(String titulo) {
         this.titulo = titulo;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
     }
 
     public OffsetDateTime getFecHora() {
@@ -98,7 +86,6 @@ public class Instancia {
         return "Instancia{" +
                 "idInstancia=" + idInstancia +
                 ", titulo='" + titulo + '\'' +
-                ", tipo='" + tipo + '\'' +
                 ", fecHora=" + fecHora +
                 ", descripcion='" + descripcion + '\'' +
                 ", estActivo=" + estActivo +
@@ -106,4 +93,5 @@ public class Instancia {
                 '}';
     }
 }
+
 

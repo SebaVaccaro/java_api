@@ -14,28 +14,34 @@ public class InstanciaService {
         this.dao = new InstanciaDAO();
     }
 
-    public Instancia crearInstancia(Instancia instancia) throws SQLException {
+    // 🔹 Crear instancia indicando el tipo ("COMUN" o "INCIDENCIA")
+    public Instancia crearInstancia(Instancia instancia, String tipo) throws SQLException {
         // Aquí podrías validar que idFuncionario exista
-        return dao.crearInstancia(instancia);
+        return dao.crearInstancia(instancia, tipo);
     }
 
+    // 🔹 Obtener instancia por id (devuelve la subclase correcta)
     public Instancia obtenerInstancia(int idInstancia) throws SQLException {
         return dao.obtenerInstancia(idInstancia);
     }
 
+    // 🔹 Listar todas las instancias
     public List<Instancia> listarInstancias() throws SQLException {
         return dao.listarInstancias();
     }
 
+    // 🔹 Listar instancias por funcionario
     public List<Instancia> listarPorFuncionario(int idFuncionario) throws SQLException {
         return dao.listarPorFuncionario(idFuncionario);
     }
 
-    public boolean actualizarInstancia(Instancia instancia) throws SQLException {
-        return dao.actualizarInstancia(instancia);
+    // 🔹 Actualizar instancia (requiere tipo)
+    public boolean actualizarInstancia(Instancia instancia, String tipo) throws SQLException {
+        return dao.actualizarInstancia(instancia, tipo);
     }
 
-    public boolean eliminarInstancia(int idInstancia) throws SQLException {
-        return dao.eliminarInstancia(idInstancia);
+    // 🔹 Baja lógica (activar/desactivar)
+    public boolean desactivarInstancia(int idInstancia) throws SQLException {
+        return dao.desactivarInstancia(idInstancia);
     }
 }

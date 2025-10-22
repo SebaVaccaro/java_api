@@ -1,10 +1,8 @@
 package consola.Estudiante;
 
-import facade.SeguimientoFacade;
 import modelo.Estudiante;
-
-import java.util.List;
 import java.util.Scanner;
+import java.sql.SQLException;
 
 public class EstudianteUI {
 
@@ -17,7 +15,6 @@ public class EstudianteUI {
     }
 
     public void iniciar() {
-
         int opcion;
         do {
             mostrarMenuPrincipal();
@@ -34,7 +31,7 @@ public class EstudianteUI {
         System.out.println("====================================");
         System.out.println("1. Ver información personal");
         System.out.println("2. Consultar seguimiento");
-        System.out.println("3. Gestión de mis instancias");
+        System.out.println("3. Gestión de mis instancias comunes");
         System.out.println("4. Gestionar mis teléfonos");
         System.out.println("5. Ver mis notificaciones");
         System.out.println("0. Cerrar sesión");
@@ -44,7 +41,7 @@ public class EstudianteUI {
         switch (opcion) {
             case 1 -> mostrarInformacionPersonal();
             case 2 -> menuSeguimiento();
-            case 3 -> gestionarMisInstancias();
+            case 3 -> gestionarMisInstanciasComunes();
             case 4 -> gestionarMisTelefonos();
             case 5 -> gestionarMisNotificaciones();
             case 0 -> System.out.println("Cerrando sesión del Estudiante...");
@@ -61,25 +58,46 @@ public class EstudianteUI {
     }
 
     private void menuSeguimiento() {
-        SeguimientoUI seguimientoUI = new SeguimientoUI(estudiante.getId());
-        seguimientoUI.menuSeguimientos();
+        try {
+            SeguimientoEstudianteUI seguimientoUI = new SeguimientoEstudianteUI(estudiante.getIdUsuario());
+            seguimientoUI.menuSeguimientoEstudiante();
+        } catch (SQLException e) {
+            System.out.println("❌ Error al acceder al módulo de seguimiento: " + e.getMessage());
+        }
     }
 
-    private void gestionarMisInstancias() {
-        InstanciaUI instanciaUI = new InstanciaUI(estudiante.getId());
-        instanciaUI.menuInstancias();
+    // =======================================
+    // Actualización: usar InstanciaComunUI
+    // =======================================
+    private void gestionarMisInstanciasComunes() {
+        try {
+            InstanciaComunUI instanciaComunUI = new InstanciaComunUI();
+            instanciaComunUI.menuInstanciasComunes();
+        } catch (SQLException e) {
+            System.out.println("❌ Error al inicializar las instancias comunes: " + e.getMessage());
+        }
     }
 
     private void gestionarMisTelefonos() {
-        TelefonoUI telefonoUI = new TelefonoUI(estudiante.getId());
-        telefonoUI.menuTelefonos();
+        try {
+            TelefonoEstudianteUI telefonoEstudianteUI = new TelefonoEstudianteUI(estudiante.getIdUsuario());
+            telefonoEstudianteUI.iniciar();
+        } catch (SQLException e) {
+            System.out.println("❌ Error al gestionar los teléfonos: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void gestionarMisNotificaciones() {
-        NotificacionUI notificacionUI = new NotificacionUI(estudiante.getId());
-        notificacionUI.menuNotificaciones();
+        try {
+            NotificacionUserUI notificacionUserUI = new NotificacionUserUI(estudiante.getIdUsuario());
+            notificacionUserUI.menuNotificaciones();
+        } catch (SQLException e) {
+            System.out.println("❌ Error al inicializar la gestión de notificaciones: " + e.getMessage());
+        }
     }
 
+    // ==== MÉTODO AUXILIAR ====
     private int leerEntero(String mensaje) {
         System.out.print(mensaje);
         while (!scanner.hasNextInt()) {
@@ -87,7 +105,7 @@ public class EstudianteUI {
             scanner.next();
         }
         int valor = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // limpia el buffer
         return valor;
     }
 }

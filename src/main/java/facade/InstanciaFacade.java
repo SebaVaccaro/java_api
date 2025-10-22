@@ -1,6 +1,8 @@
 package facade;
 
+import modelo.Incidencia;
 import modelo.Instancia;
+import modelo.InstanciaComun;
 import servicios.InstanciaService;
 
 import java.sql.SQLException;
@@ -18,7 +20,8 @@ public class InstanciaFacade {
     // CREAR INSTANCIA
     // ============================================================
     public Instancia crearInstancia(Instancia instancia) throws SQLException {
-        return instanciaService.crearInstancia(instancia);
+        String tipo = obtenerTipo(instancia);
+        return instanciaService.crearInstancia(instancia, tipo);
     }
 
     // ============================================================
@@ -43,13 +46,27 @@ public class InstanciaFacade {
     // ACTUALIZAR INSTANCIA
     // ============================================================
     public boolean actualizarInstancia(Instancia instancia) throws SQLException {
-        return instanciaService.actualizarInstancia(instancia);
+        String tipo = obtenerTipo(instancia);
+        return instanciaService.actualizarInstancia(instancia, tipo);
     }
 
     // ============================================================
-    // ELIMINAR INSTANCIA
+    // ELIMINAR / DESACTIVAR INSTANCIA
     // ============================================================
-    public boolean eliminarInstancia(int idInstancia) throws SQLException {
-        return instanciaService.eliminarInstancia(idInstancia);
+    public boolean desactivarInstancia(int idInstancia) throws SQLException {
+        return instanciaService.desactivarInstancia(idInstancia);
+    }
+
+    // ============================================================
+    // MÉTODO AUXILIAR PARA DETECTAR TIPO
+    // ============================================================
+    private String obtenerTipo(Instancia instancia) {
+        if (instancia instanceof InstanciaComun) {
+            return "COMUN";
+        } else if (instancia instanceof Incidencia) {
+            return "INCIDENCIA";
+        } else {
+            throw new IllegalArgumentException("Tipo de instancia desconocido: " + instancia.getClass().getSimpleName());
+        }
     }
 }

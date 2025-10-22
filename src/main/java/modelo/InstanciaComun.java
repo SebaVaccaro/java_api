@@ -1,28 +1,28 @@
 package modelo;
 
-public class InstanciaComun {
-    private int idInstancia;    // PK y FK hacia Instancia
+import java.time.OffsetDateTime;
+
+public class InstanciaComun extends Instancia {
     private int idSeguimiento;  // FK hacia Seguimiento
 
     // Constructor vacío
     public InstanciaComun() {
+        super();
     }
 
-    // Constructor completo
-    public InstanciaComun(int idInstancia, int idSeguimiento) {
-        this.idInstancia = idInstancia;
+    // Constructor sin idInstancia (para insertar)
+    public InstanciaComun(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, int idSeguimiento) {
+        super(titulo, fecHora, descripcion, estActivo, idFuncionario);
         this.idSeguimiento = idSeguimiento;
     }
 
-    // Getters y Setters
-    public int getIdInstancia() {
-        return idInstancia;
+    // Constructor completo
+    public InstanciaComun(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, int idSeguimiento) {
+        super(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario);
+        this.idSeguimiento = idSeguimiento;
     }
 
-    public void setIdInstancia(int idInstancia) {
-        this.idInstancia = idInstancia;
-    }
-
+    // Getter y Setter
     public int getIdSeguimiento() {
         return idSeguimiento;
     }
@@ -34,7 +34,7 @@ public class InstanciaComun {
     @Override
     public String toString() {
         return "InstanciaComun{" +
-                "idInstancia=" + idInstancia +
+                super.toString() +
                 ", idSeguimiento=" + idSeguimiento +
                 '}';
     }
