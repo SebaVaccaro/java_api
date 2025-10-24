@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleUsuarioDAO {
+public class TeleUsuarioDAOImpl {
 
     private final Connection conn;
 
-    public TeleUsuarioDAO() throws SQLException {
+    public TeleUsuarioDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

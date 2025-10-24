@@ -8,11 +8,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ObservacionDAO {
+public class ObservacionDAOImpl {
 
     private final Connection conn;
 
-    public ObservacionDAO() throws SQLException {
+    public ObservacionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

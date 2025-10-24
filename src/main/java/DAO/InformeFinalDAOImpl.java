@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InformeFinalDAO {
+public class InformeFinalDAOImpl {
 
     private final Connection conn;
 
-    public InformeFinalDAO() throws SQLException {
+    public InformeFinalDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

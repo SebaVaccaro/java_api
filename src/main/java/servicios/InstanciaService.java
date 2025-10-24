@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.InstanciaDAO;
+import DAO.InstanciaDAOImpl;
 import modelo.Instancia;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class InstanciaService {
 
-    private final InstanciaDAO dao;
+    private final InstanciaDAOImpl dao;
 
     public InstanciaService() throws SQLException {
-        this.dao = new InstanciaDAO();
+        this.dao = new InstanciaDAOImpl();
     }
 
     // 🔹 Crear instancia indicando el tipo ("COMUN" o "INCIDENCIA")

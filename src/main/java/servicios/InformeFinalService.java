@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.InformeFinalDAO;
+import DAO.InformeFinalDAOImpl;
 import modelo.InformeFinal;
 
 import java.sql.SQLException;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class InformeFinalService {
 
-    private final InformeFinalDAO informeDAO;
+    private final InformeFinalDAOImpl informeDAO;
 
     public InformeFinalService() throws SQLException {
-        this.informeDAO = new InformeFinalDAO();
+        this.informeDAO = new InformeFinalDAOImpl();
     }
 
     // 🔹 Crear informe final

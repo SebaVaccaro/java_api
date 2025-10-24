@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.CiudadDAO;
+import DAO.CiudadDAOImpl;
 import modelo.Ciudad;
 
 import java.sql.SQLException;
@@ -8,46 +8,46 @@ import java.util.List;
 
 public class CiudadService {
 
-    private final CiudadDAO ciudadDAO;
+    private final CiudadDAOImpl ciudadDAOImpl;
 
     public CiudadService() throws SQLException {
-        this.ciudadDAO = new CiudadDAO();
+        this.ciudadDAOImpl = new CiudadDAOImpl();
     }
 
     // 🔹 Crear nueva ciudad
     public Ciudad crearCiudad(int codPostal, String nombre, String departamento) throws SQLException {
         Ciudad ciudad = new Ciudad(codPostal, nombre, departamento);
-        return ciudadDAO.crearCiudad(ciudad);
+        return ciudadDAOImpl.crearCiudad(ciudad);
     }
 
     // 🔹 Obtener ciudad por ID
     public Ciudad obtenerPorId(int idCiudad) throws SQLException {
-        return ciudadDAO.obtenerCiudad(idCiudad);
+        return ciudadDAOImpl.obtenerCiudad(idCiudad);
     }
 
     // 🔹 Obtener ciudad por nombre
     public Ciudad obtenerPorNombre(String nombre) throws SQLException {
-        return ciudadDAO.obtenerPorNombre(nombre);
+        return ciudadDAOImpl.obtenerPorNombre(nombre);
     }
 
     // 🔹 Listar todas las ciudades
     public List<Ciudad> listarTodas() throws SQLException {
-        return ciudadDAO.listarCiudades();
+        return ciudadDAOImpl.listarCiudades();
     }
 
     // 🔹 Listar por departamento
     public List<Ciudad> listarPorDepartamento(String departamento) throws SQLException {
-        return ciudadDAO.listarPorDepartamento(departamento);
+        return ciudadDAOImpl.listarPorDepartamento(departamento);
     }
 
     // 🔹 Actualizar ciudad
     public boolean actualizarCiudad(int idCiudad, int codPostal, String nombre, String departamento) throws SQLException {
         Ciudad ciudad = new Ciudad(idCiudad, codPostal, nombre, departamento);
-        return ciudadDAO.actualizarCiudad(ciudad);
+        return ciudadDAOImpl.actualizarCiudad(ciudad);
     }
 
     // 🔹 Eliminar ciudad
     public boolean eliminarCiudad(int idCiudad) throws SQLException {
-        return ciudadDAO.eliminarCiudad(idCiudad);
+        return ciudadDAOImpl.eliminarCiudad(idCiudad);
     }
 }

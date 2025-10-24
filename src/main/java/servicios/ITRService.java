@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.ITRDAO;
+import DAO.ITRDAOImpl;
 import modelo.ITR;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class ITRService {
 
-    private final ITRDAO dao;
+    private final ITRDAOImpl dao;
 
     public ITRService() throws SQLException {
-        this.dao = new ITRDAO();
+        this.dao = new ITRDAOImpl();
     }
 
     public ITR crearITR(ITR itr) throws SQLException {

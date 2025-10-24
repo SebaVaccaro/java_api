@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.PartInstanciaDAO;
+import DAO.PartInstanciaDAOImpl;
 import modelo.PartInstancia;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class PartInstanciaService {
 
-    private final PartInstanciaDAO dao;
+    private final PartInstanciaDAOImpl dao;
 
     public PartInstanciaService() throws SQLException {
-        this.dao = new PartInstanciaDAO();
+        this.dao = new PartInstanciaDAOImpl();
     }
 
     // 🔹 Agregar participante a una instancia

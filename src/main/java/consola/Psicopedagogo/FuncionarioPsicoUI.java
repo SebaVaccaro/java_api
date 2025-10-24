@@ -5,6 +5,7 @@ import modelo.Funcionario;
 import util.CapturadoraDeErrores;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -38,36 +39,45 @@ public class FuncionarioPsicoUI {
         } while (opcion != 0);
     }
 
+    // ============================================================
+    // (Opcional) CREAR FUNCIONARIO — actualizado
+    // ============================================================
+    // Si el psicopedagogo no debe crear funcionarios, puedes eliminar este método.
     private void crearFuncionario() {
         String cedula = leerTexto("Cédula: ");
         String nombre = leerTexto("Nombre: ");
         String apellido = leerTexto("Apellido: ");
         String username = leerTexto("Username: ");
         String password = leerTexto("Password: ");
-        String correo = leerTexto("Correo: ");
         int idRol = leerEntero("ID de rol: ");
-        boolean estActivo = true;
+        LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
-            Funcionario f = facade.crearFuncionario(cedula, nombre, apellido, username, password, correo, idRol, estActivo);
+            Funcionario f = facade.crearFuncionario(cedula, nombre, apellido, username, password, idRol, fechaNacimiento);
             System.out.println("✅ Funcionario creado: " + f);
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex); // ✅
+            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
             System.out.println("❌ Error al crear funcionario: " + msg);
         }
     }
 
+    // ============================================================
+    // LISTAR FUNCIONARIOS
+    // ============================================================
     private void listarTodos() {
         try {
             List<Funcionario> lista = facade.listarTodos();
             if (lista.isEmpty()) System.out.println("No hay funcionarios registrados.");
             else lista.forEach(System.out::println);
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex); // ✅
+            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
             System.out.println("❌ Error al listar funcionarios: " + msg);
         }
     }
 
+    // ============================================================
+    // BUSCAR POR ID
+    // ============================================================
     private void buscarPorId() {
         int id = leerEntero("ID del funcionario: ");
         try {
@@ -75,11 +85,14 @@ public class FuncionarioPsicoUI {
             if (f != null) System.out.println(f);
             else System.out.println("❌ Funcionario no encontrado.");
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex); // ✅
+            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
             System.out.println("❌ Error al buscar funcionario: " + msg);
         }
     }
 
+    // ============================================================
+    // MODIFICAR FUNCIONARIO
+    // ============================================================
     private void modificarFuncionario() {
         int id = leerEntero("ID del funcionario a modificar: ");
         String cedula = leerTexto("Nueva cédula: ");
@@ -96,11 +109,14 @@ public class FuncionarioPsicoUI {
             if (exito) System.out.println("✅ Funcionario modificado.");
             else System.out.println("❌ No se pudo modificar el funcionario.");
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex); // ✅
+            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
             System.out.println("❌ Error al modificar funcionario: " + msg);
         }
     }
 
+    // ============================================================
+    // DESACTIVAR FUNCIONARIO
+    // ============================================================
     private void desactivarFuncionario() {
         int id = leerEntero("ID del funcionario a desactivar: ");
         try {
@@ -108,12 +124,14 @@ public class FuncionarioPsicoUI {
             if (exito) System.out.println("✅ Funcionario desactivado.");
             else System.out.println("❌ No se pudo desactivar el funcionario.");
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex); // ✅
+            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
             System.out.println("❌ Error al desactivar funcionario: " + msg);
         }
     }
 
-    // ==== Métodos auxiliares ====
+    // ============================================================
+    // MÉTODOS AUXILIARES
+    // ============================================================
     private int leerEntero(String mensaje) {
         System.out.print(mensaje);
         while (!scanner.hasNextInt()) {
@@ -137,6 +155,18 @@ public class FuncionarioPsicoUI {
             if (texto.equals("true") || texto.equals("t") || texto.equals("si") || texto.equals("s")) return true;
             if (texto.equals("false") || texto.equals("f") || texto.equals("no") || texto.equals("n")) return false;
             System.out.print("Ingrese true/false: ");
+        }
+    }
+
+    private LocalDate leerFecha(String mensaje) {
+        System.out.print(mensaje);
+        while (true) {
+            String entrada = scanner.nextLine().trim();
+            try {
+                return LocalDate.parse(entrada);
+            } catch (Exception e) {
+                System.out.print("Formato inválido. Use YYYY-MM-DD: ");
+            }
         }
     }
 }

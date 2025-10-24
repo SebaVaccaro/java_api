@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DireccionDAO {
+public class DireccionDAOImpl {
 
     private final Connection conn;
 
-    public DireccionDAO() throws SQLException {
+    public DireccionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarreraDAO {
+public class CarreraDAOImpl {
 
     private final Connection conn;
 
-    public CarreraDAO() throws SQLException {
+    public CarreraDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

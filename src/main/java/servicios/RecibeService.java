@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.RecibeDAO;
+import DAO.RecibeDAOImpl;
 import modelo.Recibe;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class RecibeService {
 
-    private final RecibeDAO dao;
+    private final RecibeDAOImpl dao;
 
     public RecibeService() throws SQLException {
-        this.dao = new RecibeDAO();
+        this.dao = new RecibeDAOImpl();
     }
 
     // 🔹 Agregar relación Notificación ↔ Usuario

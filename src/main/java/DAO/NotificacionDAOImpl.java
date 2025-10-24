@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificacionDAO {
+public class NotificacionDAOImpl {
 
     private final Connection conn;
 
-    public NotificacionDAO() throws SQLException {
+    public NotificacionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

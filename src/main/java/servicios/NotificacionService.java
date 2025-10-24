@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.NotificacionDAO;
+import DAO.NotificacionDAOImpl;
 import modelo.Notificacion;
 
 import java.sql.SQLException;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class NotificacionService {
 
-    private final NotificacionDAO notificacionDAO;
+    private final NotificacionDAOImpl notificacionDAOImpl;
 
     public NotificacionService() throws SQLException {
-        this.notificacionDAO = new NotificacionDAO();
+        this.notificacionDAOImpl = new NotificacionDAOImpl();
     }
 
     // 🔹 Crear notificación con validaciones simples
@@ -31,17 +31,17 @@ public class NotificacionService {
         }
 
         Notificacion n = new Notificacion(idInstancia, asunto, mensaje, destinatario, fecEnvio, true);
-        return notificacionDAO.crearNotificacion(n);
+        return notificacionDAOImpl.crearNotificacion(n);
     }
 
     // 🔹 Obtener notificación por id
     public Notificacion obtenerNotificacion(int id) throws SQLException {
-        return notificacionDAO.obtenerNotificacion(id);
+        return notificacionDAOImpl.obtenerNotificacion(id);
     }
 
     // 🔹 Listar todas las notificaciones activas
     public List<Notificacion> listarTodas() throws SQLException {
-        return notificacionDAO.listarTodas();
+        return notificacionDAOImpl.listarTodas();
     }
 
     // 🔹 Actualizar notificación
@@ -49,11 +49,11 @@ public class NotificacionService {
         if (n.getIdNotificacion() <= 0) {
             throw new IllegalArgumentException("ID de notificación inválido.");
         }
-        return notificacionDAO.actualizarNotificacion(n);
+        return notificacionDAOImpl.actualizarNotificacion(n);
     }
 
     // 🔹 Baja lógica de notificación
     public boolean desactivarNotificacion(int id) throws SQLException {
-        return notificacionDAO.eliminarNotificacion(id);
+        return notificacionDAOImpl.eliminarNotificacion(id);
     }
 }

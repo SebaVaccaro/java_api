@@ -8,11 +8,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IncidenciaDAO {
+public class IncidenciaDAOImpl {
 
     private final Connection conn;
 
-    public IncidenciaDAO() throws SQLException {
+    public IncidenciaDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

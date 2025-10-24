@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RolDAO {
+public class RolDAOImpl {
 
     private final Connection conn;
 
-    public RolDAO() throws SQLException {
+    public RolDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.DireccionDAO;
+import DAO.DireccionDAOImpl;
 import modelo.Direccion;
 
 import java.sql.SQLException;
@@ -8,46 +8,46 @@ import java.util.List;
 
 public class DireccionService {
 
-    private final DireccionDAO direccionDAO;
+    private final DireccionDAOImpl direccionDAOImpl;
 
     public DireccionService() throws SQLException {
-        this.direccionDAO = new DireccionDAO();
+        this.direccionDAOImpl = new DireccionDAOImpl();
     }
 
     // 🔹 Crear nueva dirección
     public Direccion crearDireccion(String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) throws SQLException {
         Direccion direccion = new Direccion(calle, numPuerta, numApto, idCiudad, idUsuario);
-        return direccionDAO.crearDireccion(direccion);
+        return direccionDAOImpl.crearDireccion(direccion);
     }
 
     // 🔹 Obtener dirección por ID
     public Direccion obtenerPorId(int idDireccion) throws SQLException {
-        return direccionDAO.obtenerDireccion(idDireccion);
+        return direccionDAOImpl.obtenerDireccion(idDireccion);
     }
 
     // 🔹 Listar todas las direcciones
     public List<Direccion> listarTodas() throws SQLException {
-        return direccionDAO.listarDirecciones();
+        return direccionDAOImpl.listarDirecciones();
     }
 
     // 🔹 Listar por usuario
     public List<Direccion> listarPorUsuario(int idUsuario) throws SQLException {
-        return direccionDAO.listarPorUsuario(idUsuario);
+        return direccionDAOImpl.listarPorUsuario(idUsuario);
     }
 
     // 🔹 Listar por ciudad
     public List<Direccion> listarPorCiudad(int idCiudad) throws SQLException {
-        return direccionDAO.listarPorCiudad(idCiudad);
+        return direccionDAOImpl.listarPorCiudad(idCiudad);
     }
 
     // 🔹 Actualizar dirección
     public boolean actualizarDireccion(int idDireccion, String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) throws SQLException {
         Direccion direccion = new Direccion(idDireccion, calle, numPuerta, numApto, idCiudad, idUsuario);
-        return direccionDAO.actualizarDireccion(direccion);
+        return direccionDAOImpl.actualizarDireccion(direccion);
     }
 
     // 🔹 Eliminar dirección
     public boolean eliminarDireccion(int idDireccion) throws SQLException {
-        return direccionDAO.eliminarDireccion(idDireccion);
+        return direccionDAOImpl.eliminarDireccion(idDireccion);
     }
 }

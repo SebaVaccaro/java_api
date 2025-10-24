@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArchivoAdjuntoDAO {
+public class ArchivoAdjuntoDAOImpl {
 
     private final Connection conn;
 
-    public ArchivoAdjuntoDAO() throws SQLException {
+    public ArchivoAdjuntoDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

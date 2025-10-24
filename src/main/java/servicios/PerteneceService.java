@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.PerteneceDAO;
+import DAO.PerteneceDAOImpl;
 import modelo.Pertenece;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class PerteneceService {
 
-    private final PerteneceDAO dao;
+    private final PerteneceDAOImpl dao;
 
     public PerteneceService() throws SQLException {
-        this.dao = new PerteneceDAO();
+        this.dao = new PerteneceDAOImpl();
     }
 
     // 🔹 Agregar relación Carrera ↔ ITR

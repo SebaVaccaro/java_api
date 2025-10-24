@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeguimientoDAO {
+public class SeguimientoDAOImpl {
 
     private final Connection conn;
 
-    public SeguimientoDAO() throws SQLException {
+    public SeguimientoDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

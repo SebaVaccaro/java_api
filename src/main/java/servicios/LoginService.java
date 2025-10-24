@@ -4,17 +4,17 @@ import algoritmos.Encriptador;
 import modelo.Usuario;
 import modelo.Estudiante;
 import modelo.Funcionario;
-import DAO.LoginDAO;
+import DAO.LoginDAOImpl;
 
 import java.sql.SQLException;
 
 public class LoginService {
 
-    private final LoginDAO loginDAO;
+    private final LoginDAOImpl loginDAOImpl;
 
     public LoginService() {
         try {
-            this.loginDAO = new LoginDAO();
+            this.loginDAOImpl = new LoginDAOImpl();
         } catch (SQLException e) {
             throw new RuntimeException("Error al inicializar LoginDAO", e);
         }
@@ -25,7 +25,7 @@ public class LoginService {
             throw new IllegalArgumentException("Username y password no pueden estar vacíos");
         }
 
-        Usuario usuario = loginDAO.obtenerUsuarioPorUsername(username);
+        Usuario usuario = loginDAOImpl.obtenerUsuarioPorUsername(username);
 
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos");

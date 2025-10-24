@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleITRDAO {
+public class TeleITRDAOImpl {
 
     private final Connection conn;
 
-    public TeleITRDAO() throws SQLException {
+    public TeleITRDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

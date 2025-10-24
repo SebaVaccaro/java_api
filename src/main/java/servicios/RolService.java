@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.RolDAO;
+import DAO.RolDAOImpl;
 import modelo.Rol;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class RolService {
 
-    private final RolDAO dao;
+    private final RolDAOImpl dao;
 
     public RolService() throws SQLException {
-        this.dao = new RolDAO();
+        this.dao = new RolDAOImpl();
     }
 
     // 🔹 Crear nuevo rol

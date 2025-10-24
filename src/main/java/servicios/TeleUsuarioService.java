@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.TeleUsuarioDAO;
+import DAO.TeleUsuarioDAOImpl;
 import modelo.TeleUsuario;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class TeleUsuarioService {
 
-    private final TeleUsuarioDAO dao;
+    private final TeleUsuarioDAOImpl dao;
 
     public TeleUsuarioService() throws SQLException {
-        this.dao = new TeleUsuarioDAO();
+        this.dao = new TeleUsuarioDAOImpl();
     }
 
     // ============================================================

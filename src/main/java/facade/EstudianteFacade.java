@@ -4,6 +4,7 @@ import modelo.Estudiante;
 import servicios.EstudianteService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EstudianteFacade {
@@ -18,8 +19,9 @@ public class EstudianteFacade {
     // CREAR ESTUDIANTE
     // ============================================================
     public Estudiante crearEstudiante(String cedula, String nombre, String apellido, String username,
-                                      String password, String correo, int idGrupo, boolean estActivo) throws SQLException {
-        return estudianteService.crearEstudiante(cedula, nombre, apellido, username, password, correo, idGrupo, estActivo);
+                                      String password, int idGrupo, LocalDate fechaNacimiento)
+            throws Exception {
+        return estudianteService.registrarEstudiante(cedula, username, password, nombre, apellido, fechaNacimiento, idGrupo);
     }
 
     // ============================================================
@@ -39,13 +41,12 @@ public class EstudianteFacade {
     // ============================================================
     // ACTUALIZAR ESTUDIANTE
     // ============================================================
-    public boolean actualizarEstudiante(int idUsuario, String cedula, String nombre, String apellido, String username,
-                                        String password, String correo, int idGrupo, boolean estActivo) throws SQLException {
-        return estudianteService.actualizarEstudiante(idUsuario, cedula, nombre, apellido, username, password, correo, idGrupo, estActivo);
+    public boolean actualizarEstudiante(Estudiante est) throws SQLException {
+        return estudianteService.actualizarEstudiante(est);
     }
 
     // ============================================================
-    // BAJA LÓGICA (DESACTIVAR ESTUDIANTE)
+    // DESACTIVAR ESTUDIANTE
     // ============================================================
     public boolean desactivarEstudiante(int idUsuario) throws SQLException {
         return estudianteService.desactivarEstudiante(idUsuario);

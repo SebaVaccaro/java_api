@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.GrupoDAO;
+import DAO.GrupoDAOImpl;
 import modelo.Grupo;
 
 import java.sql.SQLException;
@@ -8,41 +8,41 @@ import java.util.List;
 
 public class GrupoService {
 
-    private final GrupoDAO grupoDAO;
+    private final GrupoDAOImpl grupoDAOImpl;
 
     public GrupoService() throws SQLException {
-        this.grupoDAO = new GrupoDAO();
+        this.grupoDAOImpl = new GrupoDAOImpl();
     }
 
     // 🔹 Crear nuevo grupo
     public Grupo crearGrupo(String nomGrupo, int idCarrera) throws SQLException {
         Grupo g = new Grupo(nomGrupo, idCarrera);
-        return grupoDAO.crearGrupo(g);
+        return grupoDAOImpl.crearGrupo(g);
     }
 
     // 🔹 Obtener grupo por ID
     public Grupo obtenerPorId(int idGrupo) throws SQLException {
-        return grupoDAO.obtenerGrupo(idGrupo);
+        return grupoDAOImpl.obtenerGrupo(idGrupo);
     }
 
     // 🔹 Listar todos los grupos
     public List<Grupo> listarTodos() throws SQLException {
-        return grupoDAO.listarGrupos();
+        return grupoDAOImpl.listarGrupos();
     }
 
     // 🔹 Listar grupos por carrera
     public List<Grupo> listarPorCarrera(int idCarrera) throws SQLException {
-        return grupoDAO.listarPorCarrera(idCarrera);
+        return grupoDAOImpl.listarPorCarrera(idCarrera);
     }
 
     // 🔹 Actualizar grupo
     public boolean actualizarGrupo(int idGrupo, String nomGrupo, int idCarrera) throws SQLException {
         Grupo g = new Grupo(idGrupo, nomGrupo, idCarrera);
-        return grupoDAO.actualizarGrupo(g);
+        return grupoDAOImpl.actualizarGrupo(g);
     }
 
     // 🔹 Eliminar grupo
     public boolean eliminarGrupo(int idGrupo) throws SQLException {
-        return grupoDAO.eliminarGrupo(idGrupo);
+        return grupoDAOImpl.eliminarGrupo(idGrupo);
     }
 }

@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.ArchivoAdjuntoDAO;
+import DAO.ArchivoAdjuntoDAOImpl;
 import modelo.ArchivoAdjunto;
 
 import java.sql.SQLException;
@@ -8,12 +8,12 @@ import java.util.List;
 
 public class ArchivoAdjuntoService {
 
-    private final ArchivoAdjuntoDAO archivoDAO;
+    private final ArchivoAdjuntoDAOImpl archivoDAO;
     private final EstudianteService estudianteService;
     private final FuncionarioService funcionarioService; // Suponiendo que tengas un servicio para usuarios/funcionarios
 
     public ArchivoAdjuntoService() throws SQLException {
-        this.archivoDAO = new ArchivoAdjuntoDAO();
+        this.archivoDAO = new ArchivoAdjuntoDAOImpl();
         this.estudianteService = new EstudianteService();
         this.funcionarioService = new FuncionarioService(); // Inicializamos el servicio
     }

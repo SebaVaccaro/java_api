@@ -8,11 +8,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstanciaComunDAO {
+public class InstanciaComunDAOImpl {
 
     private final Connection conn;
 
-    public InstanciaComunDAO() throws SQLException {
+    public InstanciaComunDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.TeleITRDAO;
+import DAO.TeleITRDAOImpl;
 import modelo.TeleITR;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class TeleITRService {
 
-    private final TeleITRDAO dao;
+    private final TeleITRDAOImpl dao;
 
     public TeleITRService() throws SQLException {
-        this.dao = new TeleITRDAO();
+        this.dao = new TeleITRDAOImpl();
     }
 
     // 🔹 Agregar teléfono a un ITR

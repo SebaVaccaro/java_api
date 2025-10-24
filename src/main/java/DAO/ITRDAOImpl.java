@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ITRDAO {
+public class ITRDAOImpl {
 
     private final Connection conn;
 
-    public ITRDAO() throws SQLException {
+    public ITRDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

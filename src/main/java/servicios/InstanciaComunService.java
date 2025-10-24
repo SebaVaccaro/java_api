@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.InstanciaComunDAO;
+import DAO.InstanciaComunDAOImpl;
 import modelo.InstanciaComun;
 
 import java.sql.SQLException;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class InstanciaComunService {
 
-    private final InstanciaComunDAO dao;
+    private final InstanciaComunDAOImpl dao;
 
     public InstanciaComunService() throws SQLException {
-        this.dao = new InstanciaComunDAO();
+        this.dao = new InstanciaComunDAOImpl();
     }
 
     // 🔹 Crear nueva InstanciaComun completa

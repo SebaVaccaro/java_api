@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.SeguimientoDAO;
+import DAO.SeguimientoDAOImpl;
 import modelo.Seguimiento;
 
 import java.sql.SQLException;
@@ -9,11 +9,11 @@ import java.util.List;
 
 public class SeguimientoService {
 
-    private final SeguimientoDAO dao;
+    private final SeguimientoDAOImpl dao;
     private final EstudianteService estudianteService;
 
     public SeguimientoService() throws SQLException {
-        this.dao = new SeguimientoDAO();
+        this.dao = new SeguimientoDAOImpl();
         this.estudianteService = new EstudianteService();
     }
 

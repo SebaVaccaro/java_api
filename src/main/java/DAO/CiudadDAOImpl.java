@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CiudadDAO {
+public class CiudadDAOImpl {
 
     private final Connection conn;
 
-    public CiudadDAO() throws SQLException {
+    public CiudadDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

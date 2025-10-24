@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.PartSeguimientoDAO;
+import DAO.PartSeguimientoDAOImpl;
 import modelo.PartSeguimiento;
 
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class PartSeguimientoService {
 
-    private final PartSeguimientoDAO dao;
+    private final PartSeguimientoDAOImpl dao;
 
     public PartSeguimientoService() throws SQLException {
-        this.dao = new PartSeguimientoDAO();
+        this.dao = new PartSeguimientoDAOImpl();
     }
 
     // 🔹 Agregar participante a un seguimiento

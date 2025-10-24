@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.CarreraDAO;
+import DAO.CarreraDAOImpl;
 import modelo.Carrera;
 
 import java.sql.SQLException;
@@ -8,41 +8,41 @@ import java.util.List;
 
 public class CarreraService {
 
-    private final CarreraDAO carreraDAO;
+    private final CarreraDAOImpl carreraDAOImpl;
 
     public CarreraService() throws SQLException {
-        this.carreraDAO = new CarreraDAO();
+        this.carreraDAOImpl = new CarreraDAOImpl();
     }
 
     // 🔹 Crear nueva carrera
     public Carrera crearCarrera(String codigo, String nombre, String plan) throws SQLException {
         Carrera carrera = new Carrera(codigo, nombre, plan);
-        return carreraDAO.crearCarrera(carrera);
+        return carreraDAOImpl.crearCarrera(carrera);
     }
 
     // 🔹 Obtener carrera por ID
     public Carrera obtenerPorId(int idCarrera) throws SQLException {
-        return carreraDAO.obtenerCarrera(idCarrera);
+        return carreraDAOImpl.obtenerCarrera(idCarrera);
     }
 
     // 🔹 Obtener carrera por código
     public Carrera obtenerPorCodigo(String codigo) throws SQLException {
-        return carreraDAO.obtenerPorCodigo(codigo);
+        return carreraDAOImpl.obtenerPorCodigo(codigo);
     }
 
     // 🔹 Listar todas las carreras
     public List<Carrera> listarTodas() throws SQLException {
-        return carreraDAO.listarCarreras();
+        return carreraDAOImpl.listarCarreras();
     }
 
     // 🔹 Actualizar carrera
     public boolean actualizarCarrera(int idCarrera, String codigo, String nombre, String plan) throws SQLException {
         Carrera carrera = new Carrera(idCarrera, codigo, nombre, plan);
-        return carreraDAO.actualizarCarrera(carrera);
+        return carreraDAOImpl.actualizarCarrera(carrera);
     }
 
     // 🔹 Eliminar carrera
     public boolean eliminarCarrera(int idCarrera) throws SQLException {
-        return carreraDAO.eliminarCarrera(idCarrera);
+        return carreraDAOImpl.eliminarCarrera(idCarrera);
     }
 }

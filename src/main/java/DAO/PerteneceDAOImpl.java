@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PerteneceDAO {
+public class PerteneceDAOImpl {
 
     private final Connection conn;
 
-    public PerteneceDAO() throws SQLException {
+    public PerteneceDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

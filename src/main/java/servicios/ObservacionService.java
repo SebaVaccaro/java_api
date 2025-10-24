@@ -1,6 +1,6 @@
 package servicios;
 
-import DAO.ObservacionDAO;
+import DAO.ObservacionDAOImpl;
 import modelo.Observacion;
 
 import java.sql.SQLException;
@@ -9,10 +9,10 @@ import java.util.List;
 
 public class ObservacionService {
 
-    private final ObservacionDAO observacionDAO;
+    private final ObservacionDAOImpl observacionDAOImpl;
 
     public ObservacionService() throws SQLException {
-        this.observacionDAO = new ObservacionDAO();
+        this.observacionDAOImpl = new ObservacionDAOImpl();
     }
 
     // 🔹 Crear observación con validaciones
@@ -28,17 +28,17 @@ public class ObservacionService {
         }
 
         Observacion o = new Observacion(idFuncionario, idEstudiante, titulo, contenido, fecHora, true);
-        return observacionDAO.crearObservacion(o);
+        return observacionDAOImpl.crearObservacion(o);
     }
 
     // 🔹 Obtener observación por id
     public Observacion obtenerObservacion(int id) throws SQLException {
-        return observacionDAO.obtenerObservacion(id);
+        return observacionDAOImpl.obtenerObservacion(id);
     }
 
     // 🔹 Listar todas las observaciones
     public List<Observacion> listarTodas() throws SQLException {
-        return observacionDAO.listarTodas();
+        return observacionDAOImpl.listarTodas();
     }
 
     // 🔹 Actualizar observación
@@ -46,11 +46,11 @@ public class ObservacionService {
         if (o.getIdObservacion() <= 0) {
             throw new IllegalArgumentException("ID de observación inválido.");
         }
-        return observacionDAO.actualizarObservacion(o);
+        return observacionDAOImpl.actualizarObservacion(o);
     }
 
     // 🔹 Baja lógica (desactivar observación)
     public boolean desactivarObservacion(int id) throws SQLException {
-        return observacionDAO.eliminarObservacion(id);
+        return observacionDAOImpl.eliminarObservacion(id);
     }
 }

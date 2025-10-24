@@ -7,11 +7,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GrupoDAO {
+public class GrupoDAOImpl {
 
     private final Connection conn;
 
-    public GrupoDAO() throws SQLException {
+    public GrupoDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 

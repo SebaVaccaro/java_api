@@ -8,11 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginDAO {
+public class LoginDAOImpl {
 
     private final Connection connection;
 
-    public LoginDAO() throws SQLException {
+    public LoginDAOImpl() throws SQLException {
         this.connection = ConexionSingleton.getInstance().getConexion();
     }
 

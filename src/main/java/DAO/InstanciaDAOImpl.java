@@ -10,11 +10,11 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InstanciaDAO {
+public class InstanciaDAOImpl {
 
     private final Connection conn;
 
-    public InstanciaDAO() throws SQLException {
+    public InstanciaDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
