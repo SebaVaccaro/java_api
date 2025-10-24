@@ -4,18 +4,18 @@ import java.time.LocalDate;
 
 public class Seguimiento {
     private int idSeguimiento;
-    private int idInforme;      // FK hacia InformeFinal (puede ser null)
-    private int idEstudiante;   // FK hacia Estudiante
+    private Integer idInforme;      // FK hacia InformeFinal (puede ser null)
+    private int idEstudiante;       // FK hacia Estudiante
     private LocalDate fecInicio;
-    private LocalDate fecCierre; // puede ser null
-    private boolean estActivo;   // corresponde a activo_flag
+    private LocalDate fecCierre;    // puede ser null
+    private boolean estActivo;      // corresponde a activo_flag
 
     // Constructor vacío
     public Seguimiento() {
     }
 
     // Constructor sin id (para insertar)
-    public Seguimiento(int idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
+    public Seguimiento(Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
         this.idInforme = idInforme;
         this.idEstudiante = idEstudiante;
         this.fecInicio = fecInicio;
@@ -24,7 +24,7 @@ public class Seguimiento {
     }
 
     // Constructor completo
-    public Seguimiento(int idSeguimiento, int idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
+    public Seguimiento(int idSeguimiento, Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
         this.idSeguimiento = idSeguimiento;
         this.idInforme = idInforme;
         this.idEstudiante = idEstudiante;
@@ -42,11 +42,11 @@ public class Seguimiento {
         this.idSeguimiento = idSeguimiento;
     }
 
-    public int getIdInforme() {
+    public Integer getIdInforme() {
         return idInforme;
     }
 
-    public void setIdInforme(int idInforme) {
+    public void setIdInforme(Integer idInforme) {
         this.idInforme = idInforme;
     }
 

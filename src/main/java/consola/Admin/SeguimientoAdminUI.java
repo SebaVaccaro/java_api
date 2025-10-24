@@ -44,26 +44,21 @@ public class SeguimientoAdminUI {
     }
 
     private void agregarSeguimiento() {
-        int idInforme = leerEntero("ID Informe (0 si no aplica): ");
         int idEstudiante = leerEntero("ID Estudiante: ");
         LocalDate fecInicio = leerFecha("Fecha de inicio (yyyy-MM-dd): ");
-        LocalDate fecCierre = leerFechaOpcional("Fecha de cierre (yyyy-MM-dd o vacío): ");
-        boolean estActivo = leerBoolean("Está activo? (true/false): ");
+        boolean estActivo = leerBoolean("¿Está activo? (true/false): ");
 
         try {
-            boolean exito = facade.agregarSeguimiento(
-                    idInforme == 0 ? -1 : idInforme,
-                    idEstudiante,
-                    fecInicio,
-                    fecCierre,
-                    estActivo
-            );
-            if (exito) System.out.println("✅ Seguimiento agregado.");
-            else System.out.println("❌ No se pudo agregar el seguimiento.");
+            boolean exito = facade.agregarSeguimiento(null, idEstudiante, fecInicio, null,estActivo);
+            if (exito)
+                System.out.println("✅ Seguimiento agregado correctamente.");
+            else
+                System.out.println("❌ No se pudo agregar el seguimiento.");
         } catch (SQLException e) {
             System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
+
 
     private void listarTodos() {
         try {
