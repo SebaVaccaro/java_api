@@ -10,9 +10,11 @@ import java.util.List;
 public class SeguimientoService {
 
     private final SeguimientoDAO dao;
+    private final EstudianteService estudianteService;
 
     public SeguimientoService() throws SQLException {
         this.dao = new SeguimientoDAO();
+        this.estudianteService = new EstudianteService();
     }
 
     // ==========================================================
@@ -69,16 +71,34 @@ public class SeguimientoService {
     // ==========================================================
     // 🔹 MÉTODOS PRIVADOS DE VALIDACIÓN
     // ==========================================================
-    private void validarCampos(int idEstudiante, LocalDate fecInicio) {
+    private void validarCampos(int idEstudiante, LocalDate fecInicio) throws SQLException {
         if (idEstudiante <= 0)
             throw new IllegalArgumentException("ID de estudiante inválido.");
         if (fecInicio == null)
             throw new IllegalArgumentException("Fecha de inicio requerida.");
+
+        // Verificar que el estudiante exista
+        validarEstudianteExiste(idEstudiante);
+
+        // Verificar que no tenga seguimiento activo
+        validarNoTieneSeguimientoActivo(idEstudiante);
     }
 
-    private void validarCamposActualizacion(int idSeguimiento, int idEstudiante, LocalDate fecInicio) {
+    private void validarCamposActualizacion(int idSeguimiento, int idEstudiante, LocalDate fecInicio) throws SQLException {
         if (idSeguimiento <= 0)
             throw new IllegalArgumentException("ID de seguimiento inválido.");
         validarCampos(idEstudiante, fecInicio);
+    }
+
+    private void validarNoTieneSeguimientoActivo(int idEstudiante) throws SQLException {
+        if (dao.tieneSeguimientoActivo(idEstudiante)) {
+            throw new IllegalArgumentException("El estudiante ya tiene un seguimiento activo.");
+        }
+    }
+
+    private void validarEstudianteExiste(int idEstudiante) throws SQLException {
+        if (estudianteService.obtenerPorId(idEstudiante) == null) {
+            throw new IllegalArgumentException("El estudiante no existe.");
+        }
     }
 }

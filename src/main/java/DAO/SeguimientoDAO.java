@@ -142,4 +142,23 @@ public class SeguimientoDAO {
 
         return lista;
     }
+
+    // ==========================================================
+    // 🔹 VERIFICAR SI EL ESTUDIANTE TIENE SEGUIMIENTO ACTIVO
+    // ==========================================================
+    public boolean tieneSeguimientoActivo(int idEstudiante) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM seguimientos WHERE id_estudiante = ? AND est_activo = TRUE";
+
+        try (PreparedStatement psmt = conn.prepareStatement(sql)) {
+            psmt.setInt(1, idEstudiante);
+            ResultSet rs = psmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Si hay al menos 1 seguimiento activo, devuelve true
+            }
+        }
+
+        return false;
+    }
+
 }

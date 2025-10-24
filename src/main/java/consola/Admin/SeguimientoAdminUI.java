@@ -43,30 +43,37 @@ public class SeguimientoAdminUI {
         } while (opcion != 0);
     }
 
+    // ==========================================================
+    // AGREGAR SEGUIMIENTO
+    // ==========================================================
     private void agregarSeguimiento() {
         int idEstudiante = leerEntero("ID Estudiante: ");
         LocalDate fecInicio = leerFecha("Fecha de inicio (yyyy-MM-dd): ");
         boolean estActivo = leerBoolean("¿Está activo? (true/false): ");
 
         try {
-            boolean exito = facade.agregarSeguimiento(null, idEstudiante, fecInicio, null,estActivo);
+            boolean exito = facade.agregarSeguimiento(null, idEstudiante, fecInicio, null, estActivo);
             if (exito)
                 System.out.println("✅ Seguimiento agregado correctamente.");
             else
                 System.out.println("❌ No se pudo agregar el seguimiento.");
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (IllegalArgumentException e) {
+            System.out.println("⚠️ " + e.getMessage());
         }
     }
 
-
+    // ==========================================================
+    // LISTAR SEGUIMIENTOS
+    // ==========================================================
     private void listarTodos() {
         try {
             List<Seguimiento> list = facade.listarTodos();
             if (list.isEmpty()) System.out.println("No hay seguimientos registrados.");
             else list.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -77,10 +84,13 @@ public class SeguimientoAdminUI {
             if (s != null) System.out.println(s);
             else System.out.println("No se encontró seguimiento con ese ID.");
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // ==========================================================
+    // MODIFICAR SEGUIMIENTO
+    // ==========================================================
     private void modificarSeguimiento() {
         int id = leerEntero("ID del seguimiento a modificar: ");
         try {
@@ -90,6 +100,7 @@ public class SeguimientoAdminUI {
                 return;
             }
 
+            System.out.println("Seguimiento actual: " + s);
             System.out.println("Campos modificables: idInforme, idEstudiante, fecInicio, fecCierre, estActivo");
             String campo = leerTexto("Campo a modificar: ");
 
@@ -97,7 +108,7 @@ public class SeguimientoAdminUI {
             switch (campo.toLowerCase()) {
                 case "idinforme" -> {
                     int nuevo = leerEntero("Nuevo ID Informe (0 si no aplica): ");
-                    s.setIdInforme(nuevo == 0 ? -1 : nuevo);
+                    s.setIdInforme(nuevo == 0 ? null : nuevo);
                     exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
                 }
                 case "idestudiante" -> {
@@ -126,21 +137,30 @@ public class SeguimientoAdminUI {
             if (exito) System.out.println("✅ Seguimiento modificado.");
             else System.out.println("❌ No se pudo modificar el seguimiento.");
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (IllegalArgumentException e) {
+            System.out.println("⚠️ " + e.getMessage());
         }
     }
 
+    // ==========================================================
+    // ELIMINAR SEGUIMIENTO
+    // ==========================================================
     private void eliminarSeguimiento() {
         int id = leerEntero("ID del seguimiento a eliminar: ");
         try {
             if (facade.eliminarSeguimiento(id)) System.out.println("✅ Seguimiento eliminado.");
             else System.out.println("❌ No se pudo eliminar el seguimiento.");
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (IllegalArgumentException e) {
+            System.out.println("⚠️ " + e.getMessage());
         }
     }
 
-    // ==== Métodos auxiliares ====
+    // ==========================================================
+    // MÉTODOS AUXILIARES
+    // ==========================================================
     private int leerEntero(String mensaje) {
         System.out.print(mensaje);
         while (!scanner.hasNextInt()) {

@@ -46,4 +46,3 @@ public class ArchivoAdjuntoFacade {
         return service.eliminarFisico(idArchivo);
     }
 }
-// UI -> facade -> servicio -> dao -> postgreSQL
