@@ -29,7 +29,7 @@ public class EstudianteService {
     }
 
     // Crear estudiante coordinando inserción en usuario y estudiante
-    public Estudiante registrarEstudiante(String ci, String username, String password,
+    public Estudiante registrarEstudiante(String ci, String password,
                                           String nombre, String apellido, LocalDate fechaNacimiento,
                                           int idGrupo) throws Exception {
 
@@ -41,7 +41,7 @@ public class EstudianteService {
         String correo = generarCorreoEstudiante(nombre, apellido);
         String passEnc = Encriptador.encriptar(password);
 
-        Estudiante est = new Estudiante(0, ci, nombre, apellido, username, passEnc, correo, idGrupo, true);
+        Estudiante est = new Estudiante(0, ci, nombre, apellido, nombre + "." + apellido, passEnc, correo, idGrupo, false);
 
         // Coordinación de inserción atómica
         try {

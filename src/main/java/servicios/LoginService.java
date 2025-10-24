@@ -38,24 +38,83 @@ public class LoginService {
 
         String correo = usuario.getCorreo().toLowerCase();
 
-        // ✅ Corregido: dominio correcto de estudiantes
+        // ===================== ESTUDIANTE =====================
         if (correo.endsWith("@estudiantes.utec.edu.uy")) {
-
             EstudianteService estService = new EstudianteService();
             Estudiante est = estService.obtenerPorId(usuario.getIdUsuario());
 
             if (est == null) {
                 throw new IllegalArgumentException("No se encontró el estudiante en la base de datos.");
             }
+
+            if (!est.isActivo()) {
+                java.util.Scanner sc = new java.util.Scanner(System.in);
+                String opcion;
+                System.out.println("Debes aceptar las políticas de UTEC para continuar.");
+
+                while (true) {
+                    System.out.print("¿Aceptas las políticas? (SI/NO): ");
+                    opcion = sc.nextLine().trim().toUpperCase();
+
+                    if (opcion.equals("SI")) {
+                        est.setActivo(true);
+                        estService.actualizarEstudiante(est); // ✅ actualizar objeto estudiante
+                        System.out.println("¡Políticas aceptadas! Bienvenido.");
+                        break; // rompe el bucle y continúa
+                    } else if (opcion.equals("NO")) {
+                        System.out.println("No puedes acceder al sistema sin aceptar las políticas.");
+                        return null; // retorna null para volver a LoginUI
+                    } else {
+                        System.out.println("Opción inválida. Debes ingresar SI o NO.");
+                    }
+                }
+            }
+
             return est;
 
+            // ===================== FUNCIONARIO =====================
         } else if (correo.endsWith("@utec.edu.uy")) {
-
             FuncionarioService funcService = new FuncionarioService();
             Funcionario func = funcService.obtenerPorId(usuario.getIdUsuario());
 
             if (func == null) {
                 throw new IllegalArgumentException("No se encontró el funcionario en la base de datos.");
+            }
+
+            if (!func.isActivo()) {
+                java.util.Scanner sc = new java.util.Scanner(System.in);
+                String opcion;
+                System.out.println("Debes aceptar las políticas de UTEC para continuar.");
+
+                while (true) {
+                    System.out.print("¿Aceptas las políticas? (SI/NO): ");
+                    opcion = sc.nextLine().trim().toUpperCase();
+
+                    if (opcion.equals("SI")) {
+                        func.setActivo(true);
+
+                        // Actualizamos con todos los parámetros según actualizarFuncionario
+                        funcService.actualizarFuncionario(
+                                func.getIdUsuario(),
+                                func.getCedula(),
+                                func.getNombre(),
+                                func.getApellido(),
+                                func.getUsername(),
+                                Encriptador.desencriptar(func.getPassword()),
+                                func.getCorreo(),
+                                func.getIdRol(),
+                                func.isActivo()
+                        );
+
+                        System.out.println("¡Políticas aceptadas! Bienvenido.");
+                        break; // rompe el bucle y continúa
+                    } else if (opcion.equals("NO")) {
+                        System.out.println("No puedes acceder al sistema sin aceptar las políticas.");
+                        return null; // retorna null para volver a LoginUI
+                    } else {
+                        System.out.println("Opción inválida. Debes ingresar SI o NO.");
+                    }
+                }
             }
 
             return func;

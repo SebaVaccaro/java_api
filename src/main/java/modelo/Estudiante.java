@@ -13,11 +13,22 @@ public class Estudiante extends Usuario {
         this.estActivo = estActivo;
     }
 
-    public int getIdGrupo() { return idGrupo; }
-    public void setIdGrupo(int idGrupo) { this.idGrupo = idGrupo; }
+    public int getIdGrupo() {
+        return idGrupo;
+    }
 
-    public boolean isEstActivo() { return estActivo; }
-    public void setEstActivo(boolean estActivo) { this.estActivo = estActivo; }
+    public void setIdGrupo(int idGrupo) {
+        this.idGrupo = idGrupo;
+    }
+
+    // ✅ Métodos renombrados
+    public boolean isActivo() {
+        return estActivo;
+    }
+
+    public void setActivo(boolean estActivo) {
+        this.estActivo = estActivo;
+    }
 
     @Override
     public String toString() {

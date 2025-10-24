@@ -45,7 +45,7 @@ public class FuncionarioService {
         String passEnc = Encriptador.encriptar(password);
 
         // Crear objeto Funcionario
-        Funcionario f = new Funcionario(0, ci, nombre, apellido, username, passEnc, correo, idRol, true);
+        Funcionario f = new Funcionario(0, ci, nombre, apellido, username, passEnc, correo, idRol, false);
 
         // Transacción atómica
         try {

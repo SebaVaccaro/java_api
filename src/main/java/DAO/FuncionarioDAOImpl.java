@@ -22,7 +22,7 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
             ps.setInt(1, f.getIdUsuario());
             if (f.getIdRol() > 0) ps.setInt(2, f.getIdRol());
             else ps.setNull(2, Types.INTEGER);
-            ps.setBoolean(3, f.isEstActivo());
+            ps.setBoolean(3, f.isActivo());
             ps.executeUpdate();
         }
     }
@@ -91,7 +91,7 @@ public class FuncionarioDAOImpl implements FuncionarioDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             if (f.getIdRol() > 0) ps.setInt(1, f.getIdRol());
             else ps.setNull(1, Types.INTEGER);
-            ps.setBoolean(2, f.isEstActivo());
+            ps.setBoolean(2, f.isActivo());
             ps.setInt(3, f.getIdUsuario());
             return ps.executeUpdate() > 0;
         }

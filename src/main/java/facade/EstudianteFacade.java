@@ -18,10 +18,10 @@ public class EstudianteFacade {
     // ============================================================
     // CREAR ESTUDIANTE
     // ============================================================
-    public Estudiante crearEstudiante(String cedula, String nombre, String apellido, String username,
+    public Estudiante crearEstudiante(String cedula, String nombre, String apellido,
                                       String password, int idGrupo, LocalDate fechaNacimiento)
             throws Exception {
-        return estudianteService.registrarEstudiante(cedula, username, password, nombre, apellido, fechaNacimiento, idGrupo);
+        return estudianteService.registrarEstudiante(cedula, password, nombre, apellido, fechaNacimiento, idGrupo);
     }
 
     // ============================================================

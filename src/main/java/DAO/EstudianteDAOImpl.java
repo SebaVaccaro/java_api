@@ -26,7 +26,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
             } else {
                 ps.setNull(2, Types.INTEGER);
             }
-            ps.setBoolean(3, est.isEstActivo());
+            ps.setBoolean(3, est.isActivo());
             ps.executeUpdate();
         }
     }
@@ -99,7 +99,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
             } else {
                 ps.setNull(1, Types.INTEGER);
             }
-            ps.setBoolean(2, est.isEstActivo());
+            ps.setBoolean(2, est.isActivo());
             ps.setInt(3, est.getIdUsuario());
             return ps.executeUpdate() > 0;
         }

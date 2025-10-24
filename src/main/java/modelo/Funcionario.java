@@ -16,8 +16,8 @@ public class Funcionario extends Usuario {
     public int getIdRol() { return idRol; }
     public void setIdRol(int idRol) { this.idRol = idRol; }
 
-    public boolean isEstActivo() { return estActivo; }
-    public void setEstActivo(boolean estActivo) { this.estActivo = estActivo; }
+    public boolean isActivo() { return estActivo; }
+    public void setActivo(boolean estActivo) { this.estActivo = estActivo; }
 
     @Override
     public String toString() {

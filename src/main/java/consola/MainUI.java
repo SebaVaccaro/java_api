@@ -38,7 +38,7 @@ public class MainUI {
 
             usuario = loginUI.iniciar(); // Llamada al login
             if (usuario == null) {
-                System.out.println("🔒 Sesión cerrada por el usuario.");
+                System.out.println("🔒 Sesión cerrada para el usuario.");
                 return; // Salir si el login devuelve null
             }
 

@@ -50,13 +50,12 @@ public class EstudianteAdminUI {
         String cedula = leerTexto("Cédula: ");
         String nombre = leerTexto("Nombre: ");
         String apellido = leerTexto("Apellido: ");
-        String username = leerTexto("Username: ");
         String password = leerTexto("Password: ");
         int idGrupo = leerEntero("ID de grupo: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
-            Estudiante e = facade.crearEstudiante(cedula, nombre, apellido, username, password, idGrupo, fechaNacimiento);
+            Estudiante e = facade.crearEstudiante(cedula, nombre, apellido, password, idGrupo, fechaNacimiento);
             System.out.println("✅ Estudiante creado: " + e);
         } catch (SQLException ex) {
             String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
