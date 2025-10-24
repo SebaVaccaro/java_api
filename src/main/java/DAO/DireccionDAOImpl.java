@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.DireccionDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Direccion;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DireccionDAOImpl {
+public class DireccionDAOImpl implements DireccionDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class DireccionDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear nueva dirección
+    @Override
     public Direccion crearDireccion(Direccion direccion) throws SQLException {
         String sql = "INSERT INTO direcciones (calle, num_puerta, num_apto, id_ciudad, id_usuario) " +
                 "VALUES (?, ?, ?, ?, ?) RETURNING id_direccion";
@@ -33,7 +34,7 @@ public class DireccionDAOImpl {
         return direccion;
     }
 
-    // 🔹 Obtener dirección por ID
+    @Override
     public Direccion obtenerDireccion(int idDireccion) throws SQLException {
         String sql = "SELECT * FROM direcciones WHERE id_direccion = ?";
         Direccion direccion = null;
@@ -54,28 +55,27 @@ public class DireccionDAOImpl {
         return direccion;
     }
 
-    // 🔹 Listar todas las direcciones
+    @Override
     public List<Direccion> listarDirecciones() throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
         String sql = "SELECT * FROM direcciones ORDER BY id_direccion";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Direccion direccion = new Direccion(
+                direcciones.add(new Direccion(
                         rs.getInt("id_direccion"),
                         rs.getString("calle"),
                         rs.getString("num_puerta"),
                         rs.getString("num_apto"),
                         rs.getInt("id_ciudad"),
                         rs.getInt("id_usuario")
-                );
-                direcciones.add(direccion);
+                ));
             }
         }
         return direcciones;
     }
 
-    // 🔹 Listar direcciones por usuario
+    @Override
     public List<Direccion> listarPorUsuario(int idUsuario) throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
         String sql = "SELECT * FROM direcciones WHERE id_usuario = ?";
@@ -83,21 +83,20 @@ public class DireccionDAOImpl {
             ps.setInt(1, idUsuario);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Direccion direccion = new Direccion(
+                direcciones.add(new Direccion(
                         rs.getInt("id_direccion"),
                         rs.getString("calle"),
                         rs.getString("num_puerta"),
                         rs.getString("num_apto"),
                         rs.getInt("id_ciudad"),
                         rs.getInt("id_usuario")
-                );
-                direcciones.add(direccion);
+                ));
             }
         }
         return direcciones;
     }
 
-    // 🔹 Listar direcciones por ciudad
+    @Override
     public List<Direccion> listarPorCiudad(int idCiudad) throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
         String sql = "SELECT * FROM direcciones WHERE id_ciudad = ?";
@@ -105,21 +104,20 @@ public class DireccionDAOImpl {
             ps.setInt(1, idCiudad);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Direccion direccion = new Direccion(
+                direcciones.add(new Direccion(
                         rs.getInt("id_direccion"),
                         rs.getString("calle"),
                         rs.getString("num_puerta"),
                         rs.getString("num_apto"),
                         rs.getInt("id_ciudad"),
                         rs.getInt("id_usuario")
-                );
-                direcciones.add(direccion);
+                ));
             }
         }
         return direcciones;
     }
 
-    // 🔹 Actualizar dirección
+    @Override
     public boolean actualizarDireccion(Direccion direccion) throws SQLException {
         String sql = "UPDATE direcciones SET calle = ?, num_puerta = ?, num_apto = ?, id_ciudad = ?, id_usuario = ? " +
                 "WHERE id_direccion = ?";
@@ -134,7 +132,7 @@ public class DireccionDAOImpl {
         }
     }
 
-    // 🔹 Eliminar dirección
+    @Override
     public boolean eliminarDireccion(int idDireccion) throws SQLException {
         String sql = "DELETE FROM direcciones WHERE id_direccion = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.RolDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Rol;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RolDAOImpl {
+public class RolDAOImpl implements RolDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class RolDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear un nuevo rol
+    @Override
     public boolean agregar(Rol rol) throws SQLException {
         String sql = "INSERT INTO roles (nombre, est_activo) VALUES (?, ?)";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -25,7 +26,7 @@ public class RolDAOImpl {
         }
     }
 
-    // 🔹 Actualizar un rol existente
+    @Override
     public boolean actualizar(Rol rol) throws SQLException {
         String sql = "UPDATE roles SET nombre=?, est_activo=? WHERE id_rol=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -36,7 +37,7 @@ public class RolDAOImpl {
         }
     }
 
-    // 🔹 Eliminar un rol (opcional, según est_activo o físico)
+    @Override
     public boolean eliminar(int idRol) throws SQLException {
         String sql = "DELETE FROM roles WHERE id_rol=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -45,7 +46,7 @@ public class RolDAOImpl {
         }
     }
 
-    // 🔹 Buscar rol por ID
+    @Override
     public Rol buscarPorId(int idRol) throws SQLException {
         String sql = "SELECT id_rol, nombre, est_activo FROM roles WHERE id_rol=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -62,19 +63,18 @@ public class RolDAOImpl {
         return null;
     }
 
-    // 🔹 Listar todos los roles
+    @Override
     public List<Rol> listarTodos() throws SQLException {
         List<Rol> lista = new ArrayList<>();
         String sql = "SELECT id_rol, nombre, est_activo FROM roles";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Rol rol = new Rol(
+                lista.add(new Rol(
                         rs.getInt("id_rol"),
                         rs.getString("nombre"),
                         rs.getBoolean("est_activo")
-                );
-                lista.add(rol);
+                ));
             }
         }
         return lista;

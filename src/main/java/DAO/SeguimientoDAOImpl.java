@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.SeguimientoDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Seguimiento;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SeguimientoDAOImpl {
+public class SeguimientoDAOImpl implements SeguimientoDAO {
 
     private final Connection conn;
 
@@ -15,14 +16,11 @@ public class SeguimientoDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // ==========================================================
-    // 🔹 AGREGAR SEGUIMIENTO
-    // ==========================================================
+    @Override
     public boolean agregar(Seguimiento s) throws SQLException {
         String sql = "INSERT INTO seguimientos (id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
-            // id_informe (puede ser null)
             if (s.getIdInforme() != null && s.getIdInforme() > 0) {
                 psmt.setInt(1, s.getIdInforme());
             } else {
@@ -32,7 +30,6 @@ public class SeguimientoDAOImpl {
             psmt.setInt(2, s.getIdEstudiante());
             psmt.setDate(3, Date.valueOf(s.getFecInicio()));
 
-            // fec_cierre (puede ser null)
             if (s.getFecCierre() != null) {
                 psmt.setDate(4, Date.valueOf(s.getFecCierre()));
             } else {
@@ -40,14 +37,11 @@ public class SeguimientoDAOImpl {
             }
 
             psmt.setBoolean(5, s.isEstActivo());
-
             return psmt.executeUpdate() > 0;
         }
     }
 
-    // ==========================================================
-    // 🔹 ACTUALIZAR SEGUIMIENTO
-    // ==========================================================
+    @Override
     public boolean actualizar(Seguimiento s) throws SQLException {
         String sql = "UPDATE seguimientos SET id_informe = ?, id_estudiante = ?, fec_inicio = ?, fec_cierre = ?, est_activo = ? WHERE id_seguimiento = ?";
 
@@ -74,21 +68,16 @@ public class SeguimientoDAOImpl {
         }
     }
 
-    // ==========================================================
-    // 🔹 ELIMINAR SEGUIMIENTO
-    // ==========================================================
+    @Override
     public boolean eliminar(int idSeguimiento) throws SQLException {
         String sql = "DELETE FROM seguimientos WHERE id_seguimiento = ?";
-
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
             psmt.setInt(1, idSeguimiento);
             return psmt.executeUpdate() > 0;
         }
     }
 
-    // ==========================================================
-    // 🔹 BUSCAR POR ID
-    // ==========================================================
+    @Override
     public Seguimiento buscarPorId(int idSeguimiento) throws SQLException {
         String sql = "SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo FROM seguimientos WHERE id_seguimiento = ?";
 
@@ -114,9 +103,7 @@ public class SeguimientoDAOImpl {
         return null;
     }
 
-    // ==========================================================
-    // 🔹 LISTAR TODOS
-    // ==========================================================
+    @Override
     public List<Seguimiento> listarTodos() throws SQLException {
         List<Seguimiento> lista = new ArrayList<>();
         String sql = "SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo FROM seguimientos";
@@ -143,9 +130,7 @@ public class SeguimientoDAOImpl {
         return lista;
     }
 
-    // ==========================================================
-    // 🔹 VERIFICAR SI EL ESTUDIANTE TIENE SEGUIMIENTO ACTIVO
-    // ==========================================================
+    @Override
     public boolean tieneSeguimientoActivo(int idEstudiante) throws SQLException {
         String sql = "SELECT COUNT(*) FROM seguimientos WHERE id_estudiante = ? AND est_activo = TRUE";
 
@@ -154,11 +139,10 @@ public class SeguimientoDAOImpl {
             ResultSet rs = psmt.executeQuery();
 
             if (rs.next()) {
-                return rs.getInt(1) > 0; // Si hay al menos 1 seguimiento activo, devuelve true
+                return rs.getInt(1) > 0;
             }
         }
 
         return false;
     }
-
 }

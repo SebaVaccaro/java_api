@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.CiudadDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Ciudad;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CiudadDAOImpl {
+public class CiudadDAOImpl implements CiudadDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class CiudadDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear nueva ciudad
+    @Override
     public Ciudad crearCiudad(Ciudad ciudad) throws SQLException {
         String sql = "INSERT INTO ciudades (cod_postal, nombre, departamento) " +
                 "VALUES (?, ?, ?) RETURNING id_ciudad";
@@ -31,7 +32,7 @@ public class CiudadDAOImpl {
         return ciudad;
     }
 
-    // 🔹 Obtener ciudad por ID
+    @Override
     public Ciudad obtenerCiudad(int idCiudad) throws SQLException {
         String sql = "SELECT * FROM ciudades WHERE id_ciudad = ?";
         Ciudad ciudad = null;
@@ -50,26 +51,25 @@ public class CiudadDAOImpl {
         return ciudad;
     }
 
-    // 🔹 Listar todas las ciudades
+    @Override
     public List<Ciudad> listarCiudades() throws SQLException {
         List<Ciudad> ciudades = new ArrayList<>();
         String sql = "SELECT * FROM ciudades ORDER BY nombre";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Ciudad ciudad = new Ciudad(
+                ciudades.add(new Ciudad(
                         rs.getInt("id_ciudad"),
                         rs.getInt("cod_postal"),
                         rs.getString("nombre"),
                         rs.getString("departamento")
-                );
-                ciudades.add(ciudad);
+                ));
             }
         }
         return ciudades;
     }
 
-    // 🔹 Buscar ciudad por nombre
+    @Override
     public Ciudad obtenerPorNombre(String nombre) throws SQLException {
         String sql = "SELECT * FROM ciudades WHERE LOWER(nombre) = LOWER(?)";
         Ciudad ciudad = null;
@@ -88,7 +88,7 @@ public class CiudadDAOImpl {
         return ciudad;
     }
 
-    // 🔹 Listar ciudades por departamento
+    @Override
     public List<Ciudad> listarPorDepartamento(String departamento) throws SQLException {
         List<Ciudad> ciudades = new ArrayList<>();
         String sql = "SELECT * FROM ciudades WHERE LOWER(departamento) = LOWER(?) ORDER BY nombre";
@@ -96,19 +96,18 @@ public class CiudadDAOImpl {
             ps.setString(1, departamento);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Ciudad ciudad = new Ciudad(
+                ciudades.add(new Ciudad(
                         rs.getInt("id_ciudad"),
                         rs.getInt("cod_postal"),
                         rs.getString("nombre"),
                         rs.getString("departamento")
-                );
-                ciudades.add(ciudad);
+                ));
             }
         }
         return ciudades;
     }
 
-    // 🔹 Actualizar ciudad
+    @Override
     public boolean actualizarCiudad(Ciudad ciudad) throws SQLException {
         String sql = "UPDATE ciudades SET cod_postal = ?, nombre = ?, departamento = ? WHERE id_ciudad = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -120,7 +119,7 @@ public class CiudadDAOImpl {
         }
     }
 
-    // 🔹 Eliminar ciudad (borrado físico)
+    @Override
     public boolean eliminarCiudad(int idCiudad) throws SQLException {
         String sql = "DELETE FROM ciudades WHERE id_ciudad = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.TeleUsuarioDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.TeleUsuario;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleUsuarioDAOImpl {
+public class TeleUsuarioDAOImpl implements TeleUsuarioDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class TeleUsuarioDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear un TeleUsuario
+    @Override
     public TeleUsuario crearTeleUsuario(TeleUsuario teleUsuario) throws SQLException {
         String sql = "INSERT INTO tele_usuario (numero, id_usuario) VALUES (?, ?) RETURNING id_telefono";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -29,7 +30,7 @@ public class TeleUsuarioDAOImpl {
         return teleUsuario;
     }
 
-    // 🔹 Obtener TeleUsuario por id
+    @Override
     public TeleUsuario obtenerTeleUsuario(int idTelefono) throws SQLException {
         String sql = "SELECT * FROM tele_usuario WHERE id_telefono = ?";
         TeleUsuario teleUsuario = null;
@@ -47,7 +48,7 @@ public class TeleUsuarioDAOImpl {
         return teleUsuario;
     }
 
-    // 🔹 Listar todos los TeleUsuarios
+    @Override
     public List<TeleUsuario> listarTodos() throws SQLException {
         List<TeleUsuario> lista = new ArrayList<>();
         String sql = "SELECT * FROM tele_usuario";
@@ -65,22 +66,22 @@ public class TeleUsuarioDAOImpl {
         return lista;
     }
 
-    // 🔹 Eliminar TeleUsuario por id
-    public boolean eliminarTeleUsuario(int idTelefono) throws SQLException {
-        String sql = "DELETE FROM tele_usuario WHERE id_telefono = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idTelefono);
-            return ps.executeUpdate() > 0;
-        }
-    }
-
-    // 🔹 Actualizar TeleUsuario
+    @Override
     public boolean actualizarTeleUsuario(TeleUsuario teleUsuario) throws SQLException {
         String sql = "UPDATE tele_usuario SET numero = ?, id_usuario = ? WHERE id_telefono = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, teleUsuario.getNumero());
             ps.setInt(2, teleUsuario.getIdUsuario());
             ps.setInt(3, teleUsuario.getIdTelefono());
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    @Override
+    public boolean eliminarTeleUsuario(int idTelefono) throws SQLException {
+        String sql = "DELETE FROM tele_usuario WHERE id_telefono = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idTelefono);
             return ps.executeUpdate() > 0;
         }
     }

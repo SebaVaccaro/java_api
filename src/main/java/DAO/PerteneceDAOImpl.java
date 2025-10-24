@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.PerteneceDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Pertenece;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PerteneceDAOImpl {
+public class PerteneceDAOImpl implements PerteneceDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class PerteneceDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Agregar relación Carrera <-> ITR
+    @Override
     public boolean agregar(Pertenece p) throws SQLException {
         String sql = "INSERT INTO pertenece (id_carrera, id_itr) VALUES (?, ?)";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -25,7 +26,7 @@ public class PerteneceDAOImpl {
         }
     }
 
-    // 🔹 Eliminar relación Carrera <-> ITR
+    @Override
     public boolean eliminar(Pertenece p) throws SQLException {
         String sql = "DELETE FROM pertenece WHERE id_carrera=? AND id_itr=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -35,24 +36,23 @@ public class PerteneceDAOImpl {
         }
     }
 
-    // 🔹 Listar todas las relaciones
+    @Override
     public List<Pertenece> listarTodos() throws SQLException {
         List<Pertenece> lista = new ArrayList<>();
         String sql = "SELECT id_carrera, id_itr FROM pertenece";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Pertenece p = new Pertenece(
+                lista.add(new Pertenece(
                         rs.getInt("id_carrera"),
                         rs.getInt("id_itr")
-                );
-                lista.add(p);
+                ));
             }
         }
         return lista;
     }
 
-    // 🔹 Listar ITRs de una carrera
+    @Override
     public List<Integer> listarItrPorCarrera(int idCarrera) throws SQLException {
         List<Integer> itrs = new ArrayList<>();
         String sql = "SELECT id_itr FROM pertenece WHERE id_carrera=?";
@@ -66,7 +66,7 @@ public class PerteneceDAOImpl {
         return itrs;
     }
 
-    // 🔹 Listar carreras de un ITR
+    @Override
     public List<Integer> listarCarrerasPorItr(int idItr) throws SQLException {
         List<Integer> carreras = new ArrayList<>();
         String sql = "SELECT id_carrera FROM pertenece WHERE id_itr=?";

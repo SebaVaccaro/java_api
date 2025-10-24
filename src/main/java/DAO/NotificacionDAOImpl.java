@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.NotificacionDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Notificacion;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotificacionDAOImpl {
+public class NotificacionDAOImpl implements NotificacionDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class NotificacionDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear notificación
+    @Override
     public Notificacion crearNotificacion(Notificacion n) throws SQLException {
         String sql = "INSERT INTO notificaciones (id_instancia, asunto, mensaje, destinatario, fec_envio, est_activo) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id_notificacion";
@@ -26,7 +27,6 @@ public class NotificacionDAOImpl {
             ps.setString(4, n.getDestinatario());
             ps.setDate(5, Date.valueOf(n.getFecEnvio()));
             ps.setBoolean(6, n.isEstActivo());
-
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 n.setIdNotificacion(rs.getInt("id_notificacion"));
@@ -35,7 +35,7 @@ public class NotificacionDAOImpl {
         return n;
     }
 
-    // 🔹 Obtener notificación por id
+    @Override
     public Notificacion obtenerNotificacion(int id) throws SQLException {
         String sql = "SELECT * FROM notificaciones WHERE id_notificacion = ?";
         Notificacion n = null;
@@ -57,14 +57,14 @@ public class NotificacionDAOImpl {
         return n;
     }
 
-    // 🔹 Listar todas las notificaciones
+    @Override
     public List<Notificacion> listarTodas() throws SQLException {
         List<Notificacion> lista = new ArrayList<>();
         String sql = "SELECT * FROM notificaciones";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Notificacion n = new Notificacion(
+                lista.add(new Notificacion(
                         rs.getInt("id_notificacion"),
                         rs.getInt("id_instancia"),
                         rs.getString("asunto"),
@@ -72,14 +72,13 @@ public class NotificacionDAOImpl {
                         rs.getString("destinatario"),
                         rs.getDate("fec_envio").toLocalDate(),
                         rs.getBoolean("est_activo")
-                );
-                lista.add(n);
+                ));
             }
         }
         return lista;
     }
 
-    // 🔹 Actualizar notificación
+    @Override
     public boolean actualizarNotificacion(Notificacion n) throws SQLException {
         String sql = "UPDATE notificaciones SET id_instancia=?, asunto=?, mensaje=?, destinatario=?, fec_envio=?, est_activo=? " +
                 "WHERE id_notificacion=?";
@@ -95,7 +94,7 @@ public class NotificacionDAOImpl {
         }
     }
 
-    // 🔹 Baja lógica (desactivar notificación)
+    @Override
     public boolean eliminarNotificacion(int id) throws SQLException {
         String sql = "UPDATE notificaciones SET est_activo=false WHERE id_notificacion=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

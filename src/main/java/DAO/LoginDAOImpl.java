@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.LoginDAO;
 import modelo.Usuario;
 import SINGLETON.ConexionSingleton;
 
@@ -8,7 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoginDAOImpl {
+public class LoginDAOImpl implements LoginDAO {
 
     private final Connection connection;
 
@@ -16,8 +17,10 @@ public class LoginDAOImpl {
         this.connection = ConexionSingleton.getInstance().getConexion();
     }
 
-    public Usuario obtenerUsuarioPorUsername(String username) {
-        String sql = "SELECT id_usuario, cedula, nombre, apellido, username, password, correo FROM usuarios WHERE username = ?";
+    @Override
+    public Usuario obtenerUsuarioPorUsername(String username) throws SQLException {
+        String sql = "SELECT id_usuario, cedula, nombre, apellido, username, password, correo " +
+                "FROM usuarios WHERE username = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -32,13 +35,9 @@ public class LoginDAOImpl {
                         rs.getString("username"),
                         rs.getString("password"),
                         rs.getString("correo")
-                ) {};
+                ){};
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
         return null;
     }
 }

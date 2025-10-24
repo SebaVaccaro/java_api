@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.InformeFinalDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.InformeFinal;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InformeFinalDAOImpl {
+public class InformeFinalDAOImpl implements InformeFinalDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class InformeFinalDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear un informe final
+    @Override
     public InformeFinal crearInformeFinal(InformeFinal informe) throws SQLException {
         String sql = "INSERT INTO info_final (contenido, valoracion, fec_creacion) VALUES (?, ?, ?) RETURNING id_inf_final";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -30,7 +31,7 @@ public class InformeFinalDAOImpl {
         return informe;
     }
 
-    // 🔹 Obtener informe final por ID
+    @Override
     public InformeFinal obtenerInformeFinal(int idInfFinal) throws SQLException {
         String sql = "SELECT * FROM info_final WHERE id_inf_final = ?";
         InformeFinal informe = null;
@@ -49,26 +50,25 @@ public class InformeFinalDAOImpl {
         return informe;
     }
 
-    // 🔹 Listar todos los informes finales
+    @Override
     public List<InformeFinal> listarInformesFinales() throws SQLException {
         List<InformeFinal> informes = new ArrayList<>();
         String sql = "SELECT * FROM info_final ORDER BY id_inf_final";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                InformeFinal informe = new InformeFinal(
+                informes.add(new InformeFinal(
                         rs.getInt("id_inf_final"),
                         rs.getString("contenido"),
                         rs.getInt("valoracion"),
                         rs.getDate("fec_creacion").toLocalDate()
-                );
-                informes.add(informe);
+                ));
             }
         }
         return informes;
     }
 
-    // 🔹 Actualizar informe final
+    @Override
     public boolean actualizarInformeFinal(InformeFinal informe) throws SQLException {
         String sql = "UPDATE info_final SET contenido = ?, valoracion = ?, fec_creacion = ? WHERE id_inf_final = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -80,7 +80,7 @@ public class InformeFinalDAOImpl {
         }
     }
 
-    // 🔹 Eliminar informe final
+    @Override
     public boolean eliminarInformeFinal(int idInfFinal) throws SQLException {
         String sql = "DELETE FROM info_final WHERE id_inf_final = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

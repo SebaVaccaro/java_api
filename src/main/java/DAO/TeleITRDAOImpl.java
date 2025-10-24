@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.TeleITRDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.TeleITR;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeleITRDAOImpl {
+public class TeleITRDAOImpl implements TeleITRDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class TeleITRDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Agregar un teléfono ITR
+    @Override
     public boolean agregar(TeleITR t) throws SQLException {
         String sql = "INSERT INTO tele_itr (numero, id_itr) VALUES (?, ?)";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -25,7 +26,7 @@ public class TeleITRDAOImpl {
         }
     }
 
-    // 🔹 Actualizar un teléfono ITR
+    @Override
     public boolean actualizar(TeleITR t) throws SQLException {
         String sql = "UPDATE tele_itr SET numero=?, id_itr=? WHERE id_telefono=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -36,7 +37,7 @@ public class TeleITRDAOImpl {
         }
     }
 
-    // 🔹 Eliminar un teléfono ITR
+    @Override
     public boolean eliminar(int idTelefono) throws SQLException {
         String sql = "DELETE FROM tele_itr WHERE id_telefono=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -45,7 +46,7 @@ public class TeleITRDAOImpl {
         }
     }
 
-    // 🔹 Buscar teléfono por ID
+    @Override
     public TeleITR buscarPorId(int idTelefono) throws SQLException {
         String sql = "SELECT id_telefono, numero, id_itr FROM tele_itr WHERE id_telefono=?";
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
@@ -62,7 +63,7 @@ public class TeleITRDAOImpl {
         return null;
     }
 
-    // 🔹 Listar todos los teléfonos ITR
+    @Override
     public List<TeleITR> listarTodos() throws SQLException {
         List<TeleITR> lista = new ArrayList<>();
         String sql = "SELECT id_telefono, numero, id_itr FROM tele_itr";

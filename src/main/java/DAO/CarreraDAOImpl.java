@@ -1,5 +1,6 @@
 package DAO;
 
+import DAO.interfaz.CarreraDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Carrera;
 
@@ -7,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarreraDAOImpl {
+public class CarreraDAOImpl implements CarreraDAO {
 
     private final Connection conn;
 
@@ -15,7 +16,7 @@ public class CarreraDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear nueva carrera
+    @Override
     public Carrera crearCarrera(Carrera carrera) throws SQLException {
         String sql = "INSERT INTO carreras (codigo, nombre, plan) VALUES (?, ?, ?) RETURNING id_carrera";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -30,7 +31,7 @@ public class CarreraDAOImpl {
         return carrera;
     }
 
-    // 🔹 Obtener carrera por ID
+    @Override
     public Carrera obtenerCarrera(int idCarrera) throws SQLException {
         String sql = "SELECT * FROM carreras WHERE id_carrera = ?";
         Carrera carrera = null;
@@ -49,26 +50,25 @@ public class CarreraDAOImpl {
         return carrera;
     }
 
-    // 🔹 Listar todas las carreras
+    @Override
     public List<Carrera> listarCarreras() throws SQLException {
         List<Carrera> carreras = new ArrayList<>();
         String sql = "SELECT * FROM carreras ORDER BY nombre";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Carrera carrera = new Carrera(
+                carreras.add(new Carrera(
                         rs.getInt("id_carrera"),
                         rs.getString("codigo"),
                         rs.getString("nombre"),
                         rs.getString("plan")
-                );
-                carreras.add(carrera);
+                ));
             }
         }
         return carreras;
     }
 
-    // 🔹 Buscar carrera por código
+    @Override
     public Carrera obtenerPorCodigo(String codigo) throws SQLException {
         String sql = "SELECT * FROM carreras WHERE codigo = ?";
         Carrera carrera = null;
@@ -87,7 +87,7 @@ public class CarreraDAOImpl {
         return carrera;
     }
 
-    // 🔹 Actualizar carrera
+    @Override
     public boolean actualizarCarrera(Carrera carrera) throws SQLException {
         String sql = "UPDATE carreras SET codigo = ?, nombre = ?, plan = ? WHERE id_carrera = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -99,7 +99,7 @@ public class CarreraDAOImpl {
         }
     }
 
-    // 🔹 Eliminar carrera (borrado físico)
+    @Override
     public boolean eliminarCarrera(int idCarrera) throws SQLException {
         String sql = "DELETE FROM carreras WHERE id_carrera = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
