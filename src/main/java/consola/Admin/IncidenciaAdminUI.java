@@ -53,12 +53,9 @@ public class IncidenciaAdminUI {
         int idFuncionario = leerEntero("ID de funcionario: ");
         String lugar = leerTexto("Lugar: ");
 
-        Incidencia incidencia = new Incidencia(
-                titulo, fecha, descripcion, activo, idFuncionario, lugar
-        );
 
         try {
-            incidencia = facade.crearIncidencia(incidencia);
+            Incidencia incidencia = facade.crearIncidencia(titulo, fecha, descripcion, activo, idFuncionario, lugar);
             System.out.println("✅ Incidencia creada: " + incidencia);
         } catch (SQLException e) {
             System.out.println("❌ Error al crear incidencia: " +
@@ -110,12 +107,9 @@ public class IncidenciaAdminUI {
         int idFuncionario = leerEntero("Nuevo ID de funcionario: ");
         String lugar = leerTexto("Nuevo lugar: ");
 
-        Incidencia incidencia = new Incidencia(
-                idInstancia, titulo, fecha, descripcion, activo, idFuncionario, lugar
-        );
 
         try {
-            boolean exito = facade.actualizarIncidencia(incidencia);
+            boolean exito = facade.actualizarIncidencia(idInstancia, titulo, fecha, descripcion, activo, idFuncionario, lugar);
             if (exito) System.out.println("✅ Incidencia modificada.");
             else System.out.println("❌ No se pudo modificar la incidencia.");
         } catch (SQLException e) {

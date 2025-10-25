@@ -71,7 +71,7 @@ public class EstudianteUI {
     // =======================================
     private void gestionarMisInstanciasComunes() {
         try {
-            InstanciaComunUI instanciaComunUI = new InstanciaComunUI();
+            InstanciaComunEstUI instanciaComunUI = new InstanciaComunEstUI(estudiante.getIdUsuario());
             instanciaComunUI.menuInstanciasComunes();
         } catch (SQLException e) {
             System.out.println("❌ Error al inicializar las instancias comunes: " + e.getMessage());

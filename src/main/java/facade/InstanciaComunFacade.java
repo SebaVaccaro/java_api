@@ -30,15 +30,15 @@ public class InstanciaComunFacade {
     // ============================================================
     // OBTENER POR INSTANCIA
     // ============================================================
-    public InstanciaComun obtenerPorInstancia(int idInstancia) throws SQLException {
-        return instanciaComunService.obtenerPorInstancia(idInstancia);
+    public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
+        return instanciaComunService.obtenerInstanciaComun(idInstancia);
     }
 
     // ============================================================
     // LISTAR
     // ============================================================
-    public List<InstanciaComun> listarTodos() throws SQLException {
-        return instanciaComunService.listarTodos();
+    public List<InstanciaComun> listarInstanciasComunes() throws SQLException {
+        return instanciaComunService.listarInstanciasComunes();
     }
 
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
@@ -59,9 +59,9 @@ public class InstanciaComunFacade {
     }
 
     // ============================================================
-    // ELIMINAR POR INSTANCIA
+    // ELIMINAR / DESACTIVAR INSTANCIA COMÚN
     // ============================================================
-    public boolean eliminarPorInstancia(int idInstancia) throws SQLException {
-        return instanciaComunService.eliminarPorInstancia(idInstancia);
+    public boolean eliminarInstanciaComun(int idInstancia) throws SQLException {
+        return instanciaComunService.eliminarInstanciaComun(idInstancia);
     }
 }

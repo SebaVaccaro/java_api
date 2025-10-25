@@ -4,6 +4,7 @@ import modelo.Incidencia;
 import servicios.IncidenciaService;
 
 import java.sql.SQLException;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 public class IncidenciaFacade {
@@ -17,8 +18,13 @@ public class IncidenciaFacade {
     // ============================================================
     // CREAR INCIDENCIA
     // ============================================================
-    public Incidencia crearIncidencia(Incidencia incidencia) throws SQLException {
-        return incidenciaService.crearIncidencia(incidencia);
+    public Incidencia crearIncidencia(String titulo,
+                                      OffsetDateTime fecHora,
+                                      String descripcion,
+                                      boolean estActivo,
+                                      int idFuncionario,
+                                      String lugar) throws SQLException {
+        return incidenciaService.crearIncidencia(titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
     }
 
     // ============================================================
@@ -29,7 +35,7 @@ public class IncidenciaFacade {
     }
 
     // ============================================================
-    // LISTAR INCIDENCIAS
+    // LISTAR
     // ============================================================
     public List<Incidencia> listarIncidencias() throws SQLException {
         return incidenciaService.listarIncidencias();
@@ -42,12 +48,18 @@ public class IncidenciaFacade {
     // ============================================================
     // ACTUALIZAR INCIDENCIA
     // ============================================================
-    public boolean actualizarIncidencia(Incidencia incidencia) throws SQLException {
-        return incidenciaService.actualizarIncidencia(incidencia);
+    public boolean actualizarIncidencia(int idInstancia,
+                                        String titulo,
+                                        OffsetDateTime fecHora,
+                                        String descripcion,
+                                        boolean estActivo,
+                                        int idFuncionario,
+                                        String lugar) throws SQLException {
+        return incidenciaService.actualizarIncidencia(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
     }
 
     // ============================================================
-    // ELIMINAR INCIDENCIA
+    // ELIMINAR / DESACTIVAR INCIDENCIA
     // ============================================================
     public boolean eliminarIncidencia(int idInstancia) throws SQLException {
         return incidenciaService.eliminarIncidencia(idInstancia);

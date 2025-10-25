@@ -16,83 +16,50 @@ public class IncidenciaDAOImpl {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Crear nueva incidencia (inserta en instancia y luego en incidencia)
-    public Incidencia crearIncidencia(Incidencia incidencia) throws SQLException {
-        String sqlInstancia = "INSERT INTO instancias (titulo, fec_hora, descripcion, activo_flag, id_funcionario) VALUES (?, ?, ?, ?, ?)";
-        String sqlIncidencia = "INSERT INTO incidencias (id_instancia, lugar) VALUES (?, ?)";
-
-        try {
-            conn.setAutoCommit(false); // iniciar transacción
-
-            // 1️⃣ Insertar en instancias
-            try (PreparedStatement psInst = conn.prepareStatement(sqlInstancia, Statement.RETURN_GENERATED_KEYS)) {
-                psInst.setString(1, incidencia.getTitulo());
-                psInst.setObject(2, incidencia.getFecHora());
-                psInst.setString(3, incidencia.getDescripcion());
-                psInst.setBoolean(4, incidencia.isEstActivo());
-                psInst.setInt(5, incidencia.getIdFuncionario());
-                psInst.executeUpdate();
-
-                // Recuperar el id generado
-                ResultSet rs = psInst.getGeneratedKeys();
-                if (rs.next()) {
-                    incidencia.setIdInstancia(rs.getInt(1));
-                }
-            }
-
-            // 2️⃣ Insertar en incidencias
-            try (PreparedStatement psInc = conn.prepareStatement(sqlIncidencia)) {
-                psInc.setInt(1, incidencia.getIdInstancia());
-                psInc.setString(2, incidencia.getLugar());
-                psInc.executeUpdate();
-            }
-
-            conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        } finally {
-            conn.setAutoCommit(true);
+    // 🔹 Insertar subtabla incidencia
+    public void insertarIncidencia(Incidencia incidencia) throws SQLException {
+        String sql = "INSERT INTO incidencias (id_instancia, lugar) VALUES (?, ?)";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, incidencia.getIdInstancia());
+            ps.setString(2, incidencia.getLugar());
+            ps.executeUpdate();
         }
-
-        return incidencia;
     }
 
-    // 🔹 Obtener una incidencia (JOIN con instancia base)
+    // 🔹 Obtener por id
     public Incidencia obtenerIncidencia(int idInstancia) throws SQLException {
         String sql = """
-            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.activo_flag, 
-                   i.id_funcionario, inc.lugar
+            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, i.id_funcionario,
+                   inc.lugar
             FROM instancias i
-            JOIN incidencias inc ON i.id_instancia = inc.id_instancia
-            WHERE i.id_instancia = ?
+            JOIN incidencia inc ON i.id_instancia = inc.id_instancia
+            WHERE i.id_instancia=?
         """;
 
-        Incidencia incidencia = null;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInstancia);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                incidencia = new Incidencia(
+                return new Incidencia(
                         rs.getInt("id_instancia"),
                         rs.getString("titulo"),
                         rs.getObject("fec_hora", OffsetDateTime.class),
                         rs.getString("descripcion"),
-                        rs.getBoolean("activo_flag"),
+                        rs.getBoolean("est_activo"),
                         rs.getInt("id_funcionario"),
                         rs.getString("lugar")
                 );
             }
         }
-        return incidencia;
+        return null;
     }
 
-    // 🔹 Listar todas las incidencias
+    // 🔹 Listar todas
     public List<Incidencia> listarIncidencias() throws SQLException {
         List<Incidencia> lista = new ArrayList<>();
         String sql = """
-            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.activo_flag, 
-                   i.id_funcionario, inc.lugar
+            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, i.id_funcionario,
+                   inc.lugar
             FROM instancias i
             JOIN incidencias inc ON i.id_instancia = inc.id_instancia
             ORDER BY i.id_instancia
@@ -106,7 +73,7 @@ public class IncidenciaDAOImpl {
                         rs.getString("titulo"),
                         rs.getObject("fec_hora", OffsetDateTime.class),
                         rs.getString("descripcion"),
-                        rs.getBoolean("activo_flag"),
+                        rs.getBoolean("est_activo"),
                         rs.getInt("id_funcionario"),
                         rs.getString("lugar")
                 );
@@ -120,7 +87,7 @@ public class IncidenciaDAOImpl {
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws SQLException {
         List<Incidencia> lista = new ArrayList<>();
         String sql = """
-            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.activo_flag, 
+            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, 
                    i.id_funcionario, inc.lugar
             FROM instancias i
             JOIN incidencias inc ON i.id_instancia = inc.id_instancia
@@ -137,7 +104,7 @@ public class IncidenciaDAOImpl {
                         rs.getString("titulo"),
                         rs.getObject("fec_hora", OffsetDateTime.class),
                         rs.getString("descripcion"),
-                        rs.getBoolean("activo_flag"),
+                        rs.getBoolean("est_activo"),
                         rs.getInt("id_funcionario"),
                         rs.getString("lugar")
                 );
@@ -147,69 +114,22 @@ public class IncidenciaDAOImpl {
         return lista;
     }
 
-    // 🔹 Actualizar incidencia (actualiza tanto instancia como subtabla)
+    // 🔹 Actualizar solo tabla incidencia
     public boolean actualizarIncidencia(Incidencia incidencia) throws SQLException {
-        String sqlInst = "UPDATE instancias SET titulo = ?, fec_hora = ?, descripcion = ?, activo_flag = ?, id_funcionario = ? WHERE id_instancia = ?";
-        String sqlInc = "UPDATE incidencias SET lugar = ? WHERE id_instancia = ?";
-        int filasAfectadas = 0;
-
-        try {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement psInst = conn.prepareStatement(sqlInst)) {
-                psInst.setString(1, incidencia.getTitulo());
-                psInst.setObject(2, incidencia.getFecHora());
-                psInst.setString(3, incidencia.getDescripcion());
-                psInst.setBoolean(4, incidencia.isEstActivo());
-                psInst.setInt(5, incidencia.getIdFuncionario());
-                psInst.setInt(6, incidencia.getIdInstancia());
-                filasAfectadas += psInst.executeUpdate();
-            }
-
-            try (PreparedStatement psInc = conn.prepareStatement(sqlInc)) {
-                psInc.setString(1, incidencia.getLugar());
-                psInc.setInt(2, incidencia.getIdInstancia());
-                filasAfectadas += psInc.executeUpdate();
-            }
-
-            conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        } finally {
-            conn.setAutoCommit(true);
+        String sql = "UPDATE incidencias SET lugar=? WHERE id_instancia=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, incidencia.getLugar());
+            ps.setInt(2, incidencia.getIdInstancia());
+            return ps.executeUpdate() > 0;
         }
-
-        return filasAfectadas > 0;
     }
 
-    // 🔹 Eliminar incidencia (borra de ambas tablas)
+    // 🔹 Baja lógica
     public boolean eliminarIncidencia(int idInstancia) throws SQLException {
-        String sqlInc = "DELETE FROM incidencias WHERE id_instancia = ?";
-        String sqlInst = "DELETE FROM instancias WHERE id_instancia = ?";
-        int filasAfectadas = 0;
-
-        try {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement psInc = conn.prepareStatement(sqlInc)) {
-                psInc.setInt(1, idInstancia);
-                psInc.executeUpdate();
-            }
-
-            try (PreparedStatement psInst = conn.prepareStatement(sqlInst)) {
-                psInst.setInt(1, idInstancia);
-                filasAfectadas += psInst.executeUpdate();
-            }
-
-            conn.commit();
-        } catch (SQLException e) {
-            conn.rollback();
-            throw e;
-        } finally {
-            conn.setAutoCommit(true);
+        String sql = "UPDATE instancias SET est_activo=false WHERE id_instancia=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idInstancia);
+            return ps.executeUpdate() > 0;
         }
-
-        return filasAfectadas > 0;
     }
 }

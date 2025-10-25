@@ -2,7 +2,6 @@ package consola.Admin;
 
 import facade.InstanciaComunFacade;
 import modelo.InstanciaComun;
-import util.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -24,10 +23,11 @@ public class InstanciaComunAdminUI {
         do {
             System.out.println("\n--- MENÚ INSTANCIAS COMUNES ---");
             System.out.println("1. Crear instancia común");
-            System.out.println("2. Listar todos");
+            System.out.println("2. Listar todas");
             System.out.println("3. Buscar por instancia");
             System.out.println("4. Listar por seguimiento");
-            System.out.println("5. Eliminar por instancia");
+            System.out.println("5. Actualizar instancia común");
+            System.out.println("6. Eliminar instancia por ID");
             System.out.println("0. Volver al menú principal");
             opcion = leerEntero("Seleccione una opción: ");
 
@@ -36,19 +36,21 @@ public class InstanciaComunAdminUI {
                 case 2 -> listarTodos();
                 case 3 -> buscarPorInstancia();
                 case 4 -> listarPorSeguimiento();
-                case 5 -> eliminarPorInstancia();
+                case 5 -> actualizarInstanciaComun();
+                case 6 -> eliminarPorInstancia();
                 case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
+                default -> System.out.println("⚠️ Opción inválida.");
             }
         } while (opcion != 0);
     }
 
+    // ==== CRUD ====
     private void crearInstanciaComun() {
         try {
             String titulo = leerTexto("Título: ");
             OffsetDateTime fecHora = leerFechaHora("Fecha y hora (YYYY-MM-DDTHH:MM): ");
             String descripcion = leerTexto("Descripción: ");
-            boolean estActivo = leerBoolean("Activo (true/false): ");
+            boolean estActivo = leerBoolean("Activa (true/false): ");
             int idFuncionario = leerEntero("ID de funcionario: ");
             int idSeguimiento = leerEntero("ID de seguimiento: ");
 
@@ -56,74 +58,114 @@ public class InstanciaComunAdminUI {
             System.out.println("✅ Instancia común creada: " + ic);
 
         } catch (SQLException e) {
-            System.out.println("❌ Error al crear instancia común: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error al crear instancia común: " + e.getMessage());
         } catch (DateTimeParseException e) {
-            System.out.println("❌ Formato de fecha inválido. Use YYYY-MM-DDTHH:MM");
+            System.out.println("❌ Fecha inválida. Use formato YYYY-MM-DDTHH:MM");
         }
     }
 
     private void listarTodos() {
         try {
-            List<InstanciaComun> lista = facade.listarTodos();
-            if (lista.isEmpty()) System.out.println("No hay instancias registradas.");
+            List<InstanciaComun> lista = facade.listarInstanciasComunes();
+            if (lista.isEmpty()) System.out.println("No hay instancias comunes registradas.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error al listar: " + e.getMessage());
         }
     }
 
     private void buscarPorInstancia() {
-        int idInstancia = leerEntero("ID de instancia: ");
+        int id = leerEntero("ID de instancia: ");
         try {
-            InstanciaComun ic = facade.obtenerPorInstancia(idInstancia);
+            InstanciaComun ic = facade.obtenerInstanciaComun(id);
             if (ic != null) System.out.println(ic);
             else System.out.println("❌ Instancia no encontrada.");
         } catch (SQLException e) {
-            System.out.println("❌ Error al buscar instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error al buscar: " + e.getMessage());
         }
     }
 
     private void listarPorSeguimiento() {
-        int idSeguimiento = leerEntero("ID de seguimiento: ");
+        int idSeg = leerEntero("ID de seguimiento: ");
         try {
-            List<InstanciaComun> lista = facade.listarPorSeguimiento(idSeguimiento);
+            List<InstanciaComun> lista = facade.listarPorSeguimiento(idSeg);
             if (lista.isEmpty()) System.out.println("No hay instancias para este seguimiento.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar por seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error al listar por seguimiento: " + e.getMessage());
+        }
+    }
+
+    private void actualizarInstanciaComun() {
+        int id = leerEntero("ID de instancia a actualizar: ");
+        try {
+            InstanciaComun ic = facade.obtenerInstanciaComun(id);
+            if (ic == null) {
+                System.out.println("⚠️ Instancia no encontrada.");
+                return;
+            }
+
+            String titulo = leerTexto("Nuevo título [" + ic.getTitulo() + "]: ");
+            OffsetDateTime fecHora = leerFechaHoraOpcional("Nueva fecha y hora [" + ic.getFecHora() + "]: ", ic.getFecHora());
+            String descripcion = leerTextoOpcional("Nueva descripción [" + ic.getDescripcion() + "]: ", ic.getDescripcion());
+            boolean estActivo = leerBooleanOpcional("Activa (true/false) [" + ic.isEstActivo() + "]: ", ic.isEstActivo());
+            int idFuncionario = leerEnteroOpcional("ID de funcionario [" + ic.getIdFuncionario() + "]: ", ic.getIdFuncionario());
+            int idSeguimiento = leerEnteroOpcional("ID de seguimiento [" + ic.getIdSeguimiento() + "]: ", ic.getIdSeguimiento());
+
+            boolean actualizado = facade.actualizarInstanciaComun(id,
+                    titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
+            System.out.println(actualizado ? "✅ Actualización exitosa" : "⚠️ No se pudo actualizar");
+        } catch (SQLException e) {
+            System.out.println("❌ Error al actualizar: " + e.getMessage());
         }
     }
 
     private void eliminarPorInstancia() {
-        int idInstancia = leerEntero("ID de instancia a eliminar: ");
+        int id = leerEntero("ID de instancia a eliminar: ");
         try {
-            boolean exito = facade.eliminarPorInstancia(idInstancia);
-            if (exito) System.out.println("✅ Instancia eliminada.");
-            else System.out.println("❌ No se pudo eliminar la instancia.");
+            boolean eliminado = facade.eliminarInstanciaComun(id);
+            System.out.println(eliminado ? "🗑️ Instancia eliminada" : "⚠️ No se pudo eliminar");
         } catch (SQLException e) {
-            System.out.println("❌ Error al eliminar instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            System.out.println("❌ Error al eliminar: " + e.getMessage());
         }
     }
 
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
+    // ==== MÉTODOS AUXILIARES ====
+    private String leerTexto(String msg) {
+        System.out.print(msg);
+        return scanner.nextLine();
+    }
+
+    private String leerTextoOpcional(String msg, String valorActual) {
+        System.out.print(msg);
+        String input = scanner.nextLine();
+        return input.isBlank() ? valorActual : input;
+    }
+
+    private int leerEntero(String msg) {
+        System.out.print(msg);
         while (!scanner.hasNextInt()) {
             System.out.print("Ingrese un número válido: ");
             scanner.next();
         }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
+        int val = scanner.nextInt();
+        scanner.nextLine();
+        return val;
     }
 
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
+    private int leerEnteroOpcional(String msg, int valorActual) {
+        System.out.print(msg);
+        String input = scanner.nextLine();
+        if (input.isBlank()) return valorActual;
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            return valorActual;
+        }
     }
 
-    private boolean leerBoolean(String mensaje) {
-        System.out.print(mensaje);
+    private boolean leerBoolean(String msg) {
+        System.out.print(msg);
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             if (input.equals("true")) return true;
@@ -132,9 +174,22 @@ public class InstanciaComunAdminUI {
         }
     }
 
-    private OffsetDateTime leerFechaHora(String mensaje) {
-        System.out.print(mensaje);
-        String input = scanner.nextLine().trim();
-        return OffsetDateTime.parse(input + ":00+00:00"); // añade segundos y zona UTC
+    private boolean leerBooleanOpcional(String msg, boolean valorActual) {
+        System.out.print(msg);
+        String input = scanner.nextLine().trim().toLowerCase();
+        if (input.isBlank()) return valorActual;
+        return input.equals("true");
+    }
+
+    private OffsetDateTime leerFechaHora(String msg) {
+        System.out.print(msg);
+        return OffsetDateTime.parse(scanner.nextLine() + ":00+00:00");
+    }
+
+    private OffsetDateTime leerFechaHoraOpcional(String msg, OffsetDateTime valorActual) {
+        System.out.print(msg);
+        String input = scanner.nextLine();
+        if (input.isBlank()) return valorActual;
+        return OffsetDateTime.parse(input + ":00+00:00");
     }
 }
