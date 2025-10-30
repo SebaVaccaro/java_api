@@ -1,138 +1,152 @@
 package consola.Admin;
 
-import facade.TeleITRFacade;
+import PROXY.TeleITRProxy;
 import modelo.TeleITR;
-import util.CapturadoraDeErrores;
+import utils.CapturadoraDeErrores;
+import consola.interfaz.UIBase;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
-public class TeleITRAdminUI {
+public class TeleITRAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final TeleITRFacade facade;
+    private final TeleITRProxy proxy;
 
-    public TeleITRAdminUI() throws SQLException {
-        this.facade = new TeleITRFacade();
+    public TeleITRAdminUI() throws Exception {
+        this.proxy = new TeleITRProxy();
     }
 
-    public void menuTelefonos() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ TELÉFONOS ITR ---");
-            System.out.println("1. Agregar teléfono");
-            System.out.println("2. Listar todos");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Modificar teléfono");
-            System.out.println("5. Eliminar teléfono");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
-
-            switch (opcion) {
-                case 1 -> agregarTelefono();
-                case 2 -> listarTodos();
-                case 3 -> buscarPorId();
-                case 4 -> modificarTelefono();
-                case 5 -> eliminarTelefono();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ TELÉFONOS ITR ---");
+        System.out.println("1. Agregar teléfono");
+        System.out.println("2. Listar todos");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Modificar teléfono");
+        System.out.println("5. Eliminar teléfono");
+        System.out.println("0. Volver al menú principal");
     }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> agregarTelefono();
+            case 2 -> listarTodos();
+            case 3 -> buscarPorId();
+            case 4 -> modificarTelefono();
+            case 5 -> eliminarTelefono();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
+    }
+
+    // ============================================================
+    // CREAR TELÉFONO
+    // ============================================================
     private void agregarTelefono() {
         String numero = leerTexto("Número de teléfono: ");
         int idItr = leerEntero("ID del ITR: ");
 
         try {
-            boolean exito = facade.agregarTelefono(numero, idItr);
-            if (exito) System.out.println("✅ Teléfono agregado.");
-            else System.out.println("❌ No se pudo agregar el teléfono.");
+            boolean exito = proxy.agregarTelefono(numero, idItr);
+            if (exito) mostrarExito("Teléfono agregado correctamente.");
+            else mostrarError("No se pudo agregar el teléfono.");
+        } catch (SecurityException e) {
+            mostrarInfo(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al agregar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al agregar teléfono: " + e.getMessage());
         }
     }
 
+    // ============================================================
+    // LISTAR TODOS
+    // ============================================================
     private void listarTodos() {
         try {
-            List<TeleITR> list = facade.listarTodos();
-            if (list.isEmpty()) System.out.println("No hay teléfonos registrados.");
-            else list.forEach(System.out::println);
+            List<TeleITR> lista = proxy.listarTodos();
+            if (lista.isEmpty()) mostrarInfo("No hay teléfonos registrados.");
+            else lista.forEach(System.out::println);
+        } catch (SecurityException e) {
+            mostrarInfo(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar teléfonos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar teléfonos: " + e.getMessage());
         }
     }
 
+    // ============================================================
+    // BUSCAR POR ID
+    // ============================================================
     private void buscarPorId() {
         int id = leerEntero("ID del teléfono: ");
         try {
-            TeleITR t = facade.buscarPorId(id);
+            TeleITR t = proxy.buscarPorId(id);
             if (t != null) System.out.println(t);
-            else System.out.println("No se encontró teléfono con ese ID.");
+            else mostrarError("No se encontró teléfono con ese ID.");
+        } catch (SecurityException e) {
+            mostrarInfo(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al buscar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar teléfono: " + e.getMessage());
         }
     }
 
+    // ============================================================
+    // MODIFICAR TELÉFONO
+    // ============================================================
     private void modificarTelefono() {
         int id = leerEntero("ID del teléfono a modificar: ");
         try {
-            TeleITR t = facade.buscarPorId(id);
+            TeleITR t = proxy.buscarPorId(id);
             if (t == null) {
-                System.out.println("❌ No se encontró teléfono con ese ID.");
+                mostrarError("No se encontró teléfono con ese ID.");
                 return;
             }
 
-            System.out.println("Campos modificables: numero, idItr");
-            String campo = leerTexto("Campo a modificar: ");
+            mostrarInfo("Campos actuales:");
+            System.out.println(t);
 
-            boolean exito = false;
-            switch (campo.toLowerCase()) {
-                case "numero" -> {
-                    String nuevo = leerTexto("Nuevo número: ");
-                    t.setNumero(nuevo);
-                    exito = facade.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdItr());
-                }
-                case "iditr" -> {
-                    int nuevo = leerEntero("Nuevo ID ITR: ");
-                    t.setIdItr(nuevo);
-                    exito = facade.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdItr());
-                }
-                default -> System.out.println("Campo inválido.");
-            }
+            // Leer nuevos valores usando métodos opcionales de UIBase
+            String numero = leerTexto("Nuevo número (vacío para no cambiar): ", t.getNumero());
+            int idItr = leerEntero("Nuevo ID ITR (vacío para no cambiar): ", t.getIdItr());
 
-            if (exito) System.out.println("✅ Teléfono modificado.");
-            else System.out.println("❌ No se pudo modificar el teléfono.");
+            t.setNumero(numero);
+            t.setIdItr(idItr);
+
+            boolean exito = proxy.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdItr());
+
+            if (exito) mostrarExito("Teléfono modificado correctamente.");
+            else mostrarError("No se pudo modificar el teléfono.");
+
+        } catch (SecurityException e) {
+            mostrarInfo(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al modificar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar teléfono: " + e.getMessage());
         }
     }
 
+    // ============================================================
+    // ELIMINAR TELÉFONO
+    // ============================================================
     private void eliminarTelefono() {
         int id = leerEntero("ID del teléfono a eliminar: ");
         try {
-            if (facade.eliminarTelefono(id)) System.out.println("✅ Teléfono eliminado.");
-            else System.out.println("❌ No se pudo eliminar el teléfono.");
+            boolean exito = proxy.eliminarTelefono(id);
+            if (exito) mostrarExito("Teléfono eliminado correctamente.");
+            else mostrarError("No se pudo eliminar el teléfono.");
+        } catch (SecurityException e) {
+            mostrarInfo(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al eliminar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar teléfono: " + e.getMessage());
         }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }
+

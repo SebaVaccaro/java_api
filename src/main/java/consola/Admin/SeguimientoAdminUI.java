@@ -1,46 +1,44 @@
 package consola.Admin;
 
-import facade.SeguimientoFacade;
+import PROXY.SeguimientoProxy;
 import modelo.Seguimiento;
-import util.CapturadoraDeErrores;
+import utils.CapturadoraDeErrores;
+import consola.interfaz.UIBase;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Scanner;
 
-public class SeguimientoAdminUI {
+public class SeguimientoAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final SeguimientoFacade facade;
+    private final SeguimientoProxy facade;
 
     public SeguimientoAdminUI() throws SQLException {
-        this.facade = new SeguimientoFacade();
+        this.facade = new SeguimientoProxy();
     }
 
-    public void menuSeguimientos() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ SEGUIMIENTOS ---");
-            System.out.println("1. Agregar seguimiento");
-            System.out.println("2. Listar todos");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Modificar seguimiento");
-            System.out.println("5. Eliminar seguimiento");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ SEGUIMIENTOS ---");
+        System.out.println("1. Agregar seguimiento");
+        System.out.println("2. Listar todos");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Modificar seguimiento");
+        System.out.println("5. Eliminar seguimiento");
+        System.out.println("0. Volver al menú principal");
+    }
 
-            switch (opcion) {
-                case 1 -> agregarSeguimiento();
-                case 2 -> listarTodos();
-                case 3 -> buscarPorId();
-                case 4 -> modificarSeguimiento();
-                case 5 -> eliminarSeguimiento();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> agregarSeguimiento();
+            case 2 -> listarTodos();
+            case 3 -> buscarPorId();
+            case 4 -> modificarSeguimiento();
+            case 5 -> eliminarSeguimiento();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
     }
 
     // ==========================================================
@@ -53,14 +51,12 @@ public class SeguimientoAdminUI {
 
         try {
             boolean exito = facade.agregarSeguimiento(null, idEstudiante, fecInicio, null, estActivo);
-            if (exito)
-                System.out.println("✅ Seguimiento agregado correctamente.");
-            else
-                System.out.println("❌ No se pudo agregar el seguimiento.");
+            if (exito) mostrarExito("Seguimiento agregado correctamente.");
+            else mostrarError("No se pudo agregar el seguimiento.");
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -70,10 +66,10 @@ public class SeguimientoAdminUI {
     private void listarTodos() {
         try {
             List<Seguimiento> list = facade.listarTodos();
-            if (list.isEmpty()) System.out.println("No hay seguimientos registrados.");
+            if (list.isEmpty()) mostrarInfo("No hay seguimientos registrados.");
             else list.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -82,9 +78,9 @@ public class SeguimientoAdminUI {
         try {
             Seguimiento s = facade.buscarPorId(id);
             if (s != null) System.out.println(s);
-            else System.out.println("No se encontró seguimiento con ese ID.");
+            else mostrarError("No se encontró seguimiento con ese ID.");
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -96,50 +92,43 @@ public class SeguimientoAdminUI {
         try {
             Seguimiento s = facade.buscarPorId(id);
             if (s == null) {
-                System.out.println("❌ No se encontró seguimiento con ese ID.");
+                mostrarError("No se encontró seguimiento con ese ID.");
                 return;
             }
 
-            System.out.println("Seguimiento actual: " + s);
-            System.out.println("Campos modificables: idInforme, idEstudiante, fecInicio, fecCierre, estActivo");
-            String campo = leerTexto("Campo a modificar: ");
+            mostrarInfo("Campos actuales:");
+            System.out.println(s);
 
-            boolean exito = false;
-            switch (campo.toLowerCase()) {
-                case "idinforme" -> {
-                    int nuevo = leerEntero("Nuevo ID Informe (0 si no aplica): ");
-                    s.setIdInforme(nuevo == 0 ? null : nuevo);
-                    exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
-                }
-                case "idestudiante" -> {
-                    int nuevo = leerEntero("Nuevo ID Estudiante: ");
-                    s.setIdEstudiante(nuevo);
-                    exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
-                }
-                case "fecinicio" -> {
-                    LocalDate fecha = leerFecha("Nueva fecha de inicio (yyyy-MM-dd): ");
-                    s.setFecInicio(fecha);
-                    exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
-                }
-                case "feccierre" -> {
-                    LocalDate fecha = leerFechaOpcional("Nueva fecha de cierre (yyyy-MM-dd o vacío): ");
-                    s.setFecCierre(fecha);
-                    exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
-                }
-                case "estactivo" -> {
-                    boolean activo = leerBoolean("Está activo? (true/false): ");
-                    s.setEstActivo(activo);
-                    exito = facade.actualizarSeguimiento(s.getIdSeguimiento(), s.getIdInforme(), s.getIdEstudiante(), s.getFecInicio(), s.getFecCierre(), s.isEstActivo());
-                }
-                default -> System.out.println("Campo inválido.");
-            }
+            // Leer nuevos valores usando métodos opcionales de UIBase
+            Integer idInforme = leerEntero("Nuevo ID Informe (dejar vacío para no cambiar): ", s.getIdInforme());
+            int idEstudiante = leerEntero("Nuevo ID Estudiante (dejar vacío para no cambiar): ", s.getIdEstudiante());
+            LocalDate fecInicio = leerFecha("Nueva fecha de inicio (yyyy-MM-dd, vacío para no cambiar): ", s.getFecInicio());
+            LocalDate fecCierre = leerFecha("Nueva fecha de cierre (yyyy-MM-dd, vacío para no cambiar): ", s.getFecCierre());
+            boolean estActivo = leerBoolean("Está activo? (true/false, vacío para no cambiar): ", s.isEstActivo());
 
-            if (exito) System.out.println("✅ Seguimiento modificado.");
-            else System.out.println("❌ No se pudo modificar el seguimiento.");
+            // Actualizar objeto
+            s.setIdInforme(idInforme);
+            s.setIdEstudiante(idEstudiante);
+            s.setFecInicio(fecInicio);
+            s.setFecCierre(fecCierre);
+            s.setEstActivo(estActivo);
+
+            boolean exito = facade.actualizarSeguimiento(
+                    s.getIdSeguimiento(),
+                    s.getIdInforme(),
+                    s.getIdEstudiante(),
+                    s.getFecInicio(),
+                    s.getFecCierre(),
+                    s.isEstActivo()
+            );
+
+            if (exito) mostrarExito("Seguimiento modificado correctamente.");
+            else mostrarError("No se pudo modificar el seguimiento.");
+
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -149,62 +138,12 @@ public class SeguimientoAdminUI {
     private void eliminarSeguimiento() {
         int id = leerEntero("ID del seguimiento a eliminar: ");
         try {
-            if (facade.eliminarSeguimiento(id)) System.out.println("✅ Seguimiento eliminado.");
-            else System.out.println("❌ No se pudo eliminar el seguimiento.");
+            if (facade.eliminarSeguimiento(id)) mostrarExito("Seguimiento eliminado.");
+            else mostrarError("No se pudo eliminar el seguimiento.");
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
-        }
-    }
-
-    // ==========================================================
-    // MÉTODOS AUXILIARES
-    // ==========================================================
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
-    }
-
-    private LocalDate leerFecha(String mensaje) {
-        while (true) {
-            String input = leerTexto(mensaje);
-            try {
-                return LocalDate.parse(input);
-            } catch (DateTimeParseException e) {
-                System.out.println("Formato inválido. Use yyyy-MM-dd.");
-            }
-        }
-    }
-
-    private LocalDate leerFechaOpcional(String mensaje) {
-        String input = leerTexto(mensaje);
-        if (input.isBlank()) return null;
-        try {
-            return LocalDate.parse(input);
-        } catch (DateTimeParseException e) {
-            System.out.println("Formato inválido. Use yyyy-MM-dd. Valor ignorado.");
-            return null;
-        }
-    }
-
-    private boolean leerBoolean(String mensaje) {
-        while (true) {
-            String input = leerTexto(mensaje).toLowerCase();
-            if (input.equals("true") || input.equals("t")) return true;
-            if (input.equals("false") || input.equals("f")) return false;
-            System.out.println("Ingrese true o false.");
+            mostrarError(e.getMessage());
         }
     }
 }

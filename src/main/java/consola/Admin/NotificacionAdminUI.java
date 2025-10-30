@@ -1,46 +1,49 @@
 package consola.Admin;
 
-import facade.NotificacionFacade;
+import consola.interfaz.UIBase;
+import PROXY.NotificacionProxy;
 import modelo.Notificacion;
-import util.CapturadoraDeErrores; // ✅ Importación
+import utils.CapturadoraDeErrores;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
-public class NotificacionAdminUI {
+public class NotificacionAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final NotificacionFacade facade;
+    private final NotificacionProxy proxy;
 
-    public NotificacionAdminUI() throws SQLException {
-        this.facade = new NotificacionFacade();
+    public NotificacionAdminUI() throws Exception {
+        this.proxy = new NotificacionProxy();
     }
 
-    public void menuNotificaciones() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ NOTIFICACIONES ---");
-            System.out.println("1. Crear notificación");
-            System.out.println("2. Listar todas");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Modificar notificación");
-            System.out.println("5. Desactivar notificación");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
-
-            switch (opcion) {
-                case 1 -> crearNotificacion();
-                case 2 -> listarTodas();
-                case 3 -> buscarPorId();
-                case 4 -> modificarNotificacion();
-                case 5 -> desactivarNotificacion();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ NOTIFICACIONES ---");
+        System.out.println("1. Crear notificación");
+        System.out.println("2. Listar todas");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Modificar notificación");
+        System.out.println("5. Desactivar notificación");
+        System.out.println("0. Volver al menú principal");
     }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> crearNotificacion();
+            case 2 -> listarTodas();
+            case 3 -> buscarPorId();
+            case 4 -> modificarNotificacion();
+            case 5 -> desactivarNotificacion();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
+    }
+
+    // ============================================================
+    // CRUD
+    // ============================================================
     private void crearNotificacion() {
         int idInstancia = leerEntero("ID de instancia: ");
         String asunto = leerTexto("Asunto: ");
@@ -49,34 +52,43 @@ public class NotificacionAdminUI {
         LocalDate fecEnvio = leerFecha("Fecha de envío (YYYY-MM-DD): ");
 
         try {
-            Notificacion n = facade.crearNotificacion(idInstancia, asunto, mensaje, destinatario, fecEnvio);
-            System.out.println("✅ Notificación creada: " + n);
+            Notificacion nueva = proxy.crearNotificacion(idInstancia, asunto, mensaje, destinatario, fecEnvio);
+            mostrarExito("Notificación creada correctamente: " + nueva);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al crear notificación: " + msg);
+            mostrarError("Error SQL al crear notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al crear notificación: " + e.getMessage());
         }
     }
 
     private void listarTodas() {
         try {
-            List<Notificacion> lista = facade.listarTodas();
-            if (lista.isEmpty()) System.out.println("No hay notificaciones registradas.");
+            List<Notificacion> lista = proxy.listarTodas();
+            if (lista.isEmpty()) mostrarInfo("No hay notificaciones registradas.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al listar notificaciones: " + msg);
+            mostrarError("Error SQL al listar notificaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar notificaciones: " + e.getMessage());
         }
     }
 
     private void buscarPorId() {
         int id = leerEntero("ID de notificación: ");
         try {
-            Notificacion n = facade.obtenerNotificacion(id);
-            if (n != null) System.out.println(n);
-            else System.out.println("❌ Notificación no encontrada.");
+            Notificacion n = proxy.obtenerNotificacion(id);
+            if (n != null) mostrarInfo(n.toString());
+            else mostrarError("Notificación no encontrada.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al buscar notificación: " + msg);
+            mostrarError("Error SQL al buscar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar notificación: " + e.getMessage());
         }
     }
 
@@ -90,52 +102,30 @@ public class NotificacionAdminUI {
 
         try {
             Notificacion n = new Notificacion(id, 0, asunto, mensaje, destinatario, fecEnvio, estActivo);
-            boolean exito = facade.actualizarNotificacion(n);
-            if (exito) System.out.println("✅ Notificación modificada.");
-            else System.out.println("❌ No se pudo modificar la notificación.");
+            boolean exito = proxy.actualizarNotificacion(n);
+            if (exito) mostrarExito("Notificación modificada correctamente.");
+            else mostrarError("No se pudo modificar la notificación.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al modificar notificación: " + msg);
+            mostrarError("Error SQL al modificar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar notificación: " + e.getMessage());
         }
     }
 
     private void desactivarNotificacion() {
         int id = leerEntero("ID de notificación a desactivar: ");
         try {
-            boolean exito = facade.desactivarNotificacion(id);
-            if (exito) System.out.println("✅ Notificación desactivada.");
-            else System.out.println("❌ No se pudo desactivar la notificación.");
+            boolean exito = proxy.desactivarNotificacion(id);
+            if (exito) mostrarExito("Notificación desactivada correctamente.");
+            else mostrarError("No se pudo desactivar la notificación.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al desactivar notificación: " + msg);
-        }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine();
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
-    }
-
-    private LocalDate leerFecha(String mensaje) {
-        System.out.print(mensaje);
-        while (true) {
-            try {
-                return LocalDate.parse(scanner.nextLine());
-            } catch (Exception e) {
-                System.out.print("Formato inválido. Ingrese YYYY-MM-DD: ");
-            }
+            mostrarError("Error SQL al desactivar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al desactivar notificación: " + e.getMessage());
         }
     }
 }

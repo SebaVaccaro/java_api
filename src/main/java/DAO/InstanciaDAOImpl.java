@@ -16,7 +16,7 @@ public class InstanciaDAOImpl {
 
     // 🔹 Insertar solo en tabla base instancias, retorna id
     public int insertarInstancia(Instancia instancia) throws SQLException {
-        String sql = "INSERT INTO instancias (titulo, fec_hora, descripcion, activo_flag, id_funcionario) " +
+        String sql = "INSERT INTO instancias (titulo, fec_hora, descripcion, est_activo, id_funcionario) " +
                 "VALUES (?, ?, ?, ?, ?) RETURNING id_instancia";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, instancia.getTitulo());
@@ -33,7 +33,7 @@ public class InstanciaDAOImpl {
 
     // 🔹 Actualizar solo tabla base
     public boolean actualizarInstancia(Instancia instancia) throws SQLException {
-        String sql = "UPDATE instancias SET titulo=?, fec_hora=?, descripcion=?, activo_flag=?, id_funcionario=? " +
+        String sql = "UPDATE instancias SET titulo=?, fec_hora=?, descripcion=?, est_activo=?, id_funcionario=? " +
                 "WHERE id_instancia=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, instancia.getTitulo());
@@ -48,7 +48,7 @@ public class InstanciaDAOImpl {
 
     // 🔹 Baja lógica
     public boolean desactivarInstancia(int idInstancia) throws SQLException {
-        String sql = "UPDATE instancias SET activo_flag=false WHERE id_instancia=?";
+        String sql = "UPDATE instancias SET est_activo=false WHERE id_instancia=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInstancia);
             return ps.executeUpdate() > 0;

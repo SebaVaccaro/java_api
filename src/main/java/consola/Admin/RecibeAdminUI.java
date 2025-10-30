@@ -1,76 +1,76 @@
 package consola.Admin;
 
-import facade.RecibeFacade;
+import consola.interfaz.UIBase;
+import PROXY.RecibeProxy;
 import modelo.Recibe;
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
-public class RecibeAdminUI {
+public class RecibeAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final RecibeFacade facade;
+    private final RecibeProxy facade;
 
     public RecibeAdminUI() throws SQLException {
-        this.facade = new RecibeFacade();
+        this.facade = new RecibeProxy();
     }
 
-    public void menu() {
-        int opcion;
-        do {
-            System.out.println("\n=== Gestión de Recibe (Notificación ↔ Usuario) ===");
-            System.out.println("1. Agregar relación");
-            System.out.println("2. Eliminar relación");
-            System.out.println("3. Listar todas las relaciones");
-            System.out.println("4. Listar usuarios de una notificación");
-            System.out.println("5. Listar notificaciones de un usuario");
-            System.out.println("0. Salir");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n=== Gestión de Recibe (Notificación ↔ Usuario) ===");
+        System.out.println("1. Agregar relación");
+        System.out.println("2. Eliminar relación");
+        System.out.println("3. Listar todas las relaciones");
+        System.out.println("4. Listar usuarios de una notificación");
+        System.out.println("5. Listar notificaciones de un usuario");
+        System.out.println("0. Salir");
+    }
 
-            switch (opcion) {
-                case 1 -> agregarRelacion();
-                case 2 -> eliminarRelacion();
-                case 3 -> listarTodos();
-                case 4 -> listarUsuariosPorNotificacion();
-                case 5 -> listarNotificacionesPorUsuario();
-                case 0 -> System.out.println("Saliendo...");
-                default -> System.out.println("Opción no válida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> agregarRelacion();
+            case 2 -> eliminarRelacion();
+            case 3 -> listarTodos();
+            case 4 -> listarUsuariosPorNotificacion();
+            case 5 -> listarNotificacionesPorUsuario();
+            case 0 -> mostrarInfo("Saliendo...");
+            default -> mostrarError("Opción no válida.");
+        }
     }
 
     private void agregarRelacion() {
         int idNot = leerEntero("ID de notificación: ");
         int idUsu = leerEntero("ID de usuario: ");
-
         try {
             boolean exito = facade.agregarRecibe(idNot, idUsu);
-            System.out.println(exito ? "✅ Relación agregada." : "❌ No se pudo agregar la relación.");
+            if (exito) mostrarExito("Relación agregada.");
+            else mostrarError("No se pudo agregar la relación.");
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + e.getMessage());
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
     private void eliminarRelacion() {
         int idNot = leerEntero("ID de notificación: ");
         int idUsu = leerEntero("ID de usuario: ");
-
         try {
             boolean exito = facade.eliminarRecibe(idNot, idUsu);
-            System.out.println(exito ? "✅ Relación eliminada." : "❌ No se pudo eliminar la relación.");
+            if (exito) mostrarExito("Relación eliminada.");
+            else mostrarError("No se pudo eliminar la relación.");
         } catch (SQLException e) {
-            System.out.println("❌ Error de base de datos: " + e.getMessage());
+            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
     private void listarTodos() {
         try {
             List<Recibe> relaciones = facade.listarTodos();
-            if (relaciones.isEmpty()) System.out.println("No hay relaciones registradas.");
+            if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar relaciones: " + e.getMessage());
+            mostrarError("Error al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -78,9 +78,9 @@ public class RecibeAdminUI {
         int idNot = leerEntero("ID de notificación: ");
         try {
             List<Integer> usuarios = facade.listarUsuariosPorNotificacion(idNot);
-            System.out.println("Usuarios: " + usuarios);
+            mostrarInfo("Usuarios: " + usuarios);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar usuarios: " + e.getMessage());
+            mostrarError("Error al listar usuarios: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -88,26 +88,10 @@ public class RecibeAdminUI {
         int idUsu = leerEntero("ID de usuario: ");
         try {
             List<Integer> notificaciones = facade.listarNotificacionesPorUsuario(idUsu);
-            System.out.println("Notificaciones: " + notificaciones);
+            mostrarInfo("Notificaciones: " + notificaciones);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar notificaciones: " + e.getMessage());
+            mostrarError("Error al listar notificaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    public static void main(String[] args) throws SQLException {
-        RecibeAdminUI ui = new RecibeAdminUI();
-        ui.menu();
     }
 }
+

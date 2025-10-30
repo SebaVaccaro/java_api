@@ -1,49 +1,46 @@
 package consola.Psicopedagogo;
 
+import consola.interfaz.UIBase;
 import consola.Admin.*;
-import modelo.Funcionario;
-import servicios.FuncionarioService;
-import java.util.Scanner;
+import SINGLETON.LoginSingleton;
+import modelo.Usuario;
+import servicios.FuncionarioServicio;
 
-public class PsicopedagogoUI {
+public class PsicopedagogoUI extends UIBase {
 
-    private final Scanner scanner;
-    private final Funcionario funcionarioActual;
-    private final FuncionarioService funcionarioService;
+    private final Usuario funcionarioActual;
+    private final FuncionarioServicio funcionarioServicio;
 
-    public PsicopedagogoUI(Funcionario funcionarioActual) {
-        this.funcionarioActual = funcionarioActual;
-        this.scanner = new Scanner(System.in);
+    public PsicopedagogoUI() {
+        if (!LoginSingleton.getInstance().haySesionActiva()) {
+            throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
+        }
+        this.funcionarioActual = LoginSingleton.getInstance().getUsuarioActual();
 
-        FuncionarioService tempService = null;
+        FuncionarioServicio tempService = null;
         try {
-            tempService = new FuncionarioService();
+            tempService = new FuncionarioServicio();
         } catch (Exception e) {
-            System.out.println("⚠️ Error al inicializar FuncionarioService: " + e.getMessage());
+            mostrarError("Error al inicializar FuncionarioService: " + e.getMessage());
         }
-        this.funcionarioService = tempService;
+        this.funcionarioServicio = tempService;
     }
 
-    public String[] iniciar() {
+    @Override
+    public void iniciar() {
         if (funcionarioActual == null) {
-            System.out.println("⚠️ Error: el funcionario recibido es nulo.");
-            return new String[] { null, null };
+            mostrarError("Error: no se pudo obtener el psicopedagogo de sesión.");
+            return;
         }
 
-        int opcion;
-        do {
-            mostrarMenuPrincipal(funcionarioActual);
-            opcion = leerEntero("Seleccione una opción: ");
-            manejarOpcionPrincipal(opcion, funcionarioActual);
-        } while (opcion != 0);
-
+        super.iniciar(); // Llama al método iniciar() de UIBase
         System.out.println("Sesión finalizada correctamente.\n");
-        return new String[] { null, null };
     }
 
-    private void mostrarMenuPrincipal(Funcionario adminActual) {
+    @Override
+    protected void mostrarMenu() {
         System.out.println("\n===== MENÚ PSICOPEDAGOGO =====");
-        System.out.println("Bienvenido/a, " + adminActual.getNombre() + " " + adminActual.getApellido());
+        System.out.println("Bienvenido/a, " + funcionarioActual.getNombre() + " " + funcionarioActual.getApellido());
         System.out.println("====================================");
         System.out.println("1. Gestión de archivos adjuntos");
         System.out.println("2. Gestión de carreras");
@@ -68,45 +65,45 @@ public class PsicopedagogoUI {
         System.out.println("====================================");
     }
 
-    private void manejarOpcionPrincipal(int opcion, Funcionario adminActual) {
+    @Override
+    protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> new ArchivoAdjuntoAdminUI().menuArchivos();
-                case 2 -> new CarreraAdminUI().menuCarreras();
-                case 3 -> new CiudadAdminUI().menuCiudades();
-                case 4 -> new DireccionAdminUI().menuDirecciones();
-                case 5 -> new EstudiantePsicoUI().menuEstudiantes();
-                case 6 -> new FuncionarioPsicoUI().menuFuncionarios();
-                case 7 -> new GrupoAdminUI().menuGrupos();
-                case 8 -> new ITRAdminUI().menuITR();
-                case 9 -> new IncidenciaAdminUI().menuIncidencias();
-                case 10 -> new InstanciaComunAdminUI().menuInstanciasComunes();
-                case 11 -> new NotificacionAdminUI().menuNotificaciones();
-                case 12 -> new ObservacionAdminUI().menuObservaciones();
-                case 13 -> new RolAdminUI().menu();
-                case 14 -> new SeguimientoAdminUI().menuSeguimientos();
-                case 15 -> new TeleUsuarioAdminUI().menuTelefonosUsuario();
-                case 16 -> new PartSeguimientoAdminUI().menu();
-                case 17 -> new PerteneceAdminUI().menu();
-                case 18 -> new RecibeAdminUI().menu();
-                case 19 -> new TeleITRAdminUI().menuTelefonos();
-                case 0 -> System.out.println("🔒 Cerrando sesión del administrador...");
-                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
+                case 1 -> new ArchivoAdjuntoAdminUI().iniciar();
+                case 2 -> new CarreraAdminUI().iniciar();
+                case 3 -> new CiudadAdminUI().iniciar();
+                case 4 -> new DireccionAdminUI().iniciar();
+                case 5 -> new EstudiantePsicoUI().iniciar();
+                case 6 -> new FuncionarioPsicoUI().iniciar();
+                case 7 -> new GrupoAdminUI().iniciar();
+                case 8 -> new ITRAdminUI().iniciar();
+                case 9 -> new IncidenciaAdminUI().iniciar();
+                case 10 -> new InstanciaComunAdminUI().iniciar();
+                case 11 -> new NotificacionAdminUI().iniciar();
+                case 12 -> new ObservacionAdminUI().iniciar();
+                case 13 -> new RolAdminUI().iniciar();
+                case 14 -> new SeguimientoAdminUI().iniciar();
+                case 15 -> new TeleUsuarioAdminUI().iniciar();
+                case 16 -> new PartSeguimientoAdminUI().iniciar();
+                case 17 -> new PerteneceAdminUI().iniciar();
+                case 18 -> new RecibeAdminUI().iniciar();
+                case 19 -> new TeleITRAdminUI().iniciar();
+                case 0 -> mostrarInfo("Cerrando sesión del psicopedagogo...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Error al ejecutar la opción: " + e.getMessage());
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine();
-        return valor;
+    // Getter para acceder al funcionario actual (útil si se necesita en otros lugares)
+    public Usuario getFuncionarioActual() {
+        return funcionarioActual;
+    }
+
+    // Getter para el servicio (si se necesita)
+    public FuncionarioServicio getFuncionarioServicio() {
+        return funcionarioServicio;
     }
 }

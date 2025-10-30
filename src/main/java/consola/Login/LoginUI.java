@@ -1,53 +1,61 @@
 package consola.Login;
 
-import facade.LoginFacade;
 import modelo.Usuario;
-import java.util.Scanner;
+import servicios.LoginServicio;
+import SINGLETON.LoginSingleton;
+import consola.interfaz.UIBase;
 
-public class LoginUI {
+public class LoginUI extends UIBase {
 
-    private final LoginFacade loginFacade;
-    private final Scanner scanner;
+    private final LoginServicio loginServicio;
+    private final LoginSingleton sesion;
 
-    // 🔑 Constructor: inicializa el facade de login y el scanner de consola
     public LoginUI() {
-        this.loginFacade = new LoginFacade();
-        this.scanner = new Scanner(System.in);
+        this.loginServicio = new LoginServicio();
+        this.sesion = LoginSingleton.getInstance();
     }
 
-    /**
-     * 🌟 Muestra el formulario de login por consola
-     *
-     * @return el objeto Usuario cuando el login es exitoso
-     */
-    public Usuario iniciar() {
-        // ╔═══════════════════════════════════════╗
-        // ║           ENCABEZADO LOGIN            ║
-        // ╚═══════════════════════════════════════╝
+    @Override
+    public void iniciar() {
+
         System.out.println("=======================================");
-        System.out.println("      SISTEMA EDUCATIVO - LOGIN");
+        System.out.println(" SISTEMA EDUCATIVO - LOGIN");
         System.out.println("=======================================\n");
 
-        // 🔁 Bucle hasta que el usuario se autentique correctamente
-        while (true) {
-            // 📥 Solicitar credenciales al usuario
-            System.out.print("Usuario: ");
-            String username = scanner.nextLine().trim();
-
-            System.out.print("Contraseña: ");
-            String password = scanner.nextLine().trim();
+        while (sesion.getUsuarioActual() == null && sesion.getRolActual() == null) {
+            String username = leerTexto("Usuario: ");
+            String password = leerTexto("Contraseña: ");
 
             try {
-                Usuario usuario = loginFacade.autenticarUsuario(username, password);
-                if(usuario != null) {
-                    System.out.println("\n✅ Inicio de sesión exitoso.");
-                    System.out.println("Bienvenido, " + usuario.getNombre() + "!\n");
-                    return usuario;
+                loginServicio.login(username, password);
+
+                if (sesion.getUsuarioActual() != null && sesion.getRolActual() != null) {
+                    Usuario usuario = sesion.getUsuarioActual();
+
+                    mostrarInfo("\n✅ Inicio de sesión exitoso.");
+                    System.out.println("---------------------------------------");
+                    System.out.println("Usuario actual: " + usuario.getNombre() + " " + usuario.getApellido());
+                    System.out.println("Correo: " + usuario.getCorreo());
+                    System.out.println("Rol: " + sesion.getRolActual());
+                    System.out.println("---------------------------------------\n");
+                } else {
+                    mostrarError("No se pudo iniciar sesión (usuario no válido o no aceptó políticas).");
                 }
+
             } catch (Exception e) {
-                System.out.println("\n❌ Error de inicio de sesión: " + e.getMessage());
-                System.out.println("Por favor, inténtelo nuevamente.\n");
+                mostrarError("Error de inicio de sesión: " + e.getMessage());
+                mostrarInfo("Por favor, inténtelo nuevamente.\n");
             }
         }
+    }
+
+    @Override
+    protected void mostrarMenu() {
+        // No se usa en login, pero se debe implementar
+    }
+
+    @Override
+    protected void manejarOpcion(int opcion) {
+        // No se usa en login, pero se debe implementar
     }
 }

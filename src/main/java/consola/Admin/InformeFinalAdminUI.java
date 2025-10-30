@@ -1,81 +1,96 @@
 package consola.Admin;
 
-import facade.InformeFinalFacade;
+import PROXY.InformeFinalProxy;
+import consola.interfaz.UIBase;
 import modelo.InformeFinal;
-import util.CapturadoraDeErrores; // ✅ Importación para manejo de errores amigables
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
-public class InformeFinalAdminUI {
+public class InformeFinalAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final InformeFinalFacade facade;
+    private final InformeFinalProxy proxy;
 
-    public InformeFinalAdminUI() throws SQLException {
-        this.facade = new InformeFinalFacade();
+    public InformeFinalAdminUI() throws Exception {
+        this.proxy = new InformeFinalProxy();
     }
 
-    public void menuInformes() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ INFORMES FINALES ---");
-            System.out.println("1. Crear informe");
-            System.out.println("2. Listar todos");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Modificar informe");
-            System.out.println("5. Eliminar informe");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ INFORMES FINALES ---");
+        System.out.println("1. Crear informe");
+        System.out.println("2. Listar todos");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Modificar informe");
+        System.out.println("5. Eliminar informe");
+        System.out.println("0. Volver al menú principal");
+    }
 
-            switch (opcion) {
-                case 1 -> crearInforme();
-                case 2 -> listarTodos();
-                case 3 -> buscarPorId();
-                case 4 -> modificarInforme();
-                case 5 -> eliminarInforme();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> crearInforme();
+            case 2 -> listarTodos();
+            case 3 -> buscarPorId();
+            case 4 -> modificarInforme();
+            case 5 -> eliminarInforme();
+            case 0 -> System.out.println("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
     }
 
     private void crearInforme() {
         String contenido = leerTexto("Contenido: ");
         int valoracion = leerEntero("Valoración (0-100): ");
         LocalDate fecha = leerFecha("Fecha de creación (YYYY-MM-DD): ");
+        int idUsuarioPropietario = leerEntero("ID del usuario propietario: ");
 
         try {
-            InformeFinal i = facade.crearInforme(contenido, valoracion, fecha);
-            System.out.println("✅ Informe creado: " + i);
+            InformeFinal i = proxy.crearInforme(contenido, valoracion, fecha, idUsuarioPropietario);
+            mostrarExito("Informe creado: " + i);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al crear informe: " + msg);
+            mostrarError("Error SQL al crear informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al crear informe: " + e.getMessage());
         }
     }
 
     private void listarTodos() {
         try {
-            List<InformeFinal> lista = facade.listarInformes();
-            if (lista.isEmpty()) System.out.println("No hay informes registrados.");
-            else lista.forEach(System.out::println);
+            List<InformeFinal> lista = proxy.listarInformes();
+            if (lista.isEmpty()) {
+                mostrarInfo("No hay informes registrados.");
+            } else {
+                lista.forEach(System.out::println);
+            }
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar informes: " + msg);
+            mostrarError("Error SQL al listar informes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar informes: " + e.getMessage());
         }
     }
 
     private void buscarPorId() {
         int id = leerEntero("ID del informe: ");
         try {
-            InformeFinal i = facade.obtenerInforme(id);
-            if (i != null) System.out.println(i);
-            else System.out.println("❌ Informe no encontrado.");
+            InformeFinal i = proxy.obtenerInforme(id);
+            if (i != null) {
+                System.out.println(i);
+            } else {
+                mostrarError("Informe no encontrado.");
+            }
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al buscar informe: " + msg);
+            mostrarError("Error SQL al buscar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar informe: " + e.getMessage());
         }
     }
 
@@ -86,53 +101,36 @@ public class InformeFinalAdminUI {
         LocalDate fecha = leerFecha("Nueva fecha de creación (YYYY-MM-DD): ");
 
         try {
-            boolean exito = facade.actualizarInforme(id, contenido, valoracion, fecha);
-            if (exito) System.out.println("✅ Informe modificado.");
-            else System.out.println("❌ No se pudo modificar el informe.");
+            boolean exito = proxy.actualizarInforme(id, contenido, valoracion, fecha);
+            if (exito) {
+                mostrarExito("Informe modificado.");
+            } else {
+                mostrarError("No se pudo modificar el informe.");
+            }
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al modificar informe: " + msg);
+            mostrarError("Error SQL al modificar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar informe: " + e.getMessage());
         }
     }
 
     private void eliminarInforme() {
         int id = leerEntero("ID del informe a eliminar: ");
         try {
-            boolean exito = facade.eliminarInforme(id);
-            if (exito) System.out.println("✅ Informe eliminado.");
-            else System.out.println("❌ No se pudo eliminar el informe.");
-        } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al eliminar informe: " + msg);
-        }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
-    }
-
-    private LocalDate leerFecha(String mensaje) {
-        System.out.print(mensaje);
-        while (true) {
-            try {
-                String input = scanner.nextLine();
-                return LocalDate.parse(input);
-            } catch (Exception e) {
-                System.out.print("Formato incorrecto. Ingrese fecha (YYYY-MM-DD): ");
+            boolean exito = proxy.eliminarInforme(id);
+            if (exito) {
+                mostrarExito("Informe eliminado.");
+            } else {
+                mostrarError("No se pudo eliminar el informe.");
             }
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
+        } catch (SQLException e) {
+            mostrarError("Error SQL al eliminar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar informe: " + e.getMessage());
         }
     }
 }

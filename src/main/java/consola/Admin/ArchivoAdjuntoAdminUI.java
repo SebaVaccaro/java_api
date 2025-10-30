@@ -1,107 +1,108 @@
 package consola.Admin;
 
-import facade.ArchivoAdjuntoFacade;
+import consola.interfaz.UIBase;
+import PROXY.ArchivoAdjuntoProxy;
 import modelo.ArchivoAdjunto;
-import util.CapturadoraDeErrores;
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
-public class ArchivoAdjuntoAdminUI {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final ArchivoAdjuntoFacade facade;
+public class ArchivoAdjuntoAdminUI extends UIBase {
 
-    public ArchivoAdjuntoAdminUI() throws SQLException {
-        this.facade = new ArchivoAdjuntoFacade();
+    private final ArchivoAdjuntoProxy facade;
+
+    public ArchivoAdjuntoAdminUI() throws Exception {
+        this.facade = new ArchivoAdjuntoProxy();
     }
 
-    public void menuArchivos() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ ARCHIVOS ADJUNTOS ---");
-            System.out.println("1. Crear archivo");
-            System.out.println("2. Listar activos");
-            System.out.println("3. Listar por estudiante");
-            System.out.println("4. Modificar archivo");
-            System.out.println("5. Eliminar archivo");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ ARCHIVOS ADJUNTOS (ADMIN) ---");
+        System.out.println("1. Crear archivo");
+        System.out.println("2. Listar activos");
+        System.out.println("3. Listar por estudiante");
+        System.out.println("4. Modificar archivo");
+        System.out.println("5. Eliminar archivo");
+        System.out.println("0. Volver al menú principal");
+    }
 
-            switch (opcion) {
-                case 1 -> crearArchivo();
-                case 2 -> listarActivos();
-                case 3 -> listarPorEstudiante();
-                case 4 -> modificarArchivo();
-                case 5 -> eliminarArchivo();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> crearArchivo();
+            case 2 -> listarActivos();
+            case 3 -> listarPorEstudiante();
+            case 4 -> modificarArchivo();
+            case 5 -> eliminarArchivo();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
     }
 
     // ==========================================================
-    // CREAR ARCHIVO
+    // OPCIONES DEL MENÚ
     // ==========================================================
     private void crearArchivo() {
-        int idUsuario = leerEntero("ID Usuario: ");
+        int idUsuario = leerEntero("ID Usuario (quien crea el archivo): ");
         int idEstudiante = leerEntero("ID Estudiante: ");
         String ruta = leerTexto("Ruta del archivo: ");
         String categoria = leerTexto("Categoría: ");
 
         try {
             ArchivoAdjunto archivo = facade.crearArchivo(idUsuario, idEstudiante, ruta, categoria);
-            System.out.println("✅ Archivo creado: " + archivo);
-        } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al crear archivo: " + msg);
+            mostrarExito("Archivo creado: " + archivo);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
+            mostrarError(e.getMessage());
+        } catch (SQLException e) {
+            mostrarError("Error SQL al crear archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // ==========================================================
-    // LISTAR ARCHIVOS
-    // ==========================================================
     private void listarActivos() {
         try {
             List<ArchivoAdjunto> list = facade.listarActivos();
-            if (list.isEmpty()) System.out.println("No hay archivos activos.");
+            if (list.isEmpty()) mostrarInfo("No hay archivos activos.");
             else list.forEach(System.out::println);
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al listar activos: " + msg);
+            mostrarError("Error al listar activos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
     private void listarPorEstudiante() {
+        int idUsuario = leerEntero("ID Usuario (quien consulta): ");
         int idEstudiante = leerEntero("ID Estudiante: ");
+
         try {
-            List<ArchivoAdjunto> list = facade.listarPorEstudiante(idEstudiante);
-            if (list.isEmpty()) System.out.println("No hay archivos para este estudiante.");
+            List<ArchivoAdjunto> list = facade.listarPorEstudiante(idUsuario, idEstudiante);
+            if (list.isEmpty()) mostrarInfo("No hay archivos para este estudiante.");
             else list.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al listar archivos por estudiante: " + msg);
+            mostrarError("Error SQL al listar archivos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // ==========================================================
-    // MODIFICAR ARCHIVO
-    // ==========================================================
     private void modificarArchivo() {
+        int idUsuario = leerEntero("ID Usuario (quien modifica): ");
         int idArchivo = leerEntero("ID del archivo a modificar: ");
 
         try {
-            ArchivoAdjunto a = facade.obtenerPorId(idArchivo);
+            ArchivoAdjunto a = facade.obtenerPorId(idUsuario, idArchivo);
 
             if (a == null) {
-                System.out.println("⚠️ El archivo no existe.");
+                mostrarInfo("El archivo no existe.");
                 return;
             }
 
-            // 🔹 Mostrar el archivo antes de modificar
             System.out.println("Archivo seleccionado:");
             System.out.println(a);
 
@@ -131,53 +132,36 @@ public class ArchivoAdjuntoAdminUI {
                     a.setIdEstudiante(nuevoId);
                     exito = facade.actualizarArchivo(a);
                 }
-                default -> System.out.println("Campo inválido.");
+                default -> mostrarError("Campo inválido.");
             }
 
-            if (exito) System.out.println("✅ Archivo modificado.");
-            else System.out.println("❌ No se pudo modificar el archivo.");
+            if (exito) mostrarExito("Archivo modificado correctamente.");
+            else mostrarError("No se pudo modificar el archivo.");
 
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al modificar archivo: " + msg);
-        } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
+            mostrarError("Error SQL al modificar archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-
-    // ==========================================================
-    // ELIMINAR ARCHIVO
-    // ==========================================================
     private void eliminarArchivo() {
         int idArchivo = leerEntero("ID del archivo a eliminar: ");
         try {
-            if (facade.eliminar(idArchivo)) System.out.println("✅ Archivo eliminado.");
-            else System.out.println("❌ No se pudo eliminar el archivo.");
+            if (facade.eliminar(idArchivo)) {
+                mostrarExito("Archivo eliminado correctamente.");
+            } else {
+                mostrarError("No se pudo eliminar el archivo.");
+            }
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al eliminar archivo: " + msg);
-        } catch (IllegalArgumentException e) {
-            System.out.println("⚠️ " + e.getMessage());
+            mostrarError("Error SQL al eliminar archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
-    }
-
-    // ==========================================================
-    // MÉTODOS AUXILIARES
-    // ==========================================================
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }
+

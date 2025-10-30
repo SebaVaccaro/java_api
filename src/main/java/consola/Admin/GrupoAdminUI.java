@@ -1,35 +1,37 @@
 package consola.Admin;
 
-import facade.GrupoFacade;
+import consola.interfaz.UIBase;
+import PROXY.GrupoProxy;
 import modelo.Grupo;
-import util.CapturadoraDeErrores; // ✅ Importar para manejo de errores amigables
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
-public class GrupoAdminUI {
+public class GrupoAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final GrupoFacade facade;
+    private final GrupoProxy proxy;
 
-    public GrupoAdminUI() throws SQLException {
-        this.facade = new GrupoFacade();
+    public GrupoAdminUI() throws Exception {
+        this.proxy = new GrupoProxy();
     }
 
-    public void menuGrupos() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ GRUPOS ---");
-            System.out.println("1. Crear grupo");
-            System.out.println("2. Listar todos");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Listar por carrera");
-            System.out.println("5. Modificar grupo");
-            System.out.println("6. Eliminar grupo");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n===== MENÚ GRUPOS =====");
+        System.out.println("1. Crear grupo");
+        System.out.println("2. Listar todos");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Listar por carrera");
+        System.out.println("5. Modificar grupo");
+        System.out.println("6. Eliminar grupo");
+        System.out.println("0. Volver al menú anterior");
+        System.out.println("========================");
+    }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        try {
             switch (opcion) {
                 case 1 -> crearGrupo();
                 case 2 -> listarTodos();
@@ -37,56 +39,64 @@ public class GrupoAdminUI {
                 case 4 -> listarPorCarrera();
                 case 5 -> modificarGrupo();
                 case 6 -> eliminarGrupo();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
-        } while (opcion != 0);
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        }
     }
 
     private void crearGrupo() {
         String nombre = leerTexto("Nombre del grupo: ");
         int idCarrera = leerEntero("ID de la carrera: ");
         try {
-            Grupo g = facade.crearGrupo(nombre, idCarrera);
-            System.out.println("✅ Grupo creado: " + g);
+            Grupo g = proxy.crearGrupo(nombre, idCarrera);
+            mostrarExito("Grupo creado: " + g);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al crear grupo: " + msg);
+            mostrarError("Error SQL al crear grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al crear grupo: " + e.getMessage());
         }
     }
 
     private void listarTodos() {
         try {
-            List<Grupo> lista = facade.listarTodos();
-            if (lista.isEmpty()) System.out.println("No hay grupos registrados.");
+            List<Grupo> lista = proxy.listarTodos();
+            if (lista.isEmpty()) mostrarInfo("No hay grupos registrados.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar grupos: " + msg);
+            mostrarError("Error al listar grupos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar grupos: " + e.getMessage());
         }
     }
 
     private void buscarPorId() {
         int id = leerEntero("ID del grupo: ");
         try {
-            Grupo g = facade.obtenerPorId(id);
+            Grupo g = proxy.obtenerPorId(id);
             if (g != null) System.out.println(g);
-            else System.out.println("❌ Grupo no encontrado.");
+            else mostrarInfo("Grupo no encontrado.");
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al buscar grupo: " + msg);
+            mostrarError("Error al buscar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar grupo: " + e.getMessage());
         }
     }
 
     private void listarPorCarrera() {
         int idCarrera = leerEntero("ID de la carrera: ");
         try {
-            List<Grupo> lista = facade.listarPorCarrera(idCarrera);
-            if (lista.isEmpty()) System.out.println("No hay grupos para esta carrera.");
+            List<Grupo> lista = proxy.listarPorCarrera(idCarrera);
+            if (lista.isEmpty()) mostrarInfo("No hay grupos para esta carrera.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar grupos por carrera: " + msg);
+            mostrarError("Error al listar grupos por carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar grupos por carrera: " + e.getMessage());
         }
     }
 
@@ -95,41 +105,30 @@ public class GrupoAdminUI {
         String nombre = leerTexto("Nuevo nombre: ");
         int idCarrera = leerEntero("Nuevo ID de carrera: ");
         try {
-            boolean exito = facade.actualizarGrupo(id, nombre, idCarrera);
-            if (exito) System.out.println("✅ Grupo modificado.");
-            else System.out.println("❌ No se pudo modificar el grupo.");
+            boolean exito = proxy.actualizarGrupo(id, nombre, idCarrera);
+            if (exito) mostrarExito("Grupo modificado correctamente.");
+            else mostrarError("No se pudo modificar el grupo.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al modificar grupo: " + msg);
+            mostrarError("Error SQL al modificar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar grupo: " + e.getMessage());
         }
     }
 
     private void eliminarGrupo() {
         int id = leerEntero("ID del grupo a eliminar: ");
         try {
-            boolean exito = facade.eliminarGrupo(id);
-            if (exito) System.out.println("✅ Grupo eliminado.");
-            else System.out.println("❌ No se pudo eliminar el grupo.");
+            boolean exito = proxy.eliminarGrupo(id);
+            if (exito) mostrarExito("Grupo eliminado correctamente.");
+            else mostrarError("No se pudo eliminar el grupo.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al eliminar grupo: " + msg);
+            mostrarError("Error SQL al eliminar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar grupo: " + e.getMessage());
         }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }

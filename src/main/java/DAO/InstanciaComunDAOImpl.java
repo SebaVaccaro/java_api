@@ -18,7 +18,7 @@ public class InstanciaComunDAOImpl {
 
     // 🔹 Insertar en subtabla instancia_comun
     public void insertarInstanciaComun(InstanciaComun instancia) throws SQLException {
-        String sql = "INSERT INTO instancia_comun (id_instancia, id_seguimiento) VALUES (?, ?)";
+        String sql = "INSERT INTO inst_comun (id_instancia, id_seguimiento) VALUES (?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, instancia.getIdInstancia());
             ps.setInt(2, instancia.getIdSeguimiento());

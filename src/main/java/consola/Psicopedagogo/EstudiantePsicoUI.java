@@ -1,43 +1,46 @@
 package consola.Psicopedagogo;
 
-import facade.EstudianteFacade;
+import consola.interfaz.UIBase;
+import PROXY.EstudianteProxy;
 import modelo.Estudiante;
-import util.CapturadoraDeErrores;
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Scanner;
 
-public class EstudiantePsicoUI {
-    private final Scanner scanner = new Scanner(System.in);
-    private final EstudianteFacade facade;
+public class EstudiantePsicoUI extends UIBase {
 
-    public EstudiantePsicoUI() throws SQLException {
-        this.facade = new EstudianteFacade();
+    private final EstudianteProxy proxy;
+
+    public EstudiantePsicoUI() throws Exception {
+        this.proxy = new EstudianteProxy();
     }
 
-    public void menuEstudiantes() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ ESTUDIANTES (PSICOPEDAGOGO) ---");
-            System.out.println("1. Listar todos");
-            System.out.println("2. Buscar por ID");
-            System.out.println("3. Modificar estudiante");
-            System.out.println("4. Desactivar estudiante");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n===== MENÚ ESTUDIANTES (PSICOPEDAGOGO) =====");
+        System.out.println("1. Listar todos");
+        System.out.println("2. Buscar por ID");
+        System.out.println("3. Modificar estudiante");
+        System.out.println("4. Desactivar estudiante");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("============================================");
+    }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        try {
             switch (opcion) {
                 case 1 -> listarTodos();
                 case 2 -> buscarPorId();
                 case 3 -> modificarEstudiante();
                 case 4 -> desactivarEstudiante();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
-        } while (opcion != 0);
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        }
     }
 
     // ============================================================
@@ -45,27 +48,35 @@ public class EstudiantePsicoUI {
     // ============================================================
     private void listarTodos() {
         try {
-            List<Estudiante> lista = facade.listarTodos();
-            if (lista.isEmpty()) System.out.println("No hay estudiantes registrados.");
-            else lista.forEach(System.out::println);
+            List<Estudiante> lista = proxy.listarTodos();
+            if (lista.isEmpty()) {
+                mostrarInfo("No hay estudiantes registrados.");
+            } else {
+                lista.forEach(System.out::println);
+            }
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
-            System.out.println("❌ Error al listar estudiantes: " + msg);
+            mostrarError("Error al listar estudiantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al listar estudiantes: " + ex.getMessage());
         }
     }
 
     // ============================================================
-    // BUSCAR ESTUDIANTE
+    // BUSCAR ESTUDIANTE POR ID
     // ============================================================
     private void buscarPorId() {
         int id = leerEntero("ID del estudiante: ");
         try {
-            Estudiante e = facade.obtenerPorId(id);
-            if (e != null) System.out.println(e);
-            else System.out.println("❌ Estudiante no encontrado.");
+            Estudiante e = proxy.obtenerPorId(id);
+            if (e != null) {
+                System.out.println(e);
+            } else {
+                mostrarInfo("Estudiante no encontrado.");
+            }
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
-            System.out.println("❌ Error al buscar estudiante: " + msg);
+            mostrarError("Error al buscar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al buscar estudiante: " + ex.getMessage());
         }
     }
 
@@ -83,15 +94,20 @@ public class EstudiantePsicoUI {
         boolean activo = leerBoolean("¿Activo? (true/false): ");
 
         try {
-            // Creamos el objeto Estudiante con los nuevos datos
             Estudiante e = new Estudiante(id, cedula, nombre, apellido, username, password, null, idGrupo, activo);
+            boolean exito = proxy.actualizarEstudiante(e);
 
-            boolean exito = facade.actualizarEstudiante(e);
-            if (exito) System.out.println("✅ Estudiante modificado correctamente.");
-            else System.out.println("❌ No se pudo modificar el estudiante.");
+            if (exito) {
+                mostrarExito("Estudiante modificado correctamente.");
+            } else {
+                mostrarError("No se pudo modificar el estudiante.");
+            }
+        } catch (SecurityException se) {
+            mostrarError("Permiso denegado: " + se.getMessage());
         } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
-            System.out.println("❌ Error al modificar estudiante: " + msg);
+            mostrarError("Error al modificar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -101,53 +117,18 @@ public class EstudiantePsicoUI {
     private void desactivarEstudiante() {
         int id = leerEntero("ID del estudiante a desactivar: ");
         try {
-            boolean exito = facade.desactivarEstudiante(id);
-            if (exito) System.out.println("✅ Estudiante desactivado correctamente.");
-            else System.out.println("❌ No se pudo desactivar el estudiante.");
-        } catch (SQLException ex) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(ex);
-            System.out.println("❌ Error al desactivar estudiante: " + msg);
-        }
-    }
-
-    // ============================================================
-    // MÉTODOS AUXILIARES
-    // ============================================================
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
-    }
-
-    private boolean leerBoolean(String mensaje) {
-        System.out.print(mensaje);
-        while (true) {
-            String texto = scanner.nextLine().trim().toLowerCase();
-            if (texto.equals("true") || texto.equals("t") || texto.equals("si") || texto.equals("s")) return true;
-            if (texto.equals("false") || texto.equals("f") || texto.equals("no") || texto.equals("n")) return false;
-            System.out.print("Ingrese true/false: ");
-        }
-    }
-
-    private LocalDate leerFecha(String mensaje) {
-        System.out.print(mensaje);
-        while (true) {
-            try {
-                String input = scanner.nextLine();
-                return LocalDate.parse(input);
-            } catch (DateTimeParseException e) {
-                System.out.print("Formato inválido. Ingrese fecha en formato YYYY-MM-DD: ");
+            boolean exito = proxy.desactivarEstudiante(id);
+            if (exito) {
+                mostrarExito("Estudiante desactivado correctamente.");
+            } else {
+                mostrarError("No se pudo desactivar el estudiante.");
             }
+        } catch (SecurityException se) {
+            mostrarError("Permiso denegado: " + se.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al desactivar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

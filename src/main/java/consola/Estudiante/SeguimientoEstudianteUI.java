@@ -1,51 +1,51 @@
 package consola.Estudiante;
 
-import facade.SeguimientoFacade;
+import consola.interfaz.UIBase;
+import PROXY.SeguimientoProxy;
+import SINGLETON.LoginSingleton;
 import modelo.Seguimiento;
-import util.CapturadoraDeErrores;
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
 
-public class SeguimientoEstudianteUI {
+public class SeguimientoEstudianteUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final SeguimientoFacade seguimientoFacade;
+    private final SeguimientoProxy seguimientoProxy;
     private final int idEstudiante;
 
-    public SeguimientoEstudianteUI(int idEstudiante) throws SQLException {
-        this.idEstudiante = idEstudiante;
-        this.seguimientoFacade = new SeguimientoFacade();
+    public SeguimientoEstudianteUI() throws SQLException {
+        if (!LoginSingleton.getInstance().haySesionActiva()) {
+            throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
+        }
+        this.idEstudiante = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.seguimientoProxy = new SeguimientoProxy();
     }
 
-    public void menuSeguimientoEstudiante() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE ---");
-            System.out.println("1. Ver mis seguimientos");
-            System.out.println("2. Buscar seguimiento por ID");
-            System.out.println("3. Cerrar seguimiento");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
-
-            switch (opcion) {
-                case 1 -> listarMisSeguimientos();
-                case 2 -> buscarPorId();
-                case 3 -> cerrarSeguimiento();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    protected void mostrarMenu() {
+        System.out.println("\n--- MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE ---");
+        System.out.println("1. Ver mis seguimientos");
+        System.out.println("2. Buscar seguimiento por ID");
+        System.out.println("3. Cerrar seguimiento");
+        System.out.println("0. Volver al menú principal");
     }
 
-    // ============================================================
-    // LISTAR SEGUIMIENTOS DEL ESTUDIANTE
-    // ============================================================
+    @Override
+    protected void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> listarMisSeguimientos();
+            case 2 -> buscarPorId();
+            case 3 -> cerrarSeguimiento();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
+    }
+
     private void listarMisSeguimientos() {
         try {
-            List<Seguimiento> lista = seguimientoFacade.listarTodos();
+            List<Seguimiento> lista = seguimientoProxy.listarTodos();
             boolean encontrado = false;
 
             for (Seguimiento s : lista) {
@@ -55,65 +55,56 @@ public class SeguimientoEstudianteUI {
                 }
             }
 
-            if (!encontrado)
-                System.out.println("📭 No tienes seguimientos activos.");
+            if (!encontrado) mostrarInfo("No tienes seguimientos activos.");
 
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al listar seguimientos: " + msg);
+            mostrarError("Error al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
-    // ============================================================
-    // BUSCAR UN SEGUIMIENTO POR ID
-    // ============================================================
     private void buscarPorId() {
         int id = leerEntero("Ingrese el ID del seguimiento: ");
         try {
-            Seguimiento s = seguimientoFacade.buscarPorId(id);
+            Seguimiento s = seguimientoProxy.buscarPorId(id);
             if (s == null) {
-                System.out.println("❌ Seguimiento no encontrado.");
+                mostrarError("Seguimiento no encontrado.");
                 return;
             }
 
             if (s.getIdEstudiante() != idEstudiante) {
-                System.out.println("❌ No puedes acceder a un seguimiento que no es tuyo.");
+                mostrarError("No puedes acceder a un seguimiento que no es tuyo.");
                 return;
             }
 
-            System.out.println("\n📄 Detalles del seguimiento:");
+            mostrarInfo("📄 Detalles del seguimiento:");
             System.out.println(s);
 
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al buscar seguimiento: " + msg);
+            mostrarError("Error al buscar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
-    // ============================================================
-    // CERRAR UN SEGUIMIENTO (MARCAR INACTIVO Y FECHA DE CIERRE)
-    // ============================================================
     private void cerrarSeguimiento() {
         int id = leerEntero("Ingrese el ID del seguimiento a cerrar: ");
         try {
-            Seguimiento s = seguimientoFacade.buscarPorId(id);
+            Seguimiento s = seguimientoProxy.buscarPorId(id);
             if (s == null) {
-                System.out.println("❌ Seguimiento no encontrado.");
+                mostrarError("Seguimiento no encontrado.");
                 return;
             }
 
             if (s.getIdEstudiante() != idEstudiante) {
-                System.out.println("❌ No puedes cerrar un seguimiento que no te pertenece.");
+                mostrarError("No puedes cerrar un seguimiento que no te pertenece.");
                 return;
             }
 
             if (!s.isEstActivo()) {
-                System.out.println("ℹ️ Este seguimiento ya está cerrado.");
+                mostrarInfo("Este seguimiento ya está cerrado.");
                 return;
             }
 
             LocalDate fechaCierre = LocalDate.now();
-            boolean exito = seguimientoFacade.actualizarSeguimiento(
+            boolean exito = seguimientoProxy.actualizarSeguimiento(
                     s.getIdSeguimiento(),
                     s.getIdInforme(),
                     s.getIdEstudiante(),
@@ -122,28 +113,12 @@ public class SeguimientoEstudianteUI {
                     false
             );
 
-            if (exito)
-                System.out.println("✅ Seguimiento cerrado correctamente el " + fechaCierre);
-            else
-                System.out.println("❌ No se pudo cerrar el seguimiento.");
+            if (exito) mostrarExito("Seguimiento cerrado correctamente el " + fechaCierre);
+            else mostrarError("No se pudo cerrar el seguimiento.");
 
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al cerrar seguimiento: " + msg);
+            mostrarError("Error al cerrar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
-    }
-
-    // ============================================================
-    // MÉTODOS AUXILIARES
-    // ============================================================
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine();
-        return valor;
     }
 }
+

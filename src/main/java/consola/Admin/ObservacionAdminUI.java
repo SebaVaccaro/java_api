@@ -1,46 +1,47 @@
 package consola.Admin;
 
-import facade.ObservacionFacade;
+import consola.interfaz.UIBase;
+import PROXY.ObservacionProxy;
 import modelo.Observacion;
-import util.CapturadoraDeErrores; // ✅ Importación
+import utils.CapturadoraDeErrores;
+
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Scanner;
 
-public class ObservacionAdminUI {
+public class ObservacionAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final ObservacionFacade facade;
+    private final ObservacionProxy facade;
 
     public ObservacionAdminUI() throws SQLException {
-        this.facade = new ObservacionFacade();
+        this.facade = new ObservacionProxy();
     }
 
-    public void menuObservaciones() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ OBSERVACIONES ---");
-            System.out.println("1. Crear observación");
-            System.out.println("2. Listar todas");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Modificar observación");
-            System.out.println("5. Desactivar observación");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
-
-            switch (opcion) {
-                case 1 -> crearObservacion();
-                case 2 -> listarTodas();
-                case 3 -> buscarPorId();
-                case 4 -> modificarObservacion();
-                case 5 -> desactivarObservacion();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
-            }
-        } while (opcion != 0);
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n--- MENÚ OBSERVACIONES ---");
+        System.out.println("1. Crear observación");
+        System.out.println("2. Listar todas");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Modificar observación");
+        System.out.println("5. Desactivar observación");
+        System.out.println("0. Volver al menú principal");
     }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        switch (opcion) {
+            case 1 -> crearObservacion();
+            case 2 -> listarTodas();
+            case 3 -> buscarPorId();
+            case 4 -> modificarObservacion();
+            case 5 -> desactivarObservacion();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
+        }
+    }
+
+    // ==== CRUD ====
     private void crearObservacion() {
         int idFuncionario = leerEntero("ID del funcionario: ");
         int idEstudiante = leerEntero("ID del estudiante: ");
@@ -50,21 +51,19 @@ public class ObservacionAdminUI {
 
         try {
             Observacion obs = facade.crearObservacion(idFuncionario, idEstudiante, titulo, contenido, fecHora);
-            System.out.println("✅ Observación creada: " + obs);
+            mostrarExito("Observación creada: " + obs);
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al crear observación: " + msg);
+            mostrarError("Error al crear observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
     private void listarTodas() {
         try {
             List<Observacion> lista = facade.listarTodas();
-            if (lista.isEmpty()) System.out.println("No hay observaciones registradas.");
+            if (lista.isEmpty()) mostrarInfo("No hay observaciones registradas.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al listar observaciones: " + msg);
+            mostrarError("Error al listar observaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -72,11 +71,10 @@ public class ObservacionAdminUI {
         int id = leerEntero("ID de observación: ");
         try {
             Observacion obs = facade.obtenerObservacion(id);
-            if (obs != null) System.out.println(obs);
-            else System.out.println("❌ Observación no encontrada.");
+            if (obs != null) mostrarInfo(obs.toString());
+            else mostrarError("Observación no encontrada.");
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al buscar observación: " + msg);
+            mostrarError("Error al buscar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -91,11 +89,10 @@ public class ObservacionAdminUI {
         try {
             Observacion obs = new Observacion(id, idFuncionario, idEstudiante, titulo, contenido, fecHora, true);
             boolean exito = facade.actualizarObservacion(obs);
-            if (exito) System.out.println("✅ Observación modificada.");
-            else System.out.println("❌ No se pudo modificar la observación.");
+            if (exito) mostrarExito("Observación modificada.");
+            else mostrarError("No se pudo modificar la observación.");
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al modificar observación: " + msg);
+            mostrarError("Error al modificar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
@@ -103,28 +100,10 @@ public class ObservacionAdminUI {
         int id = leerEntero("ID de observación a desactivar: ");
         try {
             boolean exito = facade.desactivarObservacion(id);
-            if (exito) System.out.println("✅ Observación desactivada.");
-            else System.out.println("❌ No se pudo desactivar la observación.");
+            if (exito) mostrarExito("Observación desactivada.");
+            else mostrarError("No se pudo desactivar la observación.");
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e);
-            System.out.println("❌ Error al desactivar observación: " + msg);
+            mostrarError("Error al desactivar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine();
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }

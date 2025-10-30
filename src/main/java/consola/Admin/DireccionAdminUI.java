@@ -1,36 +1,41 @@
 package consola.Admin;
 
-import facade.DireccionFacade;
+import consola.interfaz.UIBase;
+import PROXY.DireccionProxy;
 import modelo.Direccion;
-import util.CapturadoraDeErrores; // ✅ Importar para manejo de errores amigables
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Scanner;
 
-public class DireccionAdminUI {
+public class DireccionAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final DireccionFacade facade;
+    private final DireccionProxy proxy;
 
-    public DireccionAdminUI() throws SQLException {
-        this.facade = new DireccionFacade();
+    public DireccionAdminUI() throws Exception {
+        this.proxy = new DireccionProxy();
     }
 
-    public void menuDirecciones() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ DIRECCIONES ---");
-            System.out.println("1. Crear dirección");
-            System.out.println("2. Listar todas");
-            System.out.println("3. Buscar por ID");
-            System.out.println("4. Listar por usuario");
-            System.out.println("5. Listar por ciudad");
-            System.out.println("6. Modificar dirección");
-            System.out.println("7. Eliminar dirección");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    // ==========================================================
+    // MENÚ PRINCIPAL
+    // ==========================================================
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n===== MENÚ DIRECCIONES =====");
+        System.out.println("1. Crear dirección");
+        System.out.println("2. Listar todas");
+        System.out.println("3. Buscar por ID");
+        System.out.println("4. Listar por usuario");
+        System.out.println("5. Listar por ciudad");
+        System.out.println("6. Modificar dirección");
+        System.out.println("7. Eliminar dirección");
+        System.out.println("0. Volver al menú anterior");
+        System.out.println("=============================");
+    }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        try {
             switch (opcion) {
                 case 1 -> crearDireccion();
                 case 2 -> listarTodas();
@@ -39,118 +44,134 @@ public class DireccionAdminUI {
                 case 5 -> listarPorCiudad();
                 case 6 -> modificarDireccion();
                 case 7 -> eliminarDireccion();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
-        } while (opcion != 0);
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        }
     }
 
+    // ==========================================================
+    // CRUD DIRECCIONES
+    // ==========================================================
+
     private void crearDireccion() {
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
         String calle = leerTexto("Calle: ");
         String numPuerta = leerTexto("Número de puerta: ");
         String numApto = leerTexto("Número de apartamento: ");
         int idCiudad = leerEntero("ID de ciudad: ");
-        int idUsuario = leerEntero("ID de usuario: ");
+
         try {
-            Direccion d = facade.crearDireccion(calle, numPuerta, numApto, idCiudad, idUsuario);
-            System.out.println("✅ Dirección creada: " + d);
+            Direccion d = proxy.crearDireccion(idUsuarioActual, calle, numPuerta, numApto, idCiudad);
+            mostrarExito("Dirección creada: " + d);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al crear dirección: " + msg);
+            mostrarError("Error SQL al crear dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al crear dirección: " + e.getMessage());
         }
     }
 
     private void listarTodas() {
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
         try {
-            List<Direccion> lista = facade.listarDirecciones();
-            if (lista.isEmpty()) System.out.println("No hay direcciones registradas.");
+            List<Direccion> lista = proxy.listarDirecciones(idUsuarioActual);
+            if (lista.isEmpty()) mostrarInfo("No hay direcciones registradas.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar direcciones: " + msg);
+            mostrarError("Error SQL al listar direcciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar direcciones: " + e.getMessage());
         }
     }
 
     private void buscarPorId() {
-        int id = leerEntero("ID de la dirección: ");
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
+        int idDireccion = leerEntero("ID de la dirección: ");
         try {
-            Direccion d = facade.obtenerDireccion(id);
+            Direccion d = proxy.obtenerDireccion(idUsuarioActual, idDireccion);
             if (d != null) System.out.println(d);
-            else System.out.println("❌ Dirección no encontrada.");
+            else mostrarInfo("Dirección no encontrada.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al buscar dirección: " + msg);
+            mostrarError("Error SQL al buscar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar dirección: " + e.getMessage());
         }
     }
 
     private void listarPorUsuario() {
-        int idUsuario = leerEntero("ID de usuario: ");
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
+        int idUsuarioObjetivo = leerEntero("ID del usuario cuyas direcciones se listarán: ");
         try {
-            List<Direccion> lista = facade.listarPorUsuario(idUsuario);
-            if (lista.isEmpty()) System.out.println("No hay direcciones para este usuario.");
+            List<Direccion> lista = proxy.listarPorUsuario(idUsuarioActual, idUsuarioObjetivo);
+            if (lista.isEmpty()) mostrarInfo("No hay direcciones para este usuario.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar direcciones por usuario: " + msg);
+            mostrarError("Error SQL al listar direcciones por usuario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar direcciones por usuario: " + e.getMessage());
         }
     }
 
     private void listarPorCiudad() {
-        int idCiudad = leerEntero("ID de ciudad: ");
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
+        int idCiudad = leerEntero("ID de la ciudad: ");
         try {
-            List<Direccion> lista = facade.listarPorCiudad(idCiudad);
-            if (lista.isEmpty()) System.out.println("No hay direcciones para esta ciudad.");
+            List<Direccion> lista = proxy.listarPorCiudad(idUsuarioActual, idCiudad);
+            if (lista.isEmpty()) mostrarInfo("No hay direcciones para esta ciudad.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al listar direcciones por ciudad: " + msg);
+            mostrarError("Error SQL al listar direcciones por ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar direcciones por ciudad: " + e.getMessage());
         }
     }
 
     private void modificarDireccion() {
-        int id = leerEntero("ID de la dirección a modificar: ");
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
+        int idDireccion = leerEntero("ID de la dirección a modificar: ");
         String calle = leerTexto("Nueva calle: ");
         String numPuerta = leerTexto("Nuevo número de puerta: ");
         String numApto = leerTexto("Nuevo número de apartamento: ");
         int idCiudad = leerEntero("Nuevo ID de ciudad: ");
-        int idUsuario = leerEntero("Nuevo ID de usuario: ");
 
         try {
-            boolean exito = facade.actualizarDireccion(id, calle, numPuerta, numApto, idCiudad, idUsuario);
-            if (exito) System.out.println("✅ Dirección modificada.");
-            else System.out.println("❌ No se pudo modificar la dirección.");
+            boolean exito = proxy.actualizarDireccion(idUsuarioActual, idDireccion, calle, numPuerta, numApto, idCiudad);
+            if (exito) mostrarExito("Dirección modificada correctamente.");
+            else mostrarError("No se pudo modificar la dirección.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al modificar dirección: " + msg);
+            mostrarError("Error SQL al modificar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar dirección: " + e.getMessage());
         }
     }
 
     private void eliminarDireccion() {
-        int id = leerEntero("ID de la dirección a eliminar: ");
+        int idUsuarioActual = leerEntero("ID del usuario que realiza la acción: ");
+        int idDireccion = leerEntero("ID de la dirección a eliminar: ");
         try {
-            boolean exito = facade.eliminarDireccion(id);
-            if (exito) System.out.println("✅ Dirección eliminada.");
-            else System.out.println("❌ No se pudo eliminar la dirección.");
+            boolean exito = proxy.eliminarDireccion(idUsuarioActual, idDireccion);
+            if (exito) mostrarExito("Dirección eliminada correctamente.");
+            else mostrarError("No se pudo eliminar la dirección.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            String msg = CapturadoraDeErrores.obtenerMensajeAmigable(e); // ✅
-            System.out.println("❌ Error al eliminar dirección: " + msg);
+            mostrarError("Error SQL al eliminar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar dirección: " + e.getMessage());
         }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }

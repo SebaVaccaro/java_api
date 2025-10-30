@@ -1,47 +1,44 @@
 package consola.Admin;
 
+import consola.interfaz.UIBase;
 import modelo.Funcionario;
-import servicios.FuncionarioService;
-import java.sql.SQLException;
-import java.util.Scanner;
+import servicios.FuncionarioServicio;
+import SINGLETON.LoginSingleton;
 
-public class AdminUI {
 
-    private final Scanner scanner;
-    private final Funcionario funcionarioActual;
-    private final FuncionarioService funcionarioService;
 
-    public AdminUI(Funcionario funcionarioActual) {
-        this.funcionarioActual = funcionarioActual;
-        this.scanner = new Scanner(System.in);
+public class AdminUI extends UIBase {
 
-        FuncionarioService tempService = null;
+    private final FuncionarioServicio funcionarioServicio;
+    private Funcionario adminActual;
+
+    public AdminUI() {
+        FuncionarioServicio tempService = null;
         try {
-            tempService = new FuncionarioService();
+            tempService = new FuncionarioServicio();
         } catch (Exception e) {
-            System.out.println("⚠️ Error al inicializar FuncionarioService: " + e.getMessage());
+            mostrarError("Error al inicializar FuncionarioService: " + e.getMessage());
         }
-        this.funcionarioService = tempService;
+        this.funcionarioServicio = tempService;
     }
 
-    public String[] iniciar() {
-        if (funcionarioActual == null) {
-            System.out.println("⚠️ Error: el funcionario recibido es nulo.");
-            return new String[] { null, null };
+    @Override
+    public void iniciar() {
+        LoginSingleton login = LoginSingleton.getInstance();
+
+        if (!login.haySesionActiva() || !"ADMINISTRADOR".equalsIgnoreCase(login.getRolActual())) {
+            mostrarError("No hay sesión activa de administrador.");
+            return;
         }
 
-        int opcion;
-        do {
-            mostrarMenuPrincipal(funcionarioActual);
-            opcion = leerEntero("Seleccione una opción: ");
-            manejarOpcionPrincipal(opcion, funcionarioActual);
-        } while (opcion != 0);
-
-        System.out.println("Sesión finalizada correctamente.\n");
-        return new String[] { null, null };
+        adminActual = (Funcionario) login.getUsuarioActual(); // cast seguro
+        super.iniciar(); // 🔁 ejecuta el bucle de menú común
+        mostrarInfo("Sesión finalizada correctamente.\n");
+        login.cerrarSesion();
     }
 
-    private void mostrarMenuPrincipal(Funcionario adminActual) {
+    @Override
+    protected void mostrarMenu() {
         System.out.println("\n===== MENÚ ADMINISTRADOR =====");
         System.out.println("Bienvenido/a, " + adminActual.getNombre() + " " + adminActual.getApellido());
         System.out.println("====================================");
@@ -68,45 +65,36 @@ public class AdminUI {
         System.out.println("====================================");
     }
 
-    private void manejarOpcionPrincipal(int opcion, Funcionario adminActual) {
+    @Override
+    protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> new ArchivoAdjuntoAdminUI().menuArchivos();
-                case 2 -> new CarreraAdminUI().menuCarreras();
-                case 3 -> new CiudadAdminUI().menuCiudades();
-                case 4 -> new DireccionAdminUI().menuDirecciones();
-                case 5 -> new EstudianteAdminUI().menuEstudiantes();
-                case 6 -> new FuncionarioAdminUI().menuFuncionarios();
-                case 7 -> new GrupoAdminUI().menuGrupos();
-                case 8 -> new ITRAdminUI().menuITR();
-                case 9 -> new IncidenciaAdminUI().menuIncidencias();
-                case 10 -> new InstanciaComunAdminUI().menuInstanciasComunes();
-                case 11 -> new NotificacionAdminUI().menuNotificaciones();
-                case 12 -> new ObservacionAdminUI().menuObservaciones();
-                case 13 -> new RolAdminUI().menu();
-                case 14 -> new SeguimientoAdminUI().menuSeguimientos();
-                case 15 -> new TeleUsuarioAdminUI().menuTelefonosUsuario();
-                case 16 -> new PartSeguimientoAdminUI().menu();
-                case 17 -> new PerteneceAdminUI().menu();
-                case 18 -> new RecibeAdminUI().menu();
-                case 19 -> new TeleITRAdminUI().menuTelefonos();
-                case 0 -> System.out.println("🔒 Cerrando sesión del administrador...");
-                default -> System.out.println("❌ Opción inválida. Intente nuevamente.");
+                case 1 -> new ArchivoAdjuntoAdminUI().iniciar();
+                case 2 -> new CarreraAdminUI().iniciar();
+                case 3 -> new CiudadAdminUI().iniciar();
+                case 4 -> new DireccionAdminUI().iniciar();
+                case 5 -> new EstudianteAdminUI().iniciar();
+                case 6 -> new FuncionarioAdminUI().iniciar();
+                case 7 -> new GrupoAdminUI().iniciar();
+                case 8 -> new ITRAdminUI().iniciar();
+                case 9 -> new IncidenciaAdminUI().iniciar();
+                case 10 -> new InstanciaComunAdminUI().iniciar();
+                case 11 -> new NotificacionAdminUI().iniciar();
+                case 12 -> new ObservacionAdminUI().iniciar();
+                case 13 -> new RolAdminUI().iniciar();
+                case 14 -> new SeguimientoAdminUI().iniciar();
+                case 15 -> new TeleUsuarioAdminUI().iniciar();
+                case 16 -> new PartSeguimientoAdminUI().iniciar();
+                case 17 -> new PerteneceAdminUI().iniciar();
+                case 18 -> new RecibeAdminUI().iniciar();
+                case 19 -> new TeleITRAdminUI().iniciar();
+                case 0 -> mostrarInfo("🔒 Cerrando sesión del administrador...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
-            System.out.println("⚠️ Error al ejecutar la opción: " + e.getMessage());
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine();
-        return valor;
-    }
 }

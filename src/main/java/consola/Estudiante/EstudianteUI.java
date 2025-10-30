@@ -1,31 +1,28 @@
 package consola.Estudiante;
 
+import consola.interfaz.UIBase;
 import modelo.Estudiante;
-import java.util.Scanner;
+import SINGLETON.LoginSingleton;
+
 import java.sql.SQLException;
 
-public class EstudianteUI {
+public class EstudianteUI extends UIBase {
 
-    private final Scanner scanner;
     private final Estudiante estudiante;
 
-    public EstudianteUI(Estudiante estudiante) {
-        this.estudiante = estudiante;
-        this.scanner = new Scanner(System.in);
+    public EstudianteUI() {
+        if (LoginSingleton.getInstance().haySesionActiva()) {
+            this.estudiante = (Estudiante) LoginSingleton.getInstance().getUsuarioActual();
+        } else {
+            this.estudiante = null;
+            mostrarError("No hay sesión activa. Por favor inicia sesión.");
+        }
     }
 
-    public void iniciar() {
-        int opcion;
-        do {
-            mostrarMenuPrincipal();
-            opcion = leerEntero("Seleccione una opción: ");
-            manejarOpcionPrincipal(opcion);
-        } while (opcion != 0);
+    @Override
+    protected void mostrarMenu() {
+        if (estudiante == null) return;
 
-        System.out.println("Sesión finalizada correctamente.\n");
-    }
-
-    private void mostrarMenuPrincipal() {
         System.out.println("\n===== MENÚ ESTUDIANTE =====");
         System.out.println("Bienvenido, " + estudiante.getNombre() + " " + estudiante.getApellido());
         System.out.println("====================================");
@@ -37,20 +34,23 @@ public class EstudianteUI {
         System.out.println("0. Cerrar sesión");
     }
 
-    private void manejarOpcionPrincipal(int opcion) {
+    @Override
+    protected void manejarOpcion(int opcion) {
+        if (estudiante == null) return;
+
         switch (opcion) {
             case 1 -> mostrarInformacionPersonal();
             case 2 -> menuSeguimiento();
             case 3 -> gestionarMisInstanciasComunes();
             case 4 -> gestionarMisTelefonos();
             case 5 -> gestionarMisNotificaciones();
-            case 0 -> System.out.println("Cerrando sesión del Estudiante...");
-            default -> System.out.println("Opción inválida. Intente nuevamente.");
+            case 0 -> mostrarInfo("🔒 Cerrando sesión del Estudiante...");
+            default -> mostrarError("Opción inválida. Intente nuevamente.");
         }
     }
 
     private void mostrarInformacionPersonal() {
-        System.out.println("\n--- Información personal ---");
+        mostrarInfo("--- Información personal ---");
         System.out.println("ID: " + estudiante.getIdUsuario());
         System.out.println("Nombre: " + estudiante.getNombre());
         System.out.println("Apellido: " + estudiante.getApellido());
@@ -59,53 +59,49 @@ public class EstudianteUI {
 
     private void menuSeguimiento() {
         try {
-            SeguimientoEstudianteUI seguimientoUI = new SeguimientoEstudianteUI(estudiante.getIdUsuario());
-            seguimientoUI.menuSeguimientoEstudiante();
+            SeguimientoEstudianteUI seguimientoUI = new SeguimientoEstudianteUI();
+            seguimientoUI.mostrarMenu();
         } catch (SQLException e) {
-            System.out.println("❌ Error al acceder al módulo de seguimiento: " + e.getMessage());
+            mostrarError("Error al acceder al módulo de seguimiento: " + e.getMessage());
         }
     }
 
-    // =======================================
-    // Actualización: usar InstanciaComunUI
-    // =======================================
     private void gestionarMisInstanciasComunes() {
         try {
-            InstanciaComunEstUI instanciaComunUI = new InstanciaComunEstUI(estudiante.getIdUsuario());
-            instanciaComunUI.menuInstanciasComunes();
+            InstanciaComunEstUI instanciaComunUI = new InstanciaComunEstUI();
+            instanciaComunUI.mostrarMenu();
         } catch (SQLException e) {
-            System.out.println("❌ Error al inicializar las instancias comunes: " + e.getMessage());
+            mostrarError("Error al inicializar las instancias comunes: " + e.getMessage());
         }
     }
 
     private void gestionarMisTelefonos() {
         try {
-            TelefonoEstudianteUI telefonoEstudianteUI = new TelefonoEstudianteUI(estudiante.getIdUsuario());
+            TelefonoEstudianteUI telefonoEstudianteUI = new TelefonoEstudianteUI();
             telefonoEstudianteUI.iniciar();
         } catch (SQLException e) {
-            System.out.println("❌ Error al gestionar los teléfonos: " + e.getMessage());
-            e.printStackTrace();
+            mostrarError("Error al gestionar los teléfonos: " + e.getMessage());
         }
     }
 
     private void gestionarMisNotificaciones() {
         try {
-            NotificacionUserUI notificacionUserUI = new NotificacionUserUI(estudiante.getIdUsuario());
-            notificacionUserUI.menuNotificaciones();
+            NotificacionUserUI notificacionUserUI = new NotificacionUserUI();
+            notificacionUserUI.mostrarMenu();
         } catch (SQLException e) {
-            System.out.println("❌ Error al inicializar la gestión de notificaciones: " + e.getMessage());
+            mostrarError("Error de base de datos al inicializar notificaciones: " + e.getMessage());
+        } catch (Exception e) {
+            mostrarError("Error al inicializar notificaciones: " + e.getMessage());
         }
     }
 
-    // ==== MÉTODO AUXILIAR ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpia el buffer
-        return valor;
+    @Override
+    public void iniciar() {
+        if (estudiante == null) return;
+
+        super.iniciar();
+        LoginSingleton.getInstance().cerrarSesion();
+        mostrarInfo("🔒 Sesión finalizada correctamente.\n");
     }
 }
+

@@ -1,36 +1,38 @@
 package consola.Admin;
 
-import facade.IncidenciaFacade;
+import consola.interfaz.UIBase;
+import PROXY.IncidenciaProxy;
 import modelo.Incidencia;
-import util.CapturadoraDeErrores; // manejo de errores amigables
+import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Scanner;
 
-public class IncidenciaAdminUI {
+public class IncidenciaAdminUI extends UIBase {
 
-    private final Scanner scanner = new Scanner(System.in);
-    private final IncidenciaFacade facade;
+    private final IncidenciaProxy proxy;
 
-    public IncidenciaAdminUI() throws SQLException {
-        this.facade = new IncidenciaFacade();
+    public IncidenciaAdminUI() throws Exception {
+        this.proxy = new IncidenciaProxy();
     }
 
-    public void menuIncidencias() {
-        int opcion;
-        do {
-            System.out.println("\n--- MENÚ INCIDENCIAS ---");
-            System.out.println("1. Crear incidencia");
-            System.out.println("2. Listar todas");
-            System.out.println("3. Buscar por instancia");
-            System.out.println("4. Listar por funcionario");
-            System.out.println("5. Modificar incidencia");
-            System.out.println("6. Eliminar incidencia");
-            System.out.println("0. Volver al menú principal");
-            opcion = leerEntero("Seleccione una opción: ");
+    @Override
+    public void mostrarMenu() {
+        System.out.println("\n===== MENÚ INCIDENCIAS =====");
+        System.out.println("1. Crear incidencia");
+        System.out.println("2. Listar todas");
+        System.out.println("3. Buscar por instancia");
+        System.out.println("4. Listar por funcionario");
+        System.out.println("5. Modificar incidencia");
+        System.out.println("6. Eliminar incidencia");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("=============================");
+    }
 
+    @Override
+    public void manejarOpcion(int opcion) {
+        try {
             switch (opcion) {
                 case 1 -> crearIncidencia();
                 case 2 -> listarTodas();
@@ -38,135 +40,108 @@ public class IncidenciaAdminUI {
                 case 4 -> listarPorFuncionario();
                 case 5 -> modificarIncidencia();
                 case 6 -> eliminarIncidencia();
-                case 0 -> System.out.println("Volviendo al menú principal...");
-                default -> System.out.println("Opción inválida.");
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
-        } while (opcion != 0);
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        }
     }
 
+    // ==== CRUD ====
+
     private void crearIncidencia() {
-        System.out.println("--- CREAR INCIDENCIA ---");
         String titulo = leerTexto("Título: ");
         OffsetDateTime fecha = leerFechaHora("Fecha y hora (YYYY-MM-DDTHH:MM): ");
         String descripcion = leerTexto("Descripción: ");
-        boolean activo = leerBoolean("Está activa? (true/false): ");
-        int idFuncionario = leerEntero("ID de funcionario: ");
+        boolean activo = leerBoolean("¿Está activa? (true/false): ");
+        int idFuncionario = leerEntero("ID del funcionario: ");
         String lugar = leerTexto("Lugar: ");
 
-
         try {
-            Incidencia incidencia = facade.crearIncidencia(titulo, fecha, descripcion, activo, idFuncionario, lugar);
-            System.out.println("✅ Incidencia creada: " + incidencia);
+            Incidencia incidencia = proxy.crearIncidencia(titulo, fecha, descripcion, activo, idFuncionario, lugar);
+            mostrarExito("Incidencia creada: " + incidencia);
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ Error al crear incidencia: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al crear incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al crear incidencia: " + e.getMessage());
         }
     }
 
     private void listarTodas() {
         try {
-            List<Incidencia> lista = facade.listarIncidencias();
-            if (lista.isEmpty()) System.out.println("No hay incidencias registradas.");
+            List<Incidencia> lista = proxy.listarIncidencias();
+            if (lista.isEmpty()) mostrarInfo("No hay incidencias registradas.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar incidencias: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar incidencias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar incidencias: " + e.getMessage());
         }
     }
 
     private void buscarPorInstancia() {
-        int idInstancia = leerEntero("ID de instancia: ");
+        int idInstancia = leerEntero("ID de la instancia: ");
         try {
-            Incidencia i = facade.obtenerIncidencia(idInstancia);
+            Incidencia i = proxy.obtenerIncidencia(idInstancia);
             if (i != null) System.out.println(i);
-            else System.out.println("❌ Incidencia no encontrada.");
+            else mostrarInfo("Incidencia no encontrada.");
         } catch (SQLException e) {
-            System.out.println("❌ Error al buscar incidencia: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al buscar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al buscar incidencia: " + e.getMessage());
         }
     }
 
     private void listarPorFuncionario() {
-        int idFuncionario = leerEntero("ID de funcionario: ");
+        int idFuncionario = leerEntero("ID del funcionario: ");
         try {
-            List<Incidencia> lista = facade.listarPorFuncionario(idFuncionario);
-            if (lista.isEmpty()) System.out.println("No hay incidencias para este funcionario.");
+            List<Incidencia> lista = proxy.listarPorFuncionario(idFuncionario);
+            if (lista.isEmpty()) mostrarInfo("No hay incidencias registradas para este funcionario.");
             else lista.forEach(System.out::println);
         } catch (SQLException e) {
-            System.out.println("❌ Error al listar incidencias por funcionario: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar incidencias por funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar incidencias por funcionario: " + e.getMessage());
         }
     }
 
     private void modificarIncidencia() {
-        int idInstancia = leerEntero("ID de incidencia a modificar: ");
+        int id = leerEntero("ID de la incidencia a modificar: ");
         String titulo = leerTexto("Nuevo título: ");
         OffsetDateTime fecha = leerFechaHora("Nueva fecha y hora (YYYY-MM-DDTHH:MM): ");
         String descripcion = leerTexto("Nueva descripción: ");
-        boolean activo = leerBoolean("Está activa? (true/false): ");
+        boolean activo = leerBoolean("¿Está activa? (true/false): ");
         int idFuncionario = leerEntero("Nuevo ID de funcionario: ");
         String lugar = leerTexto("Nuevo lugar: ");
 
-
         try {
-            boolean exito = facade.actualizarIncidencia(idInstancia, titulo, fecha, descripcion, activo, idFuncionario, lugar);
-            if (exito) System.out.println("✅ Incidencia modificada.");
-            else System.out.println("❌ No se pudo modificar la incidencia.");
+            boolean exito = proxy.actualizarIncidencia(id, titulo, fecha, descripcion, activo, idFuncionario, lugar);
+            if (exito) mostrarExito("Incidencia modificada correctamente.");
+            else mostrarError("No se pudo modificar la incidencia.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ Error al modificar incidencia: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al modificar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al modificar incidencia: " + e.getMessage());
         }
     }
 
     private void eliminarIncidencia() {
-        int idInstancia = leerEntero("ID de incidencia a eliminar: ");
+        int id = leerEntero("ID de la incidencia a eliminar: ");
         try {
-            boolean exito = facade.eliminarIncidencia(idInstancia);
-            if (exito) System.out.println("✅ Incidencia eliminada.");
-            else System.out.println("❌ No se pudo eliminar la incidencia.");
+            boolean exito = proxy.eliminarIncidencia(id);
+            if (exito) mostrarExito("Incidencia eliminada correctamente.");
+            else mostrarError("No se pudo eliminar la incidencia.");
+        } catch (SecurityException e) {
+            mostrarError(e.getMessage());
         } catch (SQLException e) {
-            System.out.println("❌ Error al eliminar incidencia: " +
-                    CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
-
-    // ==== Métodos auxiliares ====
-    private int leerEntero(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
-        }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine();
-    }
-
-    private boolean leerBoolean(String mensaje) {
-        System.out.print(mensaje);
-        while (!scanner.hasNextBoolean()) {
-            System.out.print("Ingrese true o false: ");
-            scanner.next();
-        }
-        boolean valor = scanner.nextBoolean();
-        scanner.nextLine(); // limpiar buffer
-        return valor;
-    }
-
-    private OffsetDateTime leerFechaHora(String mensaje) {
-        System.out.print(mensaje);
-        while (true) {
-            try {
-                String input = scanner.nextLine();
-                return OffsetDateTime.parse(input);
-            } catch (Exception e) {
-                System.out.print("Formato inválido. Use YYYY-MM-DDTHH:MM : ");
-            }
+            mostrarError("Error SQL al eliminar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar incidencia: " + e.getMessage());
         }
     }
 }
