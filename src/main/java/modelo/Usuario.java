@@ -1,6 +1,7 @@
 package modelo;
 
 public abstract class Usuario {
+
     private int idUsuario;
     private String cedula;
     private String nombre;
@@ -9,8 +10,20 @@ public abstract class Usuario {
     private String password;
     private String correo;
 
+    // Constructor vacío
     public Usuario() {}
 
+    // Constructor sin ID (para insertar en la BD)
+    public Usuario(String cedula, String nombre, String apellido, String username, String password, String correo) {
+        this.cedula = cedula;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.username = username;
+        this.password = password;
+        this.correo = correo;
+    }
+
+    // Constructor completo
     public Usuario(int idUsuario, String cedula, String nombre, String apellido, String username, String password, String correo) {
         this.idUsuario = idUsuario;
         this.cedula = cedula;
@@ -43,6 +56,7 @@ public abstract class Usuario {
     public String getCorreo() { return correo; }
     public void setCorreo(String correo) { this.correo = correo; }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Usuario{" +
@@ -55,3 +69,4 @@ public abstract class Usuario {
                 '}';
     }
 }
+

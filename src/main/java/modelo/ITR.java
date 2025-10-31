@@ -1,14 +1,15 @@
 package modelo;
 
 public class ITR {
+
     private int idItr;
-    private int idDireccion; // FK hacia Direccion
+    private int idDireccion;
 
     // Constructor vacío
     public ITR() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public ITR(int idDireccion) {
         this.idDireccion = idDireccion;
     }
@@ -36,6 +37,7 @@ public class ITR {
         this.idDireccion = idDireccion;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "ITR{" +

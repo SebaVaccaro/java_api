@@ -1,8 +1,9 @@
 package modelo;
 
 public class PartSeguimiento {
-    private int idParticipante;   // FK hacia Estudiante
-    private int idSeguimiento;    // FK hacia Seguimiento
+
+    private int idParticipante;
+    private int idSeguimiento;
 
     // Constructor vacío
     public PartSeguimiento() {
@@ -31,6 +32,7 @@ public class PartSeguimiento {
         this.idSeguimiento = idSeguimiento;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "PartSeguimiento{" +

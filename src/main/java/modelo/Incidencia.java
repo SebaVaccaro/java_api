@@ -3,6 +3,7 @@ package modelo;
 import java.time.OffsetDateTime;
 
 public class Incidencia extends Instancia {
+
     private String lugar;
 
     // Constructor vacío
@@ -10,7 +11,7 @@ public class Incidencia extends Instancia {
         super();
     }
 
-    // Constructor sin idInstancia (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Incidencia(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, String lugar) {
         super(titulo, fecHora, descripcion, estActivo, idFuncionario);
         this.lugar = lugar;
@@ -22,7 +23,7 @@ public class Incidencia extends Instancia {
         this.lugar = lugar;
     }
 
-    // Getter y Setter
+    // Getters y Setters
     public String getLugar() {
         return lugar;
     }
@@ -31,6 +32,7 @@ public class Incidencia extends Instancia {
         this.lugar = lugar;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Incidencia{" +

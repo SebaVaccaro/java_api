@@ -1,15 +1,16 @@
 package modelo;
 
 public class TeleITR {
+
     private int idTelefono;
     private String numero;
-    private int idItr;  // FK hacia ITR
+    private int idItr;
 
     // Constructor vacío
     public TeleITR() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public TeleITR(String numero, int idItr) {
         this.numero = numero;
         this.idItr = idItr;
@@ -47,6 +48,7 @@ public class TeleITR {
         this.idItr = idItr;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "TeleITR{" +

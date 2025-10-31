@@ -13,6 +13,7 @@ public class LoginServicio {
 
     private final LoginDAOImpl loginDAOImpl;
 
+    // Constructor: inicializa el DAO de login
     public LoginServicio() {
         try {
             this.loginDAOImpl = new LoginDAOImpl();
@@ -21,17 +22,21 @@ public class LoginServicio {
         }
     }
 
+    // 🔹 Método principal de login
     public void login(String username, String password) throws Exception {
+        // Validación de parámetros
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             throw new IllegalArgumentException("Username y password no pueden estar vacíos");
         }
 
+        // Obtener usuario por username
         Usuario usuario = loginDAOImpl.obtenerUsuarioPorUsername(username);
 
         if (usuario == null) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos");
         }
 
+        // Verificar contraseña
         String pass = Encriptador.desencriptar(usuario.getPassword());
         if (!pass.equals(password)) {
             throw new IllegalArgumentException("Usuario o contraseña incorrectos.");
@@ -48,6 +53,7 @@ public class LoginServicio {
                 throw new IllegalArgumentException("No se encontró el estudiante en la base de datos.");
             }
 
+            // Aceptación de políticas si no está activo
             if (!est.isActivo()) {
                 java.util.Scanner sc = new java.util.Scanner(System.in);
                 String opcion;
@@ -70,6 +76,7 @@ public class LoginServicio {
                 }
             }
 
+            // Registrar sesión
             LoginSingleton sesion = LoginSingleton.getInstance();
             sesion.setUsuarioActual(est, "estudiante");
 
@@ -82,6 +89,7 @@ public class LoginServicio {
                 throw new IllegalArgumentException("No se encontró el funcionario en la base de datos.");
             }
 
+            // Aceptación de políticas si no está activo
             if (!func.isActivo()) {
                 java.util.Scanner sc = new java.util.Scanner(System.in);
                 String opcion;
@@ -116,6 +124,7 @@ public class LoginServicio {
                 }
             }
 
+            // Obtener rol y registrar sesión
             RolServicio rolServicio = new RolServicio();
             String nombreRol;
             try {
@@ -126,7 +135,6 @@ public class LoginServicio {
 
             LoginSingleton sesion = LoginSingleton.getInstance();
             sesion.setUsuarioActual(func, nombreRol);
-
 
         } else {
             throw new IllegalArgumentException("No se encontró un tipo de usuario válido para el correo: " + correo);

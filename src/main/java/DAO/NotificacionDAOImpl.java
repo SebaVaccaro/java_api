@@ -8,14 +8,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del DAO para la entidad Notificacion.
+ * Gestiona las operaciones CRUD sobre la tabla 'notificaciones',
+ * que almacena los mensajes generados dentro del sistema.
+ */
 public class NotificacionDAOImpl implements NotificacionDAO {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public NotificacionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear una nueva notificación en la base de datos
     @Override
     public Notificacion crearNotificacion(Notificacion n) throws SQLException {
         String sql = "INSERT INTO notificaciones (id_instancia, asunto, mensaje, destinatario, fec_envio, est_activo) " +
@@ -35,6 +43,7 @@ public class NotificacionDAOImpl implements NotificacionDAO {
         return n;
     }
 
+    // Obtener una notificación específica por su ID
     @Override
     public Notificacion obtenerNotificacion(int id) throws SQLException {
         String sql = "SELECT * FROM notificaciones WHERE id_notificacion = ?";
@@ -57,6 +66,7 @@ public class NotificacionDAOImpl implements NotificacionDAO {
         return n;
     }
 
+    // Listar todas las notificaciones registradas
     @Override
     public List<Notificacion> listarTodas() throws SQLException {
         List<Notificacion> lista = new ArrayList<>();
@@ -78,6 +88,7 @@ public class NotificacionDAOImpl implements NotificacionDAO {
         return lista;
     }
 
+    // Actualizar los datos de una notificación existente
     @Override
     public boolean actualizarNotificacion(Notificacion n) throws SQLException {
         String sql = "UPDATE notificaciones SET id_instancia=?, asunto=?, mensaje=?, destinatario=?, fec_envio=?, est_activo=? " +
@@ -94,6 +105,7 @@ public class NotificacionDAOImpl implements NotificacionDAO {
         }
     }
 
+    // Realizar una baja lógica de una notificación (est_activo = false)
     @Override
     public boolean eliminarNotificacion(int id) throws SQLException {
         String sql = "UPDATE notificaciones SET est_activo=false WHERE id_notificacion=?";

@@ -2,10 +2,10 @@ package algoritmos;
 
 public class Encriptador {
 
-    // Encriptar completo
+    // Encriptar un texto completo reemplazando números y letras por símbolos específicos
     public static String encriptar(String texto) {
         return texto
-                // Números primero
+                // Primero reemplazo de números por combinaciones de símbolos
                 .replace("0", "@!~")
                 .replace("1", "^%&")
                 .replace("2", "#*(")
@@ -16,7 +16,7 @@ public class Encriptador {
                 .replace("7", "<>;")
                 .replace("8", "~`*")
                 .replace("9", "()_")
-                // Letras después
+                // Luego reemplazo de letras minúsculas por cadenas simbólicas únicas
                 .replace("a", "/?.1.?/")
                 .replace("b", "%7%7%")
                 .replace("c", "~c~")
@@ -45,9 +45,10 @@ public class Encriptador {
                 .replace("z", "{z}");
     }
 
+    // Desencriptar un texto previamente encriptado
     public static String desencriptar(String texto) {
         return texto
-                // Números primero
+                // Primero revertir números a su valor original
                 .replace("@!~", "0")
                 .replace("^%&", "1")
                 .replace("#*(", "2")
@@ -58,7 +59,7 @@ public class Encriptador {
                 .replace("<>;", "7")
                 .replace("~`*", "8")
                 .replace("()_", "9")
-                // Letras después
+                // Luego revertir letras a su valor original
                 .replace("/?.1.?/", "a")
                 .replace("%7%7%", "b")
                 .replace("~c~", "c")

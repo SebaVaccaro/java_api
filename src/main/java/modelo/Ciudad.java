@@ -1,6 +1,7 @@
 package modelo;
 
 public class Ciudad {
+
     private int idCiudad;
     private int codPostal;
     private String nombre;
@@ -10,7 +11,7 @@ public class Ciudad {
     public Ciudad() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Ciudad(int codPostal, String nombre, String departamento) {
         this.codPostal = codPostal;
         this.nombre = nombre;
@@ -58,6 +59,7 @@ public class Ciudad {
         this.departamento = departamento;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Ciudad{" +
@@ -68,3 +70,4 @@ public class Ciudad {
                 '}';
     }
 }
+

@@ -10,17 +10,20 @@ import java.util.List;
 
 public class SeguimientoDAOImpl implements SeguimientoDAO {
 
+    // Conexión a la base de datos mediante Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión del Singleton
     public SeguimientoDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Agregar un nuevo seguimiento
     @Override
     public boolean agregar(Seguimiento s) throws SQLException {
         String sql = "INSERT INTO seguimientos (id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo) VALUES (?, ?, ?, ?, ?)";
-
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
+
             if (s.getIdInforme() != null && s.getIdInforme() > 0) {
                 psmt.setInt(1, s.getIdInforme());
             } else {
@@ -41,11 +44,12 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
         }
     }
 
+    // Actualizar un seguimiento existente
     @Override
     public boolean actualizar(Seguimiento s) throws SQLException {
         String sql = "UPDATE seguimientos SET id_informe = ?, id_estudiante = ?, fec_inicio = ?, fec_cierre = ?, est_activo = ? WHERE id_seguimiento = ?";
-
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
+
             if (s.getIdInforme() != null && s.getIdInforme() > 0) {
                 psmt.setInt(1, s.getIdInforme());
             } else {
@@ -68,6 +72,7 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
         }
     }
 
+    // Eliminar un seguimiento por ID
     @Override
     public boolean eliminar(int idSeguimiento) throws SQLException {
         String sql = "DELETE FROM seguimientos WHERE id_seguimiento = ?";
@@ -77,10 +82,10 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
         }
     }
 
+    // Buscar un seguimiento por su ID
     @Override
     public Seguimiento buscarPorId(int idSeguimiento) throws SQLException {
         String sql = "SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo FROM seguimientos WHERE id_seguimiento = ?";
-
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
             psmt.setInt(1, idSeguimiento);
             ResultSet rs = psmt.executeQuery();
@@ -99,15 +104,14 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
                 );
             }
         }
-
         return null;
     }
 
+    // Listar todos los seguimientos
     @Override
     public List<Seguimiento> listarTodos() throws SQLException {
         List<Seguimiento> lista = new ArrayList<>();
         String sql = "SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo FROM seguimientos";
-
         try (Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
 
@@ -126,14 +130,13 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
                 lista.add(s);
             }
         }
-
         return lista;
     }
 
+    // Verifica si un estudiante tiene un seguimiento activo
     @Override
     public boolean tieneSeguimientoActivo(int idEstudiante) throws SQLException {
         String sql = "SELECT COUNT(*) FROM seguimientos WHERE id_estudiante = ? AND est_activo = TRUE";
-
         try (PreparedStatement psmt = conn.prepareStatement(sql)) {
             psmt.setInt(1, idEstudiante);
             ResultSet rs = psmt.executeQuery();
@@ -142,7 +145,6 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
                 return rs.getInt(1) > 0;
             }
         }
-
         return false;
     }
 }

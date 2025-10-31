@@ -10,12 +10,15 @@ import java.util.List;
 
 public class RolDAOImpl implements RolDAO {
 
+    // Conexión única a la base de datos mediante Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public RolDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Agregar un nuevo rol
     @Override
     public boolean agregar(Rol rol) throws SQLException {
         String sql = "INSERT INTO roles (nombre, est_activo) VALUES (?, ?)";
@@ -26,6 +29,7 @@ public class RolDAOImpl implements RolDAO {
         }
     }
 
+    // Actualizar los datos de un rol existente
     @Override
     public boolean actualizar(Rol rol) throws SQLException {
         String sql = "UPDATE roles SET nombre=?, est_activo=? WHERE id_rol=?";
@@ -37,6 +41,7 @@ public class RolDAOImpl implements RolDAO {
         }
     }
 
+    // Eliminar un rol por su ID
     @Override
     public boolean eliminar(int idRol) throws SQLException {
         String sql = "DELETE FROM roles WHERE id_rol=?";
@@ -46,6 +51,7 @@ public class RolDAOImpl implements RolDAO {
         }
     }
 
+    // Buscar un rol por su ID
     @Override
     public Rol buscarPorId(int idRol) throws SQLException {
         String sql = "SELECT id_rol, nombre, est_activo FROM roles WHERE id_rol=?";
@@ -63,6 +69,7 @@ public class RolDAOImpl implements RolDAO {
         return null;
     }
 
+    // Listar todos los roles
     @Override
     public List<Rol> listarTodos() throws SQLException {
         List<Rol> lista = new ArrayList<>();

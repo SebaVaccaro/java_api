@@ -1,16 +1,16 @@
 package modelo;
 
-
 public class Grupo {
+
     private int idGrupo;
     private String nomGrupo;
-    private int idCarrera; // FK hacia Carrera
+    private int idCarrera;
 
     // Constructor vacío
     public Grupo() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Grupo(String nomGrupo, int idCarrera) {
         this.nomGrupo = nomGrupo;
         this.idCarrera = idCarrera;
@@ -48,6 +48,7 @@ public class Grupo {
         this.idCarrera = idCarrera;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Grupo{" +
@@ -57,3 +58,4 @@ public class Grupo {
                 '}';
     }
 }
+

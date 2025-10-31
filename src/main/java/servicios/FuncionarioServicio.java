@@ -22,15 +22,14 @@ public class FuncionarioServicio {
     private final FuncionarioDAO funcionarioDAO;
     private final Connection conn;
 
+    // Constructor: inicializa DAOs y conexión
     public FuncionarioServicio() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
         this.usuarioDAO = new UsuarioDAOImpl();
         this.funcionarioDAO = new FuncionarioDAOImpl(conn);
     }
 
-    // =====================================================
-    // CREAR FUNCIONARIO
-    // =====================================================
+    // Registrar funcionario con transacción
     public Funcionario registrarFuncionario(String ci, String nombre, String apellido,
                                             String username, String password, int idRol,
                                             LocalDate fechaNacimiento) throws Exception {
@@ -40,14 +39,11 @@ public class FuncionarioServicio {
         if (!ValidadorEdad.esMayorDe18(fechaNacimiento)) throw new Exception("Debe ser mayor de 18 años");
         if (!ValidadorPassword.validar(password)) throw new Exception("La contraseña debe tener al menos 8 caracteres");
 
-        // Generar correo y encriptar contraseña
         String correo = generarCorreoFuncionario(nombre, apellido);
         String passEnc = Encriptador.encriptar(password);
 
-        // Crear objeto Funcionario
         Funcionario f = new Funcionario(0, ci, nombre, apellido, username, passEnc, correo, idRol, false);
 
-        // Transacción atómica
         try {
             conn.setAutoCommit(false);
 
@@ -67,24 +63,17 @@ public class FuncionarioServicio {
         return f;
     }
 
-    // =====================================================
-    // ACTUALIZAR FUNCIONARIO
-    // =====================================================
+    // Actualizar funcionario con transacción
     public boolean actualizarFuncionario(int idUsuario, String ci, String nombre, String apellido,
                                          String username, String password, String correo,
                                          int idRol, boolean activo) throws Exception {
 
-        // Validaciones
         if (!ValidadorCI.validarCI(ci)) throw new Exception("CI inválida");
         if (!ValidadorPassword.validar(password)) throw new Exception("La contraseña debe tener al menos 8 caracteres");
 
-        // Encriptar contraseña
         String passEnc = Encriptador.encriptar(password);
-
-        // Crear objeto Funcionario
         Funcionario f = new Funcionario(idUsuario, ci, nombre, apellido, username, passEnc, correo, idRol, activo);
 
-        // Transacción atómica
         boolean exito = false;
         try {
             conn.setAutoCommit(false);
@@ -109,37 +98,27 @@ public class FuncionarioServicio {
         return exito;
     }
 
-    // =====================================================
-    // OBTENER FUNCIONARIO POR ID
-    // =====================================================
+    // Obtener funcionario por ID
     public Funcionario obtenerPorId(int idUsuario) throws SQLException {
         return funcionarioDAO.obtenerFuncionario(idUsuario);
     }
 
-    // =====================================================
-    // LISTAR FUNCIONARIOS
-    // =====================================================
+    // Listar todos los funcionarios
     public List<Funcionario> listarTodos() throws SQLException {
         return funcionarioDAO.listarFuncionarios();
     }
 
-    // =====================================================
-    // DESACTIVAR FUNCIONARIO
-    // =====================================================
+    // Desactivar funcionario
     public boolean desactivarFuncionario(int idUsuario) throws SQLException {
         return funcionarioDAO.eliminarFuncionario(idUsuario);
     }
 
-    // =====================================================
-    // VERIFICAR SI ESTÁ ACTIVO
-    // =====================================================
+    // Verificar si el funcionario está activo
     public boolean estaActivo(int idUsuario) throws SQLException {
         return funcionarioDAO.estaActivo(idUsuario);
     }
 
-    // =====================================================
-    // UTILIDAD: generar correo institucional
-    // =====================================================
+    // Generar correo institucional
     private String generarCorreoFuncionario(String nombre, String apellido) {
         return nombre.toLowerCase() + "." + apellido.toLowerCase() + "@funcionarios.utec.edu.uy";
     }

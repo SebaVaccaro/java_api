@@ -1,6 +1,7 @@
 package modelo;
 
 public class Carrera {
+
     private int idCarrera;
     private String codigo;
     private String nombre;
@@ -10,7 +11,7 @@ public class Carrera {
     public Carrera() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Carrera(String codigo, String nombre, String plan) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -58,6 +59,7 @@ public class Carrera {
         this.plan = plan;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Carrera{" +

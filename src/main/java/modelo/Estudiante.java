@@ -1,11 +1,15 @@
 package modelo;
 
 public class Estudiante extends Usuario {
+
     private int idGrupo;
     private boolean estActivo;
 
-    public Estudiante() {}
+    // Constructor vacío
+    public Estudiante() {
+    }
 
+    // Constructor completo
     public Estudiante(int idUsuario, String cedula, String nombre, String apellido, String username, String password, String correo,
                       int idGrupo, boolean estActivo) {
         super(idUsuario, cedula, nombre, apellido, username, password, correo);
@@ -13,6 +17,7 @@ public class Estudiante extends Usuario {
         this.estActivo = estActivo;
     }
 
+    // Getters y Setters
     public int getIdGrupo() {
         return idGrupo;
     }
@@ -21,7 +26,6 @@ public class Estudiante extends Usuario {
         this.idGrupo = idGrupo;
     }
 
-    // ✅ Métodos renombrados
     public boolean isActivo() {
         return estActivo;
     }
@@ -30,6 +34,7 @@ public class Estudiante extends Usuario {
         this.estActivo = estActivo;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Estudiante{" + super.toString() +
@@ -38,3 +43,4 @@ public class Estudiante extends Usuario {
                 '}';
     }
 }
+

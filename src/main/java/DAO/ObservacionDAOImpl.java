@@ -11,12 +11,15 @@ import java.util.List;
 
 public class ObservacionDAOImpl implements ObservacionDAO {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public ObservacionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear una nueva observación en la base de datos
     @Override
     public Observacion crearObservacion(Observacion o) throws SQLException {
         String sql = "INSERT INTO observaciones (id_funcionario, id_estudiante, titulo, contenido, fec_hora, est_activo) " +
@@ -36,6 +39,7 @@ public class ObservacionDAOImpl implements ObservacionDAO {
         return o;
     }
 
+    // Obtener una observación por su ID
     @Override
     public Observacion obtenerObservacion(int id) throws SQLException {
         String sql = "SELECT * FROM observaciones WHERE id_observacion = ?";
@@ -58,6 +62,7 @@ public class ObservacionDAOImpl implements ObservacionDAO {
         return o;
     }
 
+    // Listar todas las observaciones
     @Override
     public List<Observacion> listarTodas() throws SQLException {
         List<Observacion> lista = new ArrayList<>();
@@ -79,6 +84,7 @@ public class ObservacionDAOImpl implements ObservacionDAO {
         return lista;
     }
 
+    // Actualizar una observación existente
     @Override
     public boolean actualizarObservacion(Observacion o) throws SQLException {
         String sql = "UPDATE observaciones SET id_funcionario=?, id_estudiante=?, titulo=?, contenido=?, fec_hora=?, est_activo=? " +
@@ -95,6 +101,7 @@ public class ObservacionDAOImpl implements ObservacionDAO {
         }
     }
 
+    // Baja lógica de una observación (est_activo = false)
     @Override
     public boolean eliminarObservacion(int id) throws SQLException {
         String sql = "UPDATE observaciones SET est_activo=false WHERE id_observacion=?";
@@ -104,3 +111,4 @@ public class ObservacionDAOImpl implements ObservacionDAO {
         }
     }
 }
+

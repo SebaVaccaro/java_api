@@ -1,8 +1,9 @@
 package modelo;
 
 public class Recibe {
-    private int idNotificacion;  // FK hacia Notificacion
-    private int idUsuario;       // FK hacia Usuario
+
+    private int idNotificacion;
+    private int idUsuario;
 
     // Constructor vacío
     public Recibe() {
@@ -31,6 +32,7 @@ public class Recibe {
         this.idUsuario = idUsuario;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Recibe{" +

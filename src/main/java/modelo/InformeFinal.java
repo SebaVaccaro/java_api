@@ -3,6 +3,7 @@ package modelo;
 import java.time.LocalDate;
 
 public class InformeFinal {
+
     private int idInfFinal;
     private String contenido;
     private int valoracion;
@@ -12,7 +13,7 @@ public class InformeFinal {
     public InformeFinal() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public InformeFinal(String contenido, int valoracion, LocalDate fecCreacion) {
         this.contenido = contenido;
         this.valoracion = valoracion;
@@ -60,6 +61,7 @@ public class InformeFinal {
         this.fecCreacion = fecCreacion;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "InformeFinal{" +
@@ -70,3 +72,4 @@ public class InformeFinal {
                 '}';
     }
 }
+

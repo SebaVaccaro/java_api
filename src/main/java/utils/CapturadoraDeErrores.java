@@ -2,16 +2,15 @@ package utils;
 
 import java.sql.SQLException;
 
-public class CapturadoraDeErrores{
+public class CapturadoraDeErrores {
 
-    /**
-     * Traduce los errores SQL de PostgreSQL a mensajes claros para el usuario.
-     */
     public static String obtenerMensajeAmigable(SQLException ex) {
+        // Obtener el código SQLSTATE del error y el mensaje original
         String sqlState = ex.getSQLState();
         String mensaje = ex.getMessage();
 
         // === ERRORES DE CLAVES ÚNICAS (SQLSTATE 23505) ===
+        // Se producen cuando se intenta insertar un valor duplicado en una columna que debe ser única
         if ("23505".equals(sqlState)) {
             if (mensaje.contains("usuarios_cedula_key")) {
                 return "Ya existe un usuario registrado con esa cédula.";
@@ -33,6 +32,7 @@ public class CapturadoraDeErrores{
         }
 
         // === ERRORES DE LLAVES FORÁNEAS (SQLSTATE 23503) ===
+        // Se producen cuando se viola la integridad referencial (relaciones entre tablas)
         if ("23503".equals(sqlState)) {
             if (mensaje.contains("fk_estudiantes_grupos")) {
                 return "El grupo seleccionado no existe o fue eliminado.";
@@ -86,6 +86,7 @@ public class CapturadoraDeErrores{
         }
 
         // === ERRORES DE CHECK CONSTRAINTS (SQLSTATE 23514) ===
+        // Se producen cuando los datos no cumplen las reglas definidas en la base de datos
         if ("23514".equals(sqlState)) {
             if (mensaje.contains("ci_uy_check")) {
                 return "La cédula debe tener 7 u 8 dígitos.";
@@ -97,16 +98,19 @@ public class CapturadoraDeErrores{
         }
 
         // === ERRORES DE CAMPOS NULOS (SQLSTATE 23502) ===
+        // Se producen cuando se intenta insertar o actualizar un campo obligatorio con valor nulo
         if ("23502".equals(sqlState)) {
             return "Faltan datos obligatorios. Verifique los campos requeridos.";
         }
 
         // === ERRORES DE CONEXIÓN (SQLSTATE 08003) ===
+        // Se producen cuando no hay conexión activa con la base de datos
         if ("08003".equals(sqlState)) {
             return "Error de conexión con la base de datos. Intente más tarde.";
         }
 
         // === CASO GENÉRICO ===
+        // Si no se reconoce el código SQLSTATE, se retorna el mensaje original para depuración
         return "Error inesperado: " + mensaje;
     }
 }

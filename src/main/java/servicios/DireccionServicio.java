@@ -10,43 +10,44 @@ public class DireccionServicio {
 
     private final DireccionDAOImpl direccionDAOImpl;
 
+    // Constructor: inicializa el DAO de dirección
     public DireccionServicio() throws SQLException {
         this.direccionDAOImpl = new DireccionDAOImpl();
     }
 
-    // 🔹 Crear nueva dirección
+    // Crear nueva dirección
     public Direccion crearDireccion(String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) throws SQLException {
         Direccion direccion = new Direccion(calle, numPuerta, numApto, idCiudad, idUsuario);
         return direccionDAOImpl.crearDireccion(direccion);
     }
 
-    // 🔹 Obtener dirección por ID
+    // Obtener dirección por ID
     public Direccion obtenerPorId(int idDireccion) throws SQLException {
         return direccionDAOImpl.obtenerDireccion(idDireccion);
     }
 
-    // 🔹 Listar todas las direcciones
+    // Listar todas las direcciones
     public List<Direccion> listarTodas() throws SQLException {
         return direccionDAOImpl.listarDirecciones();
     }
 
-    // 🔹 Listar por usuario
+    // Listar direcciones por usuario
     public List<Direccion> listarPorUsuario(int idUsuario) throws SQLException {
         return direccionDAOImpl.listarPorUsuario(idUsuario);
     }
 
-    // 🔹 Listar por ciudad
+    // Listar direcciones por ciudad
     public List<Direccion> listarPorCiudad(int idCiudad) throws SQLException {
         return direccionDAOImpl.listarPorCiudad(idCiudad);
     }
 
-    // 🔹 Actualizar dirección
+    // Actualizar dirección
     public boolean actualizarDireccion(int idDireccion, String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) throws SQLException {
         Direccion direccion = new Direccion(idDireccion, calle, numPuerta, numApto, idCiudad, idUsuario);
         return direccionDAOImpl.actualizarDireccion(direccion);
     }
 
-    // 🔹 Eliminar dirección
+    // Eliminar dirección
     public boolean eliminarDireccion(int idDireccion) throws SQLException {
         return direccionDAOImpl.eliminarDireccion(idDireccion);
     }

@@ -11,11 +11,12 @@ public class NotificacionServicio {
 
     private final NotificacionDAOImpl notificacionDAOImpl;
 
+    // Constructor: inicializa el DAO de notificaciones
     public NotificacionServicio() throws SQLException {
         this.notificacionDAOImpl = new NotificacionDAOImpl();
     }
 
-    // 🔹 Crear notificación con validaciones simples
+    // Crear notificación con validaciones básicas
     public Notificacion crearNotificacion(int idInstancia, String asunto, String mensaje, String destinatario, LocalDate fecEnvio) throws SQLException {
         if (asunto == null || asunto.isBlank()) {
             throw new IllegalArgumentException("El asunto no puede estar vacío.");
@@ -34,17 +35,17 @@ public class NotificacionServicio {
         return notificacionDAOImpl.crearNotificacion(n);
     }
 
-    // 🔹 Obtener notificación por id
+    // Obtener notificación por ID
     public Notificacion obtenerNotificacion(int id) throws SQLException {
         return notificacionDAOImpl.obtenerNotificacion(id);
     }
 
-    // 🔹 Listar todas las notificaciones activas
+    // Listar todas las notificaciones activas
     public List<Notificacion> listarTodas() throws SQLException {
         return notificacionDAOImpl.listarTodas();
     }
 
-    // 🔹 Actualizar notificación
+    // Actualizar notificación existente
     public boolean actualizarNotificacion(Notificacion n) throws SQLException {
         if (n.getIdNotificacion() <= 0) {
             throw new IllegalArgumentException("ID de notificación inválido.");
@@ -52,7 +53,7 @@ public class NotificacionServicio {
         return notificacionDAOImpl.actualizarNotificacion(n);
     }
 
-    // 🔹 Baja lógica de notificación
+    // Desactivar (baja lógica) notificación
     public boolean desactivarNotificacion(int id) throws SQLException {
         return notificacionDAOImpl.eliminarNotificacion(id);
     }

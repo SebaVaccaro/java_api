@@ -1,18 +1,19 @@
 package modelo;
 
 public class Direccion {
+
     private int idDireccion;
     private String calle;
     private String numPuerta;
     private String numApto;
-    private int idCiudad;  // FK hacia Ciudad
-    private int idUsuario; // FK hacia Usuario
+    private int idCiudad;
+    private int idUsuario;
 
     // Constructor vacío
     public Direccion() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Direccion(String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) {
         this.calle = calle;
         this.numPuerta = numPuerta;
@@ -80,6 +81,7 @@ public class Direccion {
         this.idUsuario = idUsuario;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Direccion{" +

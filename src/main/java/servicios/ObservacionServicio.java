@@ -11,11 +11,12 @@ public class ObservacionServicio {
 
     private final ObservacionDAOImpl observacionDAOImpl;
 
+    // Constructor: inicializa el DAO de observaciones
     public ObservacionServicio() throws SQLException {
         this.observacionDAOImpl = new ObservacionDAOImpl();
     }
 
-    // 🔹 Crear observación con validaciones
+    // Crear observación con validaciones
     public Observacion crearObservacion(int idFuncionario, int idEstudiante, String titulo, String contenido, OffsetDateTime fecHora) throws SQLException {
         if (titulo == null || titulo.isBlank()) {
             throw new IllegalArgumentException("El título no puede estar vacío.");
@@ -31,17 +32,17 @@ public class ObservacionServicio {
         return observacionDAOImpl.crearObservacion(o);
     }
 
-    // 🔹 Obtener observación por id
+    // Obtener observación por ID
     public Observacion obtenerObservacion(int id) throws SQLException {
         return observacionDAOImpl.obtenerObservacion(id);
     }
 
-    // 🔹 Listar todas las observaciones
+    // Listar todas las observaciones
     public List<Observacion> listarTodas() throws SQLException {
         return observacionDAOImpl.listarTodas();
     }
 
-    // 🔹 Actualizar observación
+    // Actualizar observación existente
     public boolean actualizarObservacion(Observacion o) throws SQLException {
         if (o.getIdObservacion() <= 0) {
             throw new IllegalArgumentException("ID de observación inválido.");
@@ -49,8 +50,9 @@ public class ObservacionServicio {
         return observacionDAOImpl.actualizarObservacion(o);
     }
 
-    // 🔹 Baja lógica (desactivar observación)
+    // Desactivar (baja lógica) observación
     public boolean desactivarObservacion(int id) throws SQLException {
         return observacionDAOImpl.eliminarObservacion(id);
     }
 }
+

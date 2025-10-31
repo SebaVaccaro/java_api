@@ -11,12 +11,15 @@ import java.sql.SQLException;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
 
+    // Conexión a la base de datos
     final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public UsuarioDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Insertar un nuevo usuario en la base de datos y devolver su ID generado
     @Override
     public int insertarUsuario(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO usuarios (cedula, nombre, apellido, username, password, correo) VALUES (?, ?, ?, ?, ?, ?) RETURNING id_usuario";
@@ -33,6 +36,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
         throw new SQLException("No se pudo obtener el id generado de usuario.");
     }
 
+    // Actualizar los datos de un usuario existente
     @Override
     public boolean actualizarUsuario(Usuario usuario) throws SQLException {
         String sql = "UPDATE usuarios SET cedula=?, nombre=?, apellido=?, username=?, password=?, correo=? WHERE id_usuario=?";

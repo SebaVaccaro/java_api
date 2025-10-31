@@ -13,17 +13,19 @@ public class FuncionarioProxy {
     private final FuncionarioServicio funcionarioServicio;
     private final ValidarUsuario validarUsuario;
 
+    // Constructor: inicializa el servicio de funcionarios y el validador de usuario
     public FuncionarioProxy() throws Exception {
         this.funcionarioServicio = new FuncionarioServicio();
         this.validarUsuario = new ValidarUsuario();
     }
 
+    // Crear funcionario (solo administradores)
     public Funcionario crearFuncionario(String cedula, String nombre, String apellido, String username,
                                         String password, int idRol, LocalDate fechaNacimiento)
             throws Exception {
 
         if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo los usuarios con rol ADMINISTRADOR pueden crear funcionarios.");
+            throw new SecurityException("Solo administradores pueden crear funcionarios.");
         }
 
         try {
@@ -33,14 +35,17 @@ public class FuncionarioProxy {
         }
     }
 
+    // Obtener funcionario por ID (sin restricción de permisos)
     public Funcionario obtenerPorId(int idUsuario) throws SQLException {
         return funcionarioServicio.obtenerPorId(idUsuario);
     }
 
+    // Listar todos los funcionarios (sin restricción de permisos)
     public List<Funcionario> listarTodos() throws SQLException {
         return funcionarioServicio.listarTodos();
     }
 
+    // Actualizar funcionario (sin restricción de permisos)
     public boolean actualizarFuncionario(int idUsuario, String cedula, String nombre, String apellido,
                                          String username, String password, String correo,
                                          int idRol, boolean estActivo) throws SQLException {
@@ -51,13 +56,15 @@ public class FuncionarioProxy {
         }
     }
 
+    // Desactivar funcionario (solo administradores)
     public boolean desactivarFuncionario(int idUsuario) throws Exception {
         if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo los usuarios con rol ADMINISTRADOR pueden desactivar funcionarios.");
+            throw new SecurityException("Solo administradores pueden desactivar funcionarios.");
         }
         return funcionarioServicio.desactivarFuncionario(idUsuario);
     }
 
+    // Verificar si un funcionario está activo (sin restricción de permisos)
     public boolean estaActivo(int idUsuario) throws SQLException {
         return funcionarioServicio.estaActivo(idUsuario);
     }

@@ -10,12 +10,15 @@ import java.util.List;
 
 public class PerteneceDAOImpl implements PerteneceDAO {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public PerteneceDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Agregar una relación entre carrera e ITR
     @Override
     public boolean agregar(Pertenece p) throws SQLException {
         String sql = "INSERT INTO pertenece (id_carrera, id_itr) VALUES (?, ?)";
@@ -26,6 +29,7 @@ public class PerteneceDAOImpl implements PerteneceDAO {
         }
     }
 
+    // Eliminar una relación entre carrera e ITR
     @Override
     public boolean eliminar(Pertenece p) throws SQLException {
         String sql = "DELETE FROM pertenece WHERE id_carrera=? AND id_itr=?";
@@ -36,6 +40,7 @@ public class PerteneceDAOImpl implements PerteneceDAO {
         }
     }
 
+    // Listar todas las relaciones carrera-ITR
     @Override
     public List<Pertenece> listarTodos() throws SQLException {
         List<Pertenece> lista = new ArrayList<>();
@@ -52,6 +57,7 @@ public class PerteneceDAOImpl implements PerteneceDAO {
         return lista;
     }
 
+    // Listar todos los ITR asociados a una carrera
     @Override
     public List<Integer> listarItrPorCarrera(int idCarrera) throws SQLException {
         List<Integer> itrs = new ArrayList<>();
@@ -66,6 +72,7 @@ public class PerteneceDAOImpl implements PerteneceDAO {
         return itrs;
     }
 
+    // Listar todas las carreras asociadas a un ITR
     @Override
     public List<Integer> listarCarrerasPorItr(int idItr) throws SQLException {
         List<Integer> carreras = new ArrayList<>();

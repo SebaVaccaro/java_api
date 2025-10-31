@@ -10,12 +10,15 @@ import java.util.List;
 
 public class CiudadDAOImpl implements CiudadDAO {
 
+    // Conexión a la base de datos obtenida mediante el patrón Singleton
     private final Connection conn;
 
+    // Constructor: inicializa la conexión al crear una instancia del DAO
     public CiudadDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear una nueva ciudad y devolver el objeto con su ID generado
     @Override
     public Ciudad crearCiudad(Ciudad ciudad) throws SQLException {
         String sql = "INSERT INTO ciudades (cod_postal, nombre, departamento) " +
@@ -32,6 +35,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         return ciudad;
     }
 
+    // Obtener una ciudad específica según su ID
     @Override
     public Ciudad obtenerCiudad(int idCiudad) throws SQLException {
         String sql = "SELECT * FROM ciudades WHERE id_ciudad = ?";
@@ -51,6 +55,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         return ciudad;
     }
 
+    // Listar todas las ciudades registradas, ordenadas alfabéticamente por nombre
     @Override
     public List<Ciudad> listarCiudades() throws SQLException {
         List<Ciudad> ciudades = new ArrayList<>();
@@ -69,6 +74,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         return ciudades;
     }
 
+    // Obtener una ciudad por su nombre (sin importar mayúsculas o minúsculas)
     @Override
     public Ciudad obtenerPorNombre(String nombre) throws SQLException {
         String sql = "SELECT * FROM ciudades WHERE LOWER(nombre) = LOWER(?)";
@@ -88,6 +94,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         return ciudad;
     }
 
+    // Listar todas las ciudades pertenecientes a un departamento específico
     @Override
     public List<Ciudad> listarPorDepartamento(String departamento) throws SQLException {
         List<Ciudad> ciudades = new ArrayList<>();
@@ -107,6 +114,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         return ciudades;
     }
 
+    // Actualizar los datos de una ciudad existente
     @Override
     public boolean actualizarCiudad(Ciudad ciudad) throws SQLException {
         String sql = "UPDATE ciudades SET cod_postal = ?, nombre = ?, departamento = ? WHERE id_ciudad = ?";
@@ -119,6 +127,7 @@ public class CiudadDAOImpl implements CiudadDAO {
         }
     }
 
+    // Eliminar una ciudad de la base de datos según su ID
     @Override
     public boolean eliminarCiudad(int idCiudad) throws SQLException {
         String sql = "DELETE FROM ciudades WHERE id_ciudad = ?";

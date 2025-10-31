@@ -1,7 +1,7 @@
 package modelo;
 
-
 public class Rol {
+
     private int idRol;
     private String nombre;
     private boolean estActivo;
@@ -10,7 +10,7 @@ public class Rol {
     public Rol() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Rol(String nombre, boolean estActivo) {
         this.nombre = nombre;
         this.estActivo = estActivo;
@@ -48,6 +48,7 @@ public class Rol {
         this.estActivo = estActivo;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Rol{" +
@@ -57,3 +58,4 @@ public class Rol {
                 '}';
     }
 }
+

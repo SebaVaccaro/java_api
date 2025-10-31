@@ -8,14 +8,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del DAO para la entidad InformeFinal.
+ * Gestiona las operaciones CRUD sobre la tabla 'info_final',
+ * que almacena los informes finales generados por los usuarios o procesos del sistema.
+ */
 public class InformeFinalDAOImpl implements InformeFinalDAO {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public InformeFinalDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear un nuevo informe final en la base de datos
     @Override
     public InformeFinal crearInformeFinal(InformeFinal informe) throws SQLException {
         String sql = "INSERT INTO info_final (contenido, valoracion, fec_creacion) VALUES (?, ?, ?) RETURNING id_inf_final";
@@ -31,6 +39,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
         return informe;
     }
 
+    // Obtener un informe final específico por su ID
     @Override
     public InformeFinal obtenerInformeFinal(int idInfFinal) throws SQLException {
         String sql = "SELECT * FROM info_final WHERE id_inf_final = ?";
@@ -50,6 +59,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
         return informe;
     }
 
+    // Listar todos los informes finales registrados
     @Override
     public List<InformeFinal> listarInformesFinales() throws SQLException {
         List<InformeFinal> informes = new ArrayList<>();
@@ -68,6 +78,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
         return informes;
     }
 
+    // Actualizar los datos de un informe final existente
     @Override
     public boolean actualizarInformeFinal(InformeFinal informe) throws SQLException {
         String sql = "UPDATE info_final SET contenido = ?, valoracion = ?, fec_creacion = ? WHERE id_inf_final = ?";
@@ -80,6 +91,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
         }
     }
 
+    // Eliminar físicamente un informe final por su ID
     @Override
     public boolean eliminarInformeFinal(int idInfFinal) throws SQLException {
         String sql = "DELETE FROM info_final WHERE id_inf_final = ?";

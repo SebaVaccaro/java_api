@@ -10,11 +10,12 @@ public class RecibeServicio {
 
     private final RecibeDAOImpl dao;
 
+    // Constructor: inicializa el DAO de Recibe
     public RecibeServicio() throws SQLException {
         this.dao = new RecibeDAOImpl();
     }
 
-    // 🔹 Agregar relación Notificación ↔ Usuario
+    // Agregar relación Notificación ↔ Usuario
     public boolean agregarRecibe(int idNotificacion, int idUsuario) throws SQLException {
         if (idNotificacion <= 0 || idUsuario <= 0) {
             throw new IllegalArgumentException("ID de notificación o usuario inválido.");
@@ -23,7 +24,7 @@ public class RecibeServicio {
         return dao.agregar(r);
     }
 
-    // 🔹 Eliminar relación Notificación ↔ Usuario
+    // Eliminar relación Notificación ↔ Usuario
     public boolean eliminarRecibe(int idNotificacion, int idUsuario) throws SQLException {
         if (idNotificacion <= 0 || idUsuario <= 0) {
             throw new IllegalArgumentException("ID de notificación o usuario inválido.");
@@ -32,12 +33,12 @@ public class RecibeServicio {
         return dao.eliminar(r);
     }
 
-    // 🔹 Listar todas las relaciones
+    // Listar todas las relaciones
     public List<Recibe> listarTodos() throws SQLException {
         return dao.listarTodos();
     }
 
-    // 🔹 Listar usuarios que reciben una notificación específica
+    // Listar usuarios que reciben una notificación específica
     public List<Integer> listarUsuariosPorNotificacion(int idNotificacion) throws SQLException {
         if (idNotificacion <= 0) {
             throw new IllegalArgumentException("ID de notificación inválido.");
@@ -45,7 +46,7 @@ public class RecibeServicio {
         return dao.listarUsuariosPorNotificacion(idNotificacion);
     }
 
-    // 🔹 Listar notificaciones recibidas por un usuario específico
+    // Listar notificaciones recibidas por un usuario específico
     public List<Integer> listarNotificacionesPorUsuario(int idUsuario) throws SQLException {
         if (idUsuario <= 0) {
             throw new IllegalArgumentException("ID de usuario inválido.");

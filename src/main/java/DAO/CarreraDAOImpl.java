@@ -10,12 +10,15 @@ import java.util.List;
 
 public class CarreraDAOImpl implements CarreraDAO {
 
+    // Conexión a la base de datos mediante el patrón Singleton
     private final Connection conn;
 
+    // Constructor: inicializa la conexión al crear la instancia del DAO
     public CarreraDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear una nueva carrera y devolver el objeto con su ID generado
     @Override
     public Carrera crearCarrera(Carrera carrera) throws SQLException {
         String sql = "INSERT INTO carreras (codigo, nombre, plan) VALUES (?, ?, ?) RETURNING id_carrera";
@@ -31,6 +34,7 @@ public class CarreraDAOImpl implements CarreraDAO {
         return carrera;
     }
 
+    // Obtener una carrera específica según su ID
     @Override
     public Carrera obtenerCarrera(int idCarrera) throws SQLException {
         String sql = "SELECT * FROM carreras WHERE id_carrera = ?";
@@ -50,6 +54,7 @@ public class CarreraDAOImpl implements CarreraDAO {
         return carrera;
     }
 
+    // Listar todas las carreras registradas en la base de datos
     @Override
     public List<Carrera> listarCarreras() throws SQLException {
         List<Carrera> carreras = new ArrayList<>();
@@ -68,6 +73,7 @@ public class CarreraDAOImpl implements CarreraDAO {
         return carreras;
     }
 
+    // Obtener una carrera utilizando su código único
     @Override
     public Carrera obtenerPorCodigo(String codigo) throws SQLException {
         String sql = "SELECT * FROM carreras WHERE codigo = ?";
@@ -87,6 +93,7 @@ public class CarreraDAOImpl implements CarreraDAO {
         return carrera;
     }
 
+    // Actualizar los datos de una carrera existente
     @Override
     public boolean actualizarCarrera(Carrera carrera) throws SQLException {
         String sql = "UPDATE carreras SET codigo = ?, nombre = ?, plan = ? WHERE id_carrera = ?";
@@ -99,6 +106,7 @@ public class CarreraDAOImpl implements CarreraDAO {
         }
     }
 
+    // Eliminar una carrera de la base de datos según su ID
     @Override
     public boolean eliminarCarrera(int idCarrera) throws SQLException {
         String sql = "DELETE FROM carreras WHERE id_carrera = ?";

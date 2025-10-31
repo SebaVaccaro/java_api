@@ -10,42 +10,34 @@ public class PartSeguimientoProxy {
 
     private final PartSeguimientoServicio partSeguimientoServicio;
 
+    // Constructor: inicializa el servicio de participante-seguimiento
     public PartSeguimientoProxy() throws SQLException {
         this.partSeguimientoServicio = new PartSeguimientoServicio();
     }
 
-    // ============================================================
-    // AGREGAR PARTICIPANTE A UN SEGUIMIENTO
-    // ============================================================
+    // Agregar participante a un seguimiento (sin restricción de permisos)
     public boolean agregarParticipante(int idParticipante, int idSeguimiento) throws SQLException {
         return partSeguimientoServicio.agregarParticipante(idParticipante, idSeguimiento);
     }
 
-    // ============================================================
-    // ELIMINAR PARTICIPANTE DE UN SEGUIMIENTO
-    // ============================================================
+    // Eliminar participante de un seguimiento (sin restricción de permisos)
     public boolean eliminarParticipante(int idParticipante, int idSeguimiento) throws SQLException {
         return partSeguimientoServicio.eliminarParticipante(idParticipante, idSeguimiento);
     }
 
-    // ============================================================
-    // LISTAR TODAS LAS RELACIONES PARTICIPANTE-SEGUIMIENTO
-    // ============================================================
+    // Listar todas las relaciones participante-seguimiento (sin restricción de permisos)
     public List<PartSeguimiento> listarTodos() throws SQLException {
         return partSeguimientoServicio.listarTodos();
     }
 
-    // ============================================================
-    // LISTAR SEGUIMIENTOS DE UN PARTICIPANTE
-    // ============================================================
+    // Listar seguimientos de un participante (sin restricción de permisos)
     public List<Integer> listarSeguimientosPorParticipante(int idParticipante) throws SQLException {
         return partSeguimientoServicio.listarSeguimientosPorParticipante(idParticipante);
     }
 
-    // ============================================================
-    // LISTAR PARTICIPANTES DE UN SEGUIMIENTO
-    // ============================================================
+    // Listar participantes de un seguimiento (sin restricción de permisos)
     public List<Integer> listarParticipantesPorSeguimiento(int idSeguimiento) throws SQLException {
         return partSeguimientoServicio.listarParticipantesPorSeguimiento(idSeguimiento);
     }
 }
+

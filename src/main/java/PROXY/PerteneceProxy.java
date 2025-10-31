@@ -10,42 +10,34 @@ public class PerteneceProxy {
 
     private final PerteneceServicio perteneceServicio;
 
+    // Constructor: inicializa el servicio de relaciones Carrera ↔ ITR
     public PerteneceProxy() throws SQLException {
         this.perteneceServicio = new PerteneceServicio();
     }
 
-    // ============================================================
-    // AGREGAR RELACIÓN CARRERA ↔ ITR
-    // ============================================================
+    // Agregar relación Carrera ↔ ITR (sin restricción de permisos)
     public boolean agregarPertenece(int idCarrera, int idItr) throws SQLException {
         return perteneceServicio.agregarPertenece(idCarrera, idItr);
     }
 
-    // ============================================================
-    // ELIMINAR RELACIÓN CARRERA ↔ ITR
-    // ============================================================
+    // Eliminar relación Carrera ↔ ITR (sin restricción de permisos)
     public boolean eliminarPertenece(int idCarrera, int idItr) throws SQLException {
         return perteneceServicio.eliminarPertenece(idCarrera, idItr);
     }
 
-    // ============================================================
-    // LISTAR TODAS LAS RELACIONES
-    // ============================================================
+    // Listar todas las relaciones (sin restricción de permisos)
     public List<Pertenece> listarTodos() throws SQLException {
         return perteneceServicio.listarTodos();
     }
 
-    // ============================================================
-    // LISTAR ITRs DE UNA CARRERA
-    // ============================================================
+    // Listar ITRs de una carrera específica (sin restricción de permisos)
     public List<Integer> listarItrPorCarrera(int idCarrera) throws SQLException {
         return perteneceServicio.listarItrPorCarrera(idCarrera);
     }
 
-    // ============================================================
-    // LISTAR CARRERAS DE UN ITR
-    // ============================================================
+    // Listar carreras de un ITR específico (sin restricción de permisos)
     public List<Integer> listarCarrerasPorItr(int idItr) throws SQLException {
         return perteneceServicio.listarCarrerasPorItr(idItr);
     }
 }
+

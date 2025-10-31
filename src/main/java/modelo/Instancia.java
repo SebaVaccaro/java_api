@@ -3,6 +3,7 @@ package modelo;
 import java.time.OffsetDateTime;
 
 public abstract class Instancia {
+
     private int idInstancia;
     private String titulo;
     private OffsetDateTime fecHora;
@@ -11,9 +12,10 @@ public abstract class Instancia {
     private int idFuncionario;
 
     // Constructor vacío
-    public Instancia() {}
+    public Instancia() {
+    }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Instancia(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario) {
         this.titulo = titulo;
         this.fecHora = fecHora;
@@ -81,6 +83,7 @@ public abstract class Instancia {
         this.idFuncionario = idFuncionario;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Instancia{" +
@@ -93,5 +96,4 @@ public abstract class Instancia {
                 '}';
     }
 }
-
 

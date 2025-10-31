@@ -8,14 +8,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del DAO para la entidad ITR.
+ * Gestiona las operaciones CRUD sobre la tabla 'itr',
+ * que almacena los registros de Institutos de Tecnología Regional.
+ */
 public class ITRDAOImpl implements ITRDAO {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public ITRDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear un nuevo ITR en la base de datos
     @Override
     public ITR crearITR(ITR itr) throws SQLException {
         String sql = "INSERT INTO itr (id_direccion) VALUES (?) RETURNING id_itr";
@@ -29,6 +37,7 @@ public class ITRDAOImpl implements ITRDAO {
         return itr;
     }
 
+    // Obtener un ITR específico por su ID
     @Override
     public ITR obtenerITR(int idItr) throws SQLException {
         String sql = "SELECT * FROM itr WHERE id_itr = ?";
@@ -46,6 +55,7 @@ public class ITRDAOImpl implements ITRDAO {
         return itr;
     }
 
+    // Listar todos los ITR registrados
     @Override
     public List<ITR> listarTodos() throws SQLException {
         List<ITR> lista = new ArrayList<>();
@@ -62,6 +72,7 @@ public class ITRDAOImpl implements ITRDAO {
         return lista;
     }
 
+    // Actualizar los datos de un ITR existente
     @Override
     public boolean actualizarITR(ITR itr) throws SQLException {
         String sql = "UPDATE itr SET id_direccion = ? WHERE id_itr = ?";
@@ -72,6 +83,7 @@ public class ITRDAOImpl implements ITRDAO {
         }
     }
 
+    // Eliminar físicamente un ITR de la base de datos por su ID
     @Override
     public boolean eliminarITR(int idItr) throws SQLException {
         String sql = "DELETE FROM itr WHERE id_itr = ?";

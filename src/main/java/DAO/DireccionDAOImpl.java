@@ -10,12 +10,15 @@ import java.util.List;
 
 public class DireccionDAOImpl implements DireccionDAO {
 
+    // Conexión a la base de datos obtenida mediante el patrón Singleton
     private final Connection conn;
 
+    // Constructor: inicializa la conexión al crear una instancia del DAO
     public DireccionDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear una nueva dirección y devolver el objeto con su ID generado
     @Override
     public Direccion crearDireccion(Direccion direccion) throws SQLException {
         String sql = "INSERT INTO direcciones (calle, num_puerta, num_apto, id_ciudad, id_usuario) " +
@@ -34,6 +37,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return direccion;
     }
 
+    // Obtener una dirección específica según su ID
     @Override
     public Direccion obtenerDireccion(int idDireccion) throws SQLException {
         String sql = "SELECT * FROM direcciones WHERE id_direccion = ?";
@@ -55,6 +59,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return direccion;
     }
 
+    // Listar todas las direcciones registradas en la base de datos
     @Override
     public List<Direccion> listarDirecciones() throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
@@ -75,6 +80,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return direcciones;
     }
 
+    // Listar todas las direcciones asociadas a un usuario específico
     @Override
     public List<Direccion> listarPorUsuario(int idUsuario) throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
@@ -96,6 +102,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return direcciones;
     }
 
+    // Listar todas las direcciones pertenecientes a una ciudad específica
     @Override
     public List<Direccion> listarPorCiudad(int idCiudad) throws SQLException {
         List<Direccion> direcciones = new ArrayList<>();
@@ -117,6 +124,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         return direcciones;
     }
 
+    // Actualizar los datos de una dirección existente
     @Override
     public boolean actualizarDireccion(Direccion direccion) throws SQLException {
         String sql = "UPDATE direcciones SET calle = ?, num_puerta = ?, num_apto = ?, id_ciudad = ?, id_usuario = ? " +
@@ -132,6 +140,7 @@ public class DireccionDAOImpl implements DireccionDAO {
         }
     }
 
+    // Eliminar una dirección de la base de datos según su ID
     @Override
     public boolean eliminarDireccion(int idDireccion) throws SQLException {
         String sql = "DELETE FROM direcciones WHERE id_direccion = ?";

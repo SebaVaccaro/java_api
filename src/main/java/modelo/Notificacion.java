@@ -3,19 +3,20 @@ package modelo;
 import java.time.LocalDate;
 
 public class Notificacion {
+
     private int idNotificacion;
-    private int idInstancia;    // FK hacia Instancia
+    private int idInstancia;
     private String asunto;
     private String mensaje;
     private String destinatario;
     private LocalDate fecEnvio;
-    private boolean estActivo;  // corresponde a activo_flag
+    private boolean estActivo;
 
     // Constructor vacío
     public Notificacion() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Notificacion(int idInstancia, String asunto, String mensaje, String destinatario, LocalDate fecEnvio, boolean estActivo) {
         this.idInstancia = idInstancia;
         this.asunto = asunto;
@@ -93,6 +94,7 @@ public class Notificacion {
         this.estActivo = estActivo;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Notificacion{" +

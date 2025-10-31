@@ -10,11 +10,12 @@ public class PerteneceServicio {
 
     private final PerteneceDAOImpl dao;
 
+    // Constructor: inicializa el DAO de Pertenece
     public PerteneceServicio() throws SQLException {
         this.dao = new PerteneceDAOImpl();
     }
 
-    // 🔹 Agregar relación Carrera ↔ ITR
+    // Agregar relación Carrera ↔ ITR
     public boolean agregarPertenece(int idCarrera, int idItr) throws SQLException {
         if (idCarrera <= 0 || idItr <= 0) {
             throw new IllegalArgumentException("ID de carrera o ITR inválido.");
@@ -23,7 +24,7 @@ public class PerteneceServicio {
         return dao.agregar(p);
     }
 
-    // 🔹 Eliminar relación Carrera ↔ ITR
+    // Eliminar relación Carrera ↔ ITR
     public boolean eliminarPertenece(int idCarrera, int idItr) throws SQLException {
         if (idCarrera <= 0 || idItr <= 0) {
             throw new IllegalArgumentException("ID de carrera o ITR inválido.");
@@ -32,12 +33,12 @@ public class PerteneceServicio {
         return dao.eliminar(p);
     }
 
-    // 🔹 Listar todas las relaciones
+    // Listar todas las relaciones
     public List<Pertenece> listarTodos() throws SQLException {
         return dao.listarTodos();
     }
 
-    // 🔹 Listar ITRs de una carrera
+    // Listar ITRs de una carrera
     public List<Integer> listarItrPorCarrera(int idCarrera) throws SQLException {
         if (idCarrera <= 0) {
             throw new IllegalArgumentException("ID de carrera inválido.");
@@ -45,7 +46,7 @@ public class PerteneceServicio {
         return dao.listarItrPorCarrera(idCarrera);
     }
 
-    // 🔹 Listar carreras de un ITR
+    // Listar carreras de un ITR
     public List<Integer> listarCarrerasPorItr(int idItr) throws SQLException {
         if (idItr <= 0) {
             throw new IllegalArgumentException("ID de ITR inválido.");
@@ -53,3 +54,4 @@ public class PerteneceServicio {
         return dao.listarCarrerasPorItr(idItr);
     }
 }
+

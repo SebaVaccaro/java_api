@@ -16,12 +16,14 @@ public class InstanciaComunServicio {
     private final InstanciaDAOImpl baseDao;
     private final InstanciaComunDAOImpl comunDao;
 
+    // Constructor: inicializa DAOs y conexión
     public InstanciaComunServicio() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
         this.baseDao = new InstanciaDAOImpl();
         this.comunDao = new InstanciaComunDAOImpl();
     }
 
+    // Crear nueva instancia común
     public InstanciaComun crearInstanciaComun(String titulo, OffsetDateTime fecHora, String descripcion,
                                               boolean estActivo, int idFuncionario, int idSeguimiento) throws SQLException {
         InstanciaComun instancia = new InstanciaComun(0, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
@@ -44,18 +46,22 @@ public class InstanciaComunServicio {
         }
     }
 
+    // Obtener instancia común por ID
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
         return comunDao.obtenerInstanciaComun(idInstancia);
     }
 
+    // Listar todas las instancias comunes
     public List<InstanciaComun> listarInstanciasComunes() throws SQLException {
         return comunDao.listarInstanciasComunes();
     }
 
+    // Listar instancias comunes por seguimiento
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
         return comunDao.listarPorSeguimiento(idSeguimiento);
     }
 
+    // Actualizar instancia común
     public boolean actualizarInstanciaComun(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion,
                                             boolean estActivo, int idFuncionario, int idSeguimiento) throws SQLException {
         InstanciaComun instancia = new InstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
@@ -80,6 +86,7 @@ public class InstanciaComunServicio {
         }
     }
 
+    // Eliminar instancia común (baja lógica)
     public boolean eliminarInstanciaComun(int idInstancia) throws SQLException {
         return baseDao.desactivarInstancia(idInstancia);
     }

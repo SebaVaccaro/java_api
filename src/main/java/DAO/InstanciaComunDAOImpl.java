@@ -8,15 +8,22 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del DAO para la entidad InstanciaComun.
+ * Gestiona las operaciones CRUD sobre la tabla 'inst_comun',
+ * que representa un tipo de instancia dentro del sistema.
+ */
 public class InstanciaComunDAOImpl {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public InstanciaComunDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Insertar en subtabla instancia_comun
+    // Crear una nueva instancia común en la base de datos
     public void insertarInstanciaComun(InstanciaComun instancia) throws SQLException {
         String sql = "INSERT INTO inst_comun (id_instancia, id_seguimiento) VALUES (?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -26,7 +33,8 @@ public class InstanciaComunDAOImpl {
         }
     }
 
-    // 🔹 Obtener por id
+    // Obtener una instancia común específica por su ID
+    // Recupera datos desde las tablas 'instancias' y 'inst_comun'
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
         String sql = """
             SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, i.id_funcionario,
@@ -54,7 +62,7 @@ public class InstanciaComunDAOImpl {
         return null;
     }
 
-    // 🔹 Listar todas
+    // Listar todas las instancias comunes registradas
     public List<InstanciaComun> listarInstanciasComunes() throws SQLException {
         List<InstanciaComun> lista = new ArrayList<>();
         String sql = """
@@ -83,7 +91,7 @@ public class InstanciaComunDAOImpl {
         return lista;
     }
 
-    // 🔹 Listar InstanciaComun por seguimiento
+    // Listar todas las instancias comunes asociadas a un seguimiento específico
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
         List<InstanciaComun> lista = new ArrayList<>();
         String sql = """
@@ -114,7 +122,7 @@ public class InstanciaComunDAOImpl {
         return lista;
     }
 
-    // 🔹 Actualizar solo tabla comun
+    // Actualizar los datos de una instancia común en la tabla 'inst_comun'
     public boolean actualizarInstanciaComun(InstanciaComun instanciaComun) throws SQLException {
         String sql = "UPDATE inst_comun SET id_seguimiento=? WHERE id_instancia=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -124,7 +132,7 @@ public class InstanciaComunDAOImpl {
         }
     }
 
-    // 🔹 Baja lógica
+    // Realizar una baja lógica de la instancia (est_activo = false)
     public boolean eliminarInstanciaComun(int idInstancia) throws SQLException {
         String sql = "UPDATE instancias SET est_activo=false WHERE id_instancia=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

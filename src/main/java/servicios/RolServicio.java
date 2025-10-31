@@ -10,11 +10,12 @@ public class RolServicio {
 
     private final RolDAOImpl dao;
 
+    // Constructor: inicializa el DAO de Rol
     public RolServicio() throws SQLException {
         this.dao = new RolDAOImpl();
     }
 
-    // 🔹 Crear nuevo rol
+    // Crear nuevo rol
     public boolean agregarRol(String nombre, boolean estActivo) throws SQLException {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre del rol no puede estar vacío.");
@@ -23,7 +24,7 @@ public class RolServicio {
         return dao.agregar(rol);
     }
 
-    // 🔹 Actualizar rol existente
+    // Actualizar rol existente
     public boolean actualizarRol(int idRol, String nombre, boolean estActivo) throws SQLException {
         if (idRol <= 0) {
             throw new IllegalArgumentException("ID de rol inválido.");
@@ -35,7 +36,7 @@ public class RolServicio {
         return dao.actualizar(rol);
     }
 
-    // 🔹 Eliminar rol
+    // Eliminar rol
     public boolean eliminarRol(int idRol) throws SQLException {
         if (idRol <= 0) {
             throw new IllegalArgumentException("ID de rol inválido.");
@@ -43,7 +44,7 @@ public class RolServicio {
         return dao.eliminar(idRol);
     }
 
-    // 🔹 Buscar rol por ID
+    // Buscar rol por ID
     public Rol buscarPorId(int idRol) throws SQLException {
         if (idRol <= 0) {
             throw new IllegalArgumentException("ID de rol inválido.");
@@ -51,7 +52,7 @@ public class RolServicio {
         return dao.buscarPorId(idRol);
     }
 
-    // 🔹 Listar todos los roles
+    // Listar todos los roles
     public List<Rol> listarTodos() throws SQLException {
         return dao.listarTodos();
     }

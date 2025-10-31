@@ -1,18 +1,19 @@
 package modelo;
 
 public class ArchivoAdjunto {
+
     private int idArchivoAdjunto;
-    private int idUsuario;      // FK hacia Usuario
-    private int idEstudiante;   // FK hacia Estudiante
+    private int idUsuario;
+    private int idEstudiante;
     private String ruta;
     private String categoria;
-    private boolean estActivo;  // corresponde a activo_flag
+    private boolean estActivo;
 
     // Constructor vacío
     public ArchivoAdjunto() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public ArchivoAdjunto(int idUsuario, int idEstudiante, String ruta, String categoria, boolean estActivo) {
         this.idUsuario = idUsuario;
         this.idEstudiante = idEstudiante;
@@ -80,6 +81,7 @@ public class ArchivoAdjunto {
         this.estActivo = estActivo;
     }
 
+    // Representación del objeto en texto
     @Override
     public String toString() {
         return "ArchivoAdjunto{" +

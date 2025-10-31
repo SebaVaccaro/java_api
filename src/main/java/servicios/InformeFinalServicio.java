@@ -11,33 +11,34 @@ public class InformeFinalServicio {
 
     private final InformeFinalDAOImpl informeDAO;
 
+    // Constructor: inicializa DAO
     public InformeFinalServicio() throws SQLException {
         this.informeDAO = new InformeFinalDAOImpl();
     }
 
-    // 🔹 Crear informe final
+    // Crear nuevo informe final
     public InformeFinal crearInforme(String contenido, int valoracion, LocalDate fecCreacion) throws SQLException {
         InformeFinal informe = new InformeFinal(contenido, valoracion, fecCreacion);
         return informeDAO.crearInformeFinal(informe);
     }
 
-    // 🔹 Obtener informe por ID
+    // Obtener informe por ID
     public InformeFinal obtenerInforme(int idInfFinal) throws SQLException {
         return informeDAO.obtenerInformeFinal(idInfFinal);
     }
 
-    // 🔹 Listar todos los informes
+    // Listar todos los informes
     public List<InformeFinal> listarInformes() throws SQLException {
         return informeDAO.listarInformesFinales();
     }
 
-    // 🔹 Actualizar informe
+    // Actualizar informe
     public boolean actualizarInforme(int idInfFinal, String contenido, int valoracion, LocalDate fecCreacion) throws SQLException {
         InformeFinal informe = new InformeFinal(idInfFinal, contenido, valoracion, fecCreacion);
         return informeDAO.actualizarInformeFinal(informe);
     }
 
-    // 🔹 Eliminar informe
+    // Eliminar informe
     public boolean eliminarInforme(int idInfFinal) throws SQLException {
         return informeDAO.eliminarInformeFinal(idInfFinal);
     }

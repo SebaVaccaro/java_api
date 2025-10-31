@@ -3,18 +3,19 @@ package modelo;
 import java.time.LocalDate;
 
 public class Seguimiento {
+
     private int idSeguimiento;
-    private Integer idInforme;      // FK hacia InformeFinal (puede ser null)
-    private int idEstudiante;       // FK hacia Estudiante
+    private Integer idInforme;
+    private int idEstudiante;
     private LocalDate fecInicio;
-    private LocalDate fecCierre;    // puede ser null
-    private boolean estActivo;      // corresponde a activo_flag
+    private LocalDate fecCierre;
+    private boolean estActivo;
 
     // Constructor vacío
     public Seguimiento() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Seguimiento(Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {
         this.idInforme = idInforme;
         this.idEstudiante = idEstudiante;
@@ -82,6 +83,7 @@ public class Seguimiento {
         this.estActivo = estActivo;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Seguimiento{" +

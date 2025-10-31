@@ -12,14 +12,13 @@ public class IncidenciaProxy {
     private final IncidenciaServicio incidenciaServicio;
     private final ValidarUsuario validarUsuario;
 
+    // Constructor: inicializa el servicio de incidencias y el validador de usuario
     public IncidenciaProxy() throws Exception {
         this.incidenciaServicio = new IncidenciaServicio();
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // ============================================================
-    // CREAR INCIDENCIA - solo propietario
-    // ============================================================
+    // Crear incidencia (solo propietario)
     public Incidencia crearIncidencia(String titulo,
                                       OffsetDateTime fecHora,
                                       String descripcion,
@@ -27,42 +26,33 @@ public class IncidenciaProxy {
                                       int idFuncionario,
                                       String lugar) throws Exception {
         if (!validarUsuario.esPropietario(idFuncionario)) {
-            throw new SecurityException("No tiene permiso para crear esta incidencia");
+            throw new SecurityException("Solo el propietario puede crear esta incidencia.");
         }
         return incidenciaServicio.crearIncidencia(titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
     }
 
-    // ============================================================
-    // OBTENER INCIDENCIA - adm, psico o propietario
-    // ============================================================
+    // Obtener incidencia por ID (sin restricción de permisos, puede validar luego según rol)
     public Incidencia obtenerIncidencia(int idIncidencia) throws Exception {
-        //if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuarioPropietario)) {
-        //    throw new SecurityException("No tiene permiso para ver esta incidencia");
-        //}
         return incidenciaServicio.obtenerIncidencia(idIncidencia);
     }
 
-    // ============================================================
-    // LISTAR
-    // ============================================================
+    // Listar todas las incidencias (solo administradores o psicopedagogos)
     public List<Incidencia> listarIncidencias() throws Exception {
         if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("No tiene permiso para listar incidencias de funcionarios");
+            throw new SecurityException("Solo administradores o psicopedagogos pueden listar incidencias.");
         }
         return incidenciaServicio.listarIncidencias();
     }
 
-    // Listar por funcionario - solo adm o psico
+    // Listar incidencias por funcionario (solo administradores o psicopedagogos)
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws Exception {
         if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("No tiene permiso para listar incidencias de funcionarios");
+            throw new SecurityException("Solo administradores o psicopedagogos pueden listar incidencias de un funcionario.");
         }
         return incidenciaServicio.listarPorFuncionario(idFuncionario);
     }
 
-    // ============================================================
-    // ACTUALIZAR INCIDENCIA - solo propietario
-    // ============================================================
+    // Actualizar incidencia (solo propietario)
     public boolean actualizarIncidencia(int idIncidencia,
                                         String titulo,
                                         OffsetDateTime fecHora,
@@ -71,18 +61,18 @@ public class IncidenciaProxy {
                                         int idFuncionario,
                                         String lugar) throws Exception {
         if (!validarUsuario.esPropietario(idFuncionario)) {
-            throw new SecurityException("No tiene permiso para actualizar esta incidencia");
+            throw new SecurityException("Solo el propietario puede actualizar esta incidencia.");
         }
         return incidenciaServicio.actualizarIncidencia(idIncidencia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
     }
 
-    // ============================================================
-    // ELIMINAR INCIDENCIA - solo administrador
-    // ============================================================
+    // Eliminar incidencia (solo administradores)
     public boolean eliminarIncidencia(int idIncidencia) throws Exception {
         if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("No tiene permiso para eliminar esta incidencia");
+            throw new SecurityException("Solo administradores pueden eliminar esta incidencia.");
         }
         return incidenciaServicio.eliminarIncidencia(idIncidencia);
     }
 }
+
+

@@ -10,12 +10,15 @@ import java.util.List;
 
 public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
 
+    // Conexión a la base de datos obtenida mediante el patrón Singleton
     private final Connection conn;
 
+    // Constructor: inicializa la conexión al crear una instancia del DAO
     public ArchivoAdjuntoDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Crear un nuevo archivo adjunto y devolver el objeto con su ID generado
     @Override
     public ArchivoAdjunto crearArchivoAdjunto(ArchivoAdjunto archivo) throws SQLException {
         String sql = "INSERT INTO arch_adjuntos (id_usuario, id_estudiante, ruta, categoria, est_activo) " +
@@ -35,6 +38,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         return archivo;
     }
 
+    // Obtener un archivo adjunto específico por su ID
     @Override
     public ArchivoAdjunto obtenerArchivoAdjunto(int idArchivo) throws SQLException {
         String sql = "SELECT * FROM arch_adjuntos WHERE id_archivo_adjunto = ?";
@@ -56,6 +60,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         return archivo;
     }
 
+    // Listar todos los archivos adjuntos que se encuentran activos
     @Override
     public List<ArchivoAdjunto> listarArchivosAdjuntosActivos() throws SQLException {
         List<ArchivoAdjunto> archivos = new ArrayList<>();
@@ -76,6 +81,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         return archivos;
     }
 
+    // Listar todos los archivos activos pertenecientes a un estudiante específico
     @Override
     public List<ArchivoAdjunto> listarPorEstudiante(int idEstudiante) throws SQLException {
         List<ArchivoAdjunto> archivos = new ArrayList<>();
@@ -97,6 +103,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         return archivos;
     }
 
+    // Actualizar los datos de un archivo adjunto existente
     @Override
     public boolean actualizarArchivoAdjunto(ArchivoAdjunto archivo) throws SQLException {
         String sql = "UPDATE arch_adjuntos SET id_usuario=?, id_estudiante=?, ruta=?, categoria=?, est_activo=? " +
@@ -112,6 +119,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         }
     }
 
+    // Realizar una baja lógica (desactivar un archivo sin eliminarlo físicamente)
     @Override
     public boolean eliminarArchivoAdjunto(int idArchivo) throws SQLException {
         String sql = "UPDATE arch_adjuntos SET est_activo = false WHERE id_archivo_adjunto = ?";
@@ -121,6 +129,7 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         }
     }
 
+    // Eliminar físicamente un archivo adjunto de la base de datos
     @Override
     public boolean eliminarFisico(int idArchivo) throws SQLException {
         String sql = "DELETE FROM arch_adjuntos WHERE id_archivo_adjunto = ?";

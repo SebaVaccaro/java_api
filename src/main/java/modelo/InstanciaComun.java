@@ -3,14 +3,15 @@ package modelo;
 import java.time.OffsetDateTime;
 
 public class InstanciaComun extends Instancia {
-    private int idSeguimiento;  // FK hacia Seguimiento
+
+    private int idSeguimiento;
 
     // Constructor vacío
     public InstanciaComun() {
         super();
     }
 
-    // Constructor sin idInstancia (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public InstanciaComun(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, int idSeguimiento) {
         super(titulo, fecHora, descripcion, estActivo, idFuncionario);
         this.idSeguimiento = idSeguimiento;
@@ -22,7 +23,7 @@ public class InstanciaComun extends Instancia {
         this.idSeguimiento = idSeguimiento;
     }
 
-    // Getter y Setter
+    // Getters y Setters
     public int getIdSeguimiento() {
         return idSeguimiento;
     }
@@ -31,6 +32,7 @@ public class InstanciaComun extends Instancia {
         this.idSeguimiento = idSeguimiento;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "InstanciaComun{" +

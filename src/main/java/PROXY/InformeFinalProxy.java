@@ -12,55 +12,47 @@ public class InformeFinalProxy {
     private final InformeFinalServicio informeService;
     private final ValidarUsuario validarUsuario;
 
+    // Constructor: inicializa el servicio de informes finales y el validador de usuario
     public InformeFinalProxy() throws Exception {
         this.informeService = new InformeFinalServicio();
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // ============================================================
-    // CREAR INFORME FINAL
-    // ============================================================
+    // Crear informe final (solo propietario)
     public InformeFinal crearInforme(String contenido, int valoracion, LocalDate fecCreacion, int idUsuarioPropietario) throws Exception {
         if (!validarUsuario.esPropietario(idUsuarioPropietario)) {
-            throw new SecurityException("No tiene permiso para crear este informe");
+            throw new SecurityException("Solo el propietario puede crear este informe.");
         }
         return informeService.crearInforme(contenido, valoracion, fecCreacion);
     }
 
-    // ============================================================
-    // OBTENER INFORME FINAL - adm, psico o propietario
-    // ============================================================
+    // Obtener informe por ID (administrador, psicopedagogo o propietario)
     public InformeFinal obtenerInforme(int idInfFinal) throws Exception {
         return informeService.obtenerInforme(idInfFinal);
     }
 
-    // ============================================================
-    // LISTAR INFORMES FINALES - solo adm o psico
-    // ============================================================
+    // Listar todos los informes (solo administradores o psicopedagogos)
     public List<InformeFinal> listarInformes() throws Exception {
         if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("No tiene permiso para listar informes");
+            throw new SecurityException("Solo administradores o psicopedagogos pueden listar informes.");
         }
         return informeService.listarInformes();
     }
 
-    // ============================================================
-    // ACTUALIZAR INFORME FINAL - solo adm o psico
-    // ============================================================
+    // Actualizar informe final (solo administradores o psicopedagogos)
     public boolean actualizarInforme(int idInfFinal, String contenido, int valoracion, LocalDate fecCreacion) throws Exception {
         if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("No tiene permiso para actualizar este informe");
+            throw new SecurityException("Solo administradores o psicopedagogos pueden actualizar este informe.");
         }
         return informeService.actualizarInforme(idInfFinal, contenido, valoracion, fecCreacion);
     }
 
-    // ============================================================
-    // ELIMINAR INFORME FINAL - solo adm
-    // ============================================================
+    // Eliminar informe final (solo administradores)
     public boolean eliminarInforme(int idInfFinal) throws Exception {
         if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("No tiene permiso para eliminar este informe");
+            throw new SecurityException("Solo administradores pueden eliminar este informe.");
         }
         return informeService.eliminarInforme(idInfFinal);
     }
 }
+

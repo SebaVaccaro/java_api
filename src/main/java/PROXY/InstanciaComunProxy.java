@@ -9,45 +9,39 @@ import java.util.List;
 
 public class InstanciaComunProxy {
 
-    private final InstanciaComunServicio instanciaComunServicio;
+    private final InstanciaComunServicio instanciaServicio;
 
+    // Constructor: inicializa el servicio de instancias comunes
     public InstanciaComunProxy() throws SQLException {
-        this.instanciaComunServicio = new InstanciaComunServicio();
+        this.instanciaServicio = new InstanciaComunServicio();
     }
 
-    // ============================================================
-    // CREAR INSTANCIA COMÚN
-    // ============================================================
+    // Crear instancia común (sin restricción de permisos)
     public InstanciaComun crearInstanciaComun(String titulo,
                                               OffsetDateTime fecHora,
                                               String descripcion,
                                               boolean estActivo,
                                               int idFuncionario,
                                               int idSeguimiento) throws SQLException {
-        return instanciaComunServicio.crearInstanciaComun(titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
+        return instanciaServicio.crearInstanciaComun(titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
     }
 
-    // ============================================================
-    // OBTENER POR INSTANCIA
-    // ============================================================
+    // Obtener instancia común por ID (sin restricción de permisos)
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
-        return instanciaComunServicio.obtenerInstanciaComun(idInstancia);
+        return instanciaServicio.obtenerInstanciaComun(idInstancia);
     }
 
-    // ============================================================
-    // LISTAR
-    // ============================================================
+    // Listar todas las instancias comunes (sin restricción de permisos)
     public List<InstanciaComun> listarInstanciasComunes() throws SQLException {
-        return instanciaComunServicio.listarInstanciasComunes();
+        return instanciaServicio.listarInstanciasComunes();
     }
 
+    // Listar instancias comunes por seguimiento (sin restricción de permisos)
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
-        return instanciaComunServicio.listarPorSeguimiento(idSeguimiento);
+        return instanciaServicio.listarPorSeguimiento(idSeguimiento);
     }
 
-    // ============================================================
-    // ACTUALIZAR INSTANCIA COMÚN
-    // ============================================================
+    // Actualizar instancia común (sin restricción de permisos)
     public boolean actualizarInstanciaComun(int idInstancia,
                                             String titulo,
                                             OffsetDateTime fecHora,
@@ -55,13 +49,11 @@ public class InstanciaComunProxy {
                                             boolean estActivo,
                                             int idFuncionario,
                                             int idSeguimiento) throws SQLException {
-        return instanciaComunServicio.actualizarInstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
+        return instanciaServicio.actualizarInstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
     }
 
-    // ============================================================
-    // ELIMINAR / DESACTIVAR INSTANCIA COMÚN
-    // ============================================================
+    // Eliminar instancia común (sin restricción de permisos)
     public boolean eliminarInstanciaComun(int idInstancia) throws SQLException {
-        return instanciaComunServicio.eliminarInstanciaComun(idInstancia);
+        return instanciaServicio.eliminarInstanciaComun(idInstancia);
     }
 }

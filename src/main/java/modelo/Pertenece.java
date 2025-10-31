@@ -1,8 +1,9 @@
 package modelo;
 
 public class Pertenece {
-    private int idCarrera;  // FK hacia Carrera
-    private int idItr;      // FK hacia ITR
+
+    private int idCarrera;
+    private int idItr;
 
     // Constructor vacío
     public Pertenece() {
@@ -31,6 +32,7 @@ public class Pertenece {
         this.idItr = idItr;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Pertenece{" +
@@ -39,3 +41,4 @@ public class Pertenece {
                 '}';
     }
 }
+

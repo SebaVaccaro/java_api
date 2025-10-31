@@ -12,75 +12,67 @@ public class SeguimientoServicio {
     private final SeguimientoDAOImpl dao;
     private final EstudianteServicio estudianteServicio;
 
+    // Constructor: inicializa DAO de seguimiento y servicio de estudiante
     public SeguimientoServicio() throws SQLException {
         this.dao = new SeguimientoDAOImpl();
         this.estudianteServicio = new EstudianteServicio();
     }
 
-    // ==========================================================
-    // 🔹 AGREGAR SEGUIMIENTO
-    // ==========================================================
+    // Agregar seguimiento
     public boolean agregarSeguimiento(Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) throws SQLException {
         validarCampos(idEstudiante, fecInicio);
         Seguimiento s = new Seguimiento(idInforme, idEstudiante, fecInicio, fecCierre, estActivo);
         return dao.agregar(s);
     }
 
-    // ➤ Sobrecarga sin idInforme ni fecCierre
+    // Sobrecarga sin idInforme ni fecCierre
     public boolean agregarSeguimiento(int idEstudiante, LocalDate fecInicio, boolean estActivo) throws SQLException {
         validarCampos(idEstudiante, fecInicio);
         Seguimiento s = new Seguimiento(null, idEstudiante, fecInicio, null, estActivo);
         return dao.agregar(s);
     }
 
-    // ==========================================================
-    // 🔹 ACTUALIZAR SEGUIMIENTO
-    // ==========================================================
+    // Actualizar seguimiento
     public boolean actualizarSeguimiento(int idSeguimiento, Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) throws SQLException {
         validarCamposActualizacion(idSeguimiento, idEstudiante, fecInicio);
         Seguimiento s = new Seguimiento(idSeguimiento, idInforme, idEstudiante, fecInicio, fecCierre, estActivo);
         return dao.actualizar(s);
     }
 
-    // ➤ Sobrecarga sin idInforme ni fecCierre
+    // Sobrecarga sin idInforme ni fecCierre
     public boolean actualizarSeguimiento(int idSeguimiento, int idEstudiante, LocalDate fecInicio, boolean estActivo) throws SQLException {
         validarCamposActualizacion(idSeguimiento, idEstudiante, fecInicio);
         Seguimiento s = new Seguimiento(idSeguimiento, null, idEstudiante, fecInicio, null, estActivo);
         return dao.actualizar(s);
     }
 
-    // ==========================================================
-    // 🔹 ELIMINAR / BUSCAR / LISTAR
-    // ==========================================================
+    // Eliminar seguimiento
     public boolean eliminarSeguimiento(int idSeguimiento) throws SQLException {
         if (idSeguimiento <= 0)
             throw new IllegalArgumentException("ID de seguimiento inválido.");
         return dao.eliminar(idSeguimiento);
     }
 
+    // Buscar seguimiento por ID
     public Seguimiento buscarPorId(int idSeguimiento) throws SQLException {
         if (idSeguimiento <= 0)
             throw new IllegalArgumentException("ID de seguimiento inválido.");
         return dao.buscarPorId(idSeguimiento);
     }
 
+    // Listar todos los seguimientos
     public List<Seguimiento> listarTodos() throws SQLException {
         return dao.listarTodos();
     }
 
-    // ==========================================================
-    // 🔹 MÉTODOS PRIVADOS DE VALIDACIÓN
-    // ==========================================================
+    // Métodos privados de validación
     private void validarCampos(int idEstudiante, LocalDate fecInicio) throws SQLException {
         if (idEstudiante <= 0)
             throw new IllegalArgumentException("ID de estudiante inválido.");
         if (fecInicio == null)
             throw new IllegalArgumentException("Fecha de inicio requerida.");
 
-        // Verificar que el estudiante exista
         validarEstudianteExiste(idEstudiante);
-
-        // Verificar que no tenga seguimiento activo
         validarNoTieneSeguimientoActivo(idEstudiante);
     }
 

@@ -10,11 +10,12 @@ public class PartInstanciaServicio {
 
     private final PartInstanciaDAOImpl dao;
 
+    // Constructor: inicializa el DAO de PartInstancia
     public PartInstanciaServicio() throws SQLException {
         this.dao = new PartInstanciaDAOImpl();
     }
 
-    // 🔹 Agregar participante a una instancia
+    // Agregar participante a una instancia
     public boolean agregarParticipante(int idParticipante, int idInstancia) throws SQLException {
         if (idParticipante <= 0 || idInstancia <= 0) {
             throw new IllegalArgumentException("ID de participante o instancia inválido.");
@@ -23,7 +24,7 @@ public class PartInstanciaServicio {
         return dao.agregarParticipante(pi);
     }
 
-    // 🔹 Eliminar participante de una instancia
+    // Eliminar participante de una instancia
     public boolean eliminarParticipante(int idParticipante, int idInstancia) throws SQLException {
         if (idParticipante <= 0 || idInstancia <= 0) {
             throw new IllegalArgumentException("ID de participante o instancia inválido.");
@@ -32,12 +33,12 @@ public class PartInstanciaServicio {
         return dao.eliminarParticipante(pi);
     }
 
-    // 🔹 Listar todas las relaciones participante-instancia
+    // Listar todas las relaciones participante-instancia
     public List<PartInstancia> listarTodos() throws SQLException {
         return dao.listarTodos();
     }
 
-    // 🔹 Listar instancias de un participante
+    // Listar instancias de un participante
     public List<Integer> listarInstanciasPorParticipante(int idParticipante) throws SQLException {
         if (idParticipante <= 0) {
             throw new IllegalArgumentException("ID de participante inválido.");
@@ -45,7 +46,7 @@ public class PartInstanciaServicio {
         return dao.listarInstanciasPorParticipante(idParticipante);
     }
 
-    // 🔹 Listar participantes de una instancia
+    // Listar participantes de una instancia
     public List<Integer> listarParticipantesPorInstancia(int idInstancia) throws SQLException {
         if (idInstancia <= 0) {
             throw new IllegalArgumentException("ID de instancia inválido.");

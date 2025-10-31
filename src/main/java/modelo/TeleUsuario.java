@@ -6,15 +6,11 @@ public class TeleUsuario {
     private String numero;
     private int idUsuario;
 
-    // ============================================================
-    // CONSTRUCTORES
-    // ============================================================
-
     // Constructor vacío
     public TeleUsuario() {
     }
 
-    // Constructor para crear un nuevo registro (sin ID)
+    // Constructor sin ID (para insertar en la BD)
     public TeleUsuario(String numero, int idUsuario) {
         this.numero = numero;
         this.idUsuario = idUsuario;
@@ -27,10 +23,7 @@ public class TeleUsuario {
         this.idUsuario = idUsuario;
     }
 
-    // ============================================================
-    // GETTERS Y SETTERS
-    // ============================================================
-
+    // Getters y Setters
     public int getIdTelefono() {
         return idTelefono;
     }
@@ -53,5 +46,15 @@ public class TeleUsuario {
 
     public void setIdUsuario(int idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    // Representación en texto
+    @Override
+    public String toString() {
+        return "TeleUsuario{" +
+                "idTelefono=" + idTelefono +
+                ", numero='" + numero + '\'' +
+                ", idUsuario=" + idUsuario +
+                '}';
     }
 }

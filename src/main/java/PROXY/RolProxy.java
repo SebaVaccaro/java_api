@@ -10,42 +10,34 @@ public class RolProxy {
 
     private final RolServicio rolServicio;
 
+    // Constructor: inicializa el servicio de roles
     public RolProxy() throws SQLException {
         this.rolServicio = new RolServicio();
     }
 
-    // ============================================================
-    // AGREGAR NUEVO ROL
-    // ============================================================
+    // Agregar nuevo rol (sin restricción de permisos)
     public boolean agregarRol(String nombre, boolean estActivo) throws SQLException {
         return rolServicio.agregarRol(nombre, estActivo);
     }
 
-    // ============================================================
-    // ACTUALIZAR ROL EXISTENTE
-    // ============================================================
+    // Actualizar rol existente (sin restricción de permisos)
     public boolean actualizarRol(int idRol, String nombre, boolean estActivo) throws SQLException {
         return rolServicio.actualizarRol(idRol, nombre, estActivo);
     }
 
-    // ============================================================
-    // ELIMINAR ROL
-    // ============================================================
+    // Eliminar rol (sin restricción de permisos)
     public boolean eliminarRol(int idRol) throws SQLException {
         return rolServicio.eliminarRol(idRol);
     }
 
-    // ============================================================
-    // BUSCAR ROL POR ID
-    // ============================================================
+    // Buscar rol por ID (sin restricción de permisos)
     public Rol buscarPorId(int idRol) throws SQLException {
         return rolServicio.buscarPorId(idRol);
     }
 
-    // ============================================================
-    // LISTAR TODOS LOS ROLES
-    // ============================================================
+    // Listar todos los roles (sin restricción de permisos)
     public List<Rol> listarTodos() throws SQLException {
         return rolServicio.listarTodos();
     }
 }
+

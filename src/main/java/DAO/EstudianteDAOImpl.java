@@ -10,17 +10,21 @@ import java.util.List;
 
 public class EstudianteDAOImpl implements EstudianteDAO {
 
+    // Conexión a la base de datos obtenida mediante el patrón Singleton
     private final Connection conn;
 
+    // Constructor: inicializa la conexión al crear una instancia del DAO
     public EstudianteDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Insertar un nuevo estudiante en la base de datos
     @Override
     public void insertarEstudiante(Estudiante est) throws SQLException {
         String sql = "INSERT INTO estudiantes (id_usuario, id_grupo, est_activo) VALUES (?, ?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, est.getIdUsuario());
+            // Si el estudiante no tiene grupo asignado, se inserta NULL
             if (est.getIdGrupo() > 0) {
                 ps.setInt(2, est.getIdGrupo());
             } else {
@@ -31,6 +35,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
         }
     }
 
+    // Obtener un estudiante específico según su ID de usuario
     @Override
     public Estudiante obtenerEstudiante(int idUsuario) throws SQLException {
         String sql = """
@@ -61,6 +66,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
         return est;
     }
 
+    // Listar todos los estudiantes registrados junto con sus datos de usuario
     @Override
     public List<Estudiante> listarEstudiantes() throws SQLException {
         List<Estudiante> lista = new ArrayList<>();
@@ -90,10 +96,12 @@ public class EstudianteDAOImpl implements EstudianteDAO {
         return lista;
     }
 
+    // Actualizar los datos de un estudiante existente
     @Override
     public boolean actualizarEstudiante(Estudiante est) throws SQLException {
         String sql = "UPDATE estudiantes SET id_grupo=?, est_activo=? WHERE id_usuario=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            // Si el estudiante no tiene grupo, se asigna NULL
             if (est.getIdGrupo() > 0) {
                 ps.setInt(1, est.getIdGrupo());
             } else {
@@ -105,6 +113,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
         }
     }
 
+    // Realizar una baja lógica del estudiante (marcar como inactivo)
     @Override
     public boolean eliminarEstudiante(int idUsuario) throws SQLException {
         String sql = "UPDATE estudiantes SET est_activo=false WHERE id_usuario=?";
@@ -114,6 +123,7 @@ public class EstudianteDAOImpl implements EstudianteDAO {
         }
     }
 
+    // Verificar si un estudiante se encuentra activo en el sistema
     @Override
     public boolean estaActivo(int idUsuario) throws SQLException {
         String sql = "SELECT est_activo FROM estudiantes WHERE id_usuario=?";

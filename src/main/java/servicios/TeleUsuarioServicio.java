@@ -10,13 +10,12 @@ public class TeleUsuarioServicio {
 
     private final TeleUsuarioDAOImpl dao;
 
+    // Constructor: inicializa DAO de TeleUsuario
     public TeleUsuarioServicio() throws SQLException {
         this.dao = new TeleUsuarioDAOImpl();
     }
 
-    // ============================================================
-    // AGREGAR TELÉFONO A UN USUARIO
-    // ============================================================
+    // Agregar teléfono a un usuario
     public TeleUsuario agregarTelefono(String numero, int idUsuario) throws SQLException {
         if (numero == null || numero.isBlank())
             throw new IllegalArgumentException("Número no puede estar vacío.");
@@ -24,12 +23,10 @@ public class TeleUsuarioServicio {
             throw new IllegalArgumentException("ID de usuario inválido.");
 
         TeleUsuario t = new TeleUsuario(numero, idUsuario);
-        return dao.crearTeleUsuario(t); // ✅ Cambiado a método real del DAO
+        return dao.crearTeleUsuario(t);
     }
 
-    // ============================================================
-    // ACTUALIZAR TELÉFONO
-    // ============================================================
+    // Actualizar teléfono
     public boolean actualizarTelefono(int idTelefono, String numero, int idUsuario) throws SQLException {
         if (idTelefono <= 0)
             throw new IllegalArgumentException("ID de teléfono inválido.");
@@ -39,31 +36,25 @@ public class TeleUsuarioServicio {
             throw new IllegalArgumentException("ID de usuario inválido.");
 
         TeleUsuario t = new TeleUsuario(idTelefono, numero, idUsuario);
-        return dao.actualizarTeleUsuario(t); // ✅ Cambiado
+        return dao.actualizarTeleUsuario(t);
     }
 
-    // ============================================================
-    // ELIMINAR TELÉFONO
-    // ============================================================
+    // Eliminar teléfono
     public boolean eliminarTelefono(int idTelefono) throws SQLException {
         if (idTelefono <= 0)
             throw new IllegalArgumentException("ID de teléfono inválido.");
-        return dao.eliminarTeleUsuario(idTelefono); // ✅ Cambiado
+        return dao.eliminarTeleUsuario(idTelefono);
     }
 
-    // ============================================================
-    // BUSCAR TELÉFONO POR ID
-    // ============================================================
+    // Buscar teléfono por ID
     public TeleUsuario buscarPorId(int idTelefono) throws SQLException {
         if (idTelefono <= 0)
             throw new IllegalArgumentException("ID de teléfono inválido.");
-        return dao.obtenerTeleUsuario(idTelefono); // ✅ Cambiado
+        return dao.obtenerTeleUsuario(idTelefono);
     }
 
-    // ============================================================
-    // LISTAR TODOS LOS TELÉFONOS
-    // ============================================================
+    // Listar todos los teléfonos
     public List<TeleUsuario> listarTodos() throws SQLException {
-        return dao.listarTodos(); // ✅ Este ya estaba bien
+        return dao.listarTodos();
     }
 }

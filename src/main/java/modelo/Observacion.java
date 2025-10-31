@@ -3,19 +3,20 @@ package modelo;
 import java.time.OffsetDateTime;
 
 public class Observacion {
+
     private int idObservacion;
-    private int idFuncionario;  // FK hacia Funcionario
-    private int idEstudiante;   // FK hacia Estudiante
+    private int idFuncionario;
+    private int idEstudiante;
     private String titulo;
     private String contenido;
     private OffsetDateTime fecHora;
-    private boolean estActivo;  // corresponde a activo_flag
+    private boolean estActivo;
 
     // Constructor vacío
     public Observacion() {
     }
 
-    // Constructor sin id (para insertar)
+    // Constructor sin ID (para insertar en la BD)
     public Observacion(int idFuncionario, int idEstudiante, String titulo, String contenido, OffsetDateTime fecHora, boolean estActivo) {
         this.idFuncionario = idFuncionario;
         this.idEstudiante = idEstudiante;
@@ -93,6 +94,7 @@ public class Observacion {
         this.estActivo = estActivo;
     }
 
+    // Representación en texto
     @Override
     public String toString() {
         return "Observacion{" +

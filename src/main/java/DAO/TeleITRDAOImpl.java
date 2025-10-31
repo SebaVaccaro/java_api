@@ -10,12 +10,15 @@ import java.util.List;
 
 public class TeleITRDAOImpl implements TeleITRDAO {
 
+    // Conexión a la base de datos mediante Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public TeleITRDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
+    // Agregar un nuevo teléfono asociado a un ITR
     @Override
     public boolean agregar(TeleITR t) throws SQLException {
         String sql = "INSERT INTO tele_itr (numero, id_itr) VALUES (?, ?)";
@@ -26,6 +29,7 @@ public class TeleITRDAOImpl implements TeleITRDAO {
         }
     }
 
+    // Actualizar los datos de un teléfono
     @Override
     public boolean actualizar(TeleITR t) throws SQLException {
         String sql = "UPDATE tele_itr SET numero=?, id_itr=? WHERE id_telefono=?";
@@ -37,6 +41,7 @@ public class TeleITRDAOImpl implements TeleITRDAO {
         }
     }
 
+    // Eliminar un teléfono por su ID
     @Override
     public boolean eliminar(int idTelefono) throws SQLException {
         String sql = "DELETE FROM tele_itr WHERE id_telefono=?";
@@ -46,6 +51,7 @@ public class TeleITRDAOImpl implements TeleITRDAO {
         }
     }
 
+    // Buscar un teléfono por su ID
     @Override
     public TeleITR buscarPorId(int idTelefono) throws SQLException {
         String sql = "SELECT id_telefono, numero, id_itr FROM tele_itr WHERE id_telefono=?";
@@ -63,6 +69,7 @@ public class TeleITRDAOImpl implements TeleITRDAO {
         return null;
     }
 
+    // Listar todos los teléfonos registrados
     @Override
     public List<TeleITR> listarTodos() throws SQLException {
         List<TeleITR> lista = new ArrayList<>();

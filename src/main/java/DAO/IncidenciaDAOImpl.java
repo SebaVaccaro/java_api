@@ -8,15 +8,22 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementación del DAO para la entidad Incidencia.
+ * Gestiona las operaciones CRUD sobre la tabla 'incidencias',
+ * la cual extiende la información de la tabla general 'instancias'.
+ */
 public class IncidenciaDAOImpl {
 
+    // Conexión única a la base de datos mediante el Singleton
     private final Connection conn;
 
+    // Constructor: obtiene la conexión desde el Singleton
     public IncidenciaDAOImpl() throws SQLException {
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // 🔹 Insertar subtabla incidencia
+    // Crear una nueva incidencia (subregistro vinculado a 'instancias')
     public void insertarIncidencia(Incidencia incidencia) throws SQLException {
         String sql = "INSERT INTO incidencias (id_instancia, lugar) VALUES (?, ?)";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -26,14 +33,14 @@ public class IncidenciaDAOImpl {
         }
     }
 
-    // 🔹 Obtener por id
+    // Obtener una incidencia por su ID de instancia
     public Incidencia obtenerIncidencia(int idInstancia) throws SQLException {
         String sql = """
             SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, i.id_funcionario,
                    inc.lugar
             FROM instancias i
             JOIN incidencia inc ON i.id_instancia = inc.id_instancia
-            WHERE i.id_instancia=?
+            WHERE i.id_instancia = ?
         """;
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -54,7 +61,7 @@ public class IncidenciaDAOImpl {
         return null;
     }
 
-    // 🔹 Listar todas
+    // Listar todas las incidencias registradas
     public List<Incidencia> listarIncidencias() throws SQLException {
         List<Incidencia> lista = new ArrayList<>();
         String sql = """
@@ -83,11 +90,11 @@ public class IncidenciaDAOImpl {
         return lista;
     }
 
-    // 🔹 Listar incidencias por funcionario
+    // Listar todas las incidencias asociadas a un funcionario específico
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws SQLException {
         List<Incidencia> lista = new ArrayList<>();
         String sql = """
-            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, 
+            SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo,
                    i.id_funcionario, inc.lugar
             FROM instancias i
             JOIN incidencias inc ON i.id_instancia = inc.id_instancia
@@ -114,9 +121,9 @@ public class IncidenciaDAOImpl {
         return lista;
     }
 
-    // 🔹 Actualizar solo tabla incidencia
+    // Actualizar los datos de la tabla 'incidencias'
     public boolean actualizarIncidencia(Incidencia incidencia) throws SQLException {
-        String sql = "UPDATE incidencias SET lugar=? WHERE id_instancia=?";
+        String sql = "UPDATE incidencias SET lugar = ? WHERE id_instancia = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, incidencia.getLugar());
             ps.setInt(2, incidencia.getIdInstancia());
@@ -124,9 +131,9 @@ public class IncidenciaDAOImpl {
         }
     }
 
-    // 🔹 Baja lógica
+    // Realizar baja lógica: desactivar la incidencia en la tabla 'instancias'
     public boolean eliminarIncidencia(int idInstancia) throws SQLException {
-        String sql = "UPDATE instancias SET est_activo=false WHERE id_instancia=?";
+        String sql = "UPDATE instancias SET est_activo = false WHERE id_instancia = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInstancia);
             return ps.executeUpdate() > 0;

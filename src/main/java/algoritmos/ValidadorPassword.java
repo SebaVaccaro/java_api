@@ -2,14 +2,10 @@ package algoritmos;
 
 public class ValidadorPassword {
 
-    /**
-     * Valida que la contraseña tenga al menos 8 caracteres.
-     * @param password La contraseña a validar.
-     * @return true si cumple, false si no.
-     */
+    // Validar un password según criterios mínimos de seguridad
     public static boolean validar(String password) {
-        if (password == null) return false; // chequeo básico por null
+        if (password == null) return false; // Verificar que no sea null para evitar errores
+        // Verificar que tenga al menos 8 caracteres de longitud
         return password.length() >= 8;
     }
 }
-
