@@ -10,32 +10,40 @@ public class EstudianteConsola extends UIBase {
 
     private Estudiante estudiante;
 
+    // Constructor vacío; la validación y carga del estudiante se realiza en iniciar()
     public EstudianteConsola() {
-        // Constructor vacío, la validación se hace en iniciar()
+        // Constructor vacío
     }
 
+    // Inicia la sesión del estudiante y muestra el menú principal
     @Override
     public void iniciar() {
         LoginSingleton login = LoginSingleton.getInstance();
 
+        // Verificar que haya sesión activa
         if (!login.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        // Validar que el usuario sea un Estudiante
+        // Validar que el usuario actual sea un estudiante
         if (!(login.getUsuarioActual() instanceof Estudiante)) {
             mostrarError("El usuario actual no es un estudiante.");
             return;
         }
 
+        // Asignar el usuario autenticado como estudiante
         estudiante = (Estudiante) login.getUsuarioActual();
 
-        super.iniciar(); // 🔁 ejecuta el bucle de menú común
+        // Ejecutar el bucle principal del menú
+        super.iniciar();
+
+        // Cerrar sesión al finalizar
         mostrarInfo("Sesión finalizada correctamente.\n");
         login.cerrarSesion();
     }
 
+    // Mostrar el menú principal del estudiante
     @Override
     protected void mostrarMenu() {
         System.out.println("\n===== MENÚ ESTUDIANTE =====");
@@ -50,15 +58,16 @@ public class EstudianteConsola extends UIBase {
         System.out.println("====================================");
     }
 
+    // Controla la ejecución de las opciones del menú según la elección del usuario
     @Override
     protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> mostrarInformacionPersonal();
-                case 2 -> menuSeguimiento();
-                case 3 -> gestionarMisInstanciasComunes();
-                case 4 -> gestionarMisTelefonos();
-                case 5 -> gestionarMisNotificaciones();
+                case 1 -> mostrarInformacionPersonal();  // Ver datos personales del estudiante
+                case 2 -> menuSeguimiento();              // Consultar su seguimiento académico
+                case 3 -> gestionarMisInstanciasComunes(); // Acceder a sus instancias comunes
+                case 4 -> gestionarMisTelefonos();        // Administrar sus teléfonos
+                case 5 -> gestionarMisNotificaciones();   // Ver sus notificaciones
                 case 0 -> mostrarInfo("🔒 Cerrando sesión del Estudiante...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -68,6 +77,7 @@ public class EstudianteConsola extends UIBase {
         }
     }
 
+    // Mostrar la información personal del estudiante autenticado
     private void mostrarInformacionPersonal() {
         mostrarInfo("--- Información personal ---");
         System.out.println("ID: " + estudiante.getIdUsuario());
@@ -76,6 +86,7 @@ public class EstudianteConsola extends UIBase {
         System.out.println("Correo: " + estudiante.getCorreo());
     }
 
+    // Acceder al módulo de seguimiento académico del estudiante
     private void menuSeguimiento() {
         try {
             SeguimientoConsola seguimientoUI = new SeguimientoConsola();
@@ -85,6 +96,7 @@ public class EstudianteConsola extends UIBase {
         }
     }
 
+    // Gestionar las instancias comunes asociadas al estudiante
     private void gestionarMisInstanciasComunes() {
         try {
             InstanciaComunConsola instanciaComunUI = new InstanciaComunConsola();
@@ -94,6 +106,7 @@ public class EstudianteConsola extends UIBase {
         }
     }
 
+    // Gestionar los teléfonos personales del estudiante
     private void gestionarMisTelefonos() {
         try {
             TelefonoConsola telefonoEstudianteUI = new TelefonoConsola();
@@ -103,6 +116,7 @@ public class EstudianteConsola extends UIBase {
         }
     }
 
+    // Gestionar las notificaciones del estudiante autenticado
     private void gestionarMisNotificaciones() {
         try {
             NotificacionConsola notificacionUserUI = new NotificacionConsola();

@@ -2,20 +2,21 @@ package consola.FuncionarioConsola;
 
 import PROXY.RolProxy;
 import modelo.Rol;
+import consola.InterfazConsola.UIBase;
 
 import java.sql.SQLException;
 import java.util.List;
-
-import consola.InterfazConsola.UIBase;
 
 public class RolConsola extends UIBase {
 
     private final RolProxy rolProxy;
 
+    // Constructor: inicializa el proxy
     public RolConsola() throws SQLException {
         this.rolProxy = new RolProxy();
     }
 
+    // Muestra el menú principal del módulo de roles
     @Override
     public void mostrarMenu() {
         System.out.println("\n=== Gestión de Roles ===");
@@ -27,6 +28,7 @@ public class RolConsola extends UIBase {
         System.out.println("0. Salir");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -40,6 +42,7 @@ public class RolConsola extends UIBase {
         }
     }
 
+    // Crea un nuevo rol
     private void agregarRol() {
         String nombre = leerTexto("Nombre del rol: ");
         boolean estActivo = leerBoolean("¿Activo? (true/false): ");
@@ -53,6 +56,7 @@ public class RolConsola extends UIBase {
         }
     }
 
+    // Actualiza un rol existente
     private void actualizarRol() {
         int idRol = leerEntero("ID del rol a actualizar: ");
         String nombre = leerTexto("Nuevo nombre: ");
@@ -67,6 +71,7 @@ public class RolConsola extends UIBase {
         }
     }
 
+    // Elimina un rol por su ID
     private void eliminarRol() {
         int idRol = leerEntero("ID del rol a eliminar: ");
         try {
@@ -78,6 +83,7 @@ public class RolConsola extends UIBase {
         }
     }
 
+    // Lista todos los roles registrados
     private void listarTodos() {
         try {
             List<Rol> roles = rolProxy.listarTodos();
@@ -88,6 +94,7 @@ public class RolConsola extends UIBase {
         }
     }
 
+    // Busca y muestra un rol por su ID
     private void buscarPorId() {
         int idRol = leerEntero("ID del rol: ");
         try {
@@ -98,4 +105,11 @@ public class RolConsola extends UIBase {
             mostrarError("Error de base de datos: " + e.getMessage());
         }
     }
+
+    // Permite ejecutar directamente la consola de roles
+    public static void main(String[] args) throws SQLException {
+        RolConsola ui = new RolConsola();
+        ui.iniciar();
+    }
 }
+

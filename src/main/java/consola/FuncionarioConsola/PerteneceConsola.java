@@ -12,10 +12,12 @@ public class PerteneceConsola extends UIBase {
 
     private final PerteneceProxy facade;
 
+    // Constructor: inicializa el proxy
     public PerteneceConsola() throws SQLException {
         this.facade = new PerteneceProxy();
     }
 
+    // Muestra el menú principal del módulo
     @Override
     public void mostrarMenu() {
         System.out.println("\n=== Gestión de Pertenece (Carrera ↔ ITR) ===");
@@ -27,6 +29,7 @@ public class PerteneceConsola extends UIBase {
         System.out.println("0. Salir");
     }
 
+    // Maneja la opción elegida por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -40,30 +43,33 @@ public class PerteneceConsola extends UIBase {
         }
     }
 
+    // Agrega una nueva relación entre carrera e ITR
     private void agregarRelacion() {
         int idCarrera = leerEntero("ID de carrera: ");
         int idItr = leerEntero("ID de ITR: ");
         try {
             boolean exito = facade.agregarPertenece(idCarrera, idItr);
-            if (exito) mostrarExito("Relación agregada.");
+            if (exito) mostrarExito("Relación agregada correctamente.");
             else mostrarError("No se pudo agregar la relación.");
         } catch (SQLException e) {
             mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // Elimina una relación existente entre carrera e ITR
     private void eliminarRelacion() {
         int idCarrera = leerEntero("ID de carrera: ");
         int idItr = leerEntero("ID de ITR: ");
         try {
             boolean exito = facade.eliminarPertenece(idCarrera, idItr);
-            if (exito) mostrarExito("Relación eliminada.");
+            if (exito) mostrarExito("Relación eliminada correctamente.");
             else mostrarError("No se pudo eliminar la relación.");
         } catch (SQLException e) {
             mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // Lista todas las relaciones carrera ↔ ITR
     private void listarTodos() {
         try {
             List<Pertenece> relaciones = facade.listarTodos();
@@ -74,6 +80,7 @@ public class PerteneceConsola extends UIBase {
         }
     }
 
+    // Lista los ITRs asociados a una carrera
     private void listarItrPorCarrera() {
         int idCarrera = leerEntero("ID de carrera: ");
         try {
@@ -84,6 +91,7 @@ public class PerteneceConsola extends UIBase {
         }
     }
 
+    // Lista las carreras asociadas a un ITR
     private void listarCarrerasPorItr() {
         int idItr = leerEntero("ID de ITR: ");
         try {

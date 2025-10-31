@@ -12,10 +12,12 @@ public class TeleITRConsola extends UIBase {
 
     private final TeleITRProxy proxy;
 
+    // Constructor: inicializa el proxy de teléfonos ITR
     public TeleITRConsola() throws Exception {
         this.proxy = new TeleITRProxy();
     }
 
+    // Muestra el menú principal de opciones
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ TELÉFONOS ITR ---");
@@ -27,6 +29,7 @@ public class TeleITRConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Ejecuta la opción seleccionada
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -40,9 +43,7 @@ public class TeleITRConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // CREAR TELÉFONO
-    // ============================================================
+    // Agregar un nuevo teléfono
     private void agregarTelefono() {
         String numero = leerTexto("Número de teléfono: ");
         int idItr = leerEntero("ID del ITR: ");
@@ -60,9 +61,7 @@ public class TeleITRConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // LISTAR TODOS
-    // ============================================================
+    // Listar todos los teléfonos registrados
     private void listarTodos() {
         try {
             List<TeleITR> lista = proxy.listarTodos();
@@ -77,9 +76,7 @@ public class TeleITRConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // BUSCAR POR ID
-    // ============================================================
+    // Buscar un teléfono por su ID
     private void buscarPorId() {
         int id = leerEntero("ID del teléfono: ");
         try {
@@ -95,9 +92,7 @@ public class TeleITRConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // MODIFICAR TELÉFONO
-    // ============================================================
+    // Modificar los datos de un teléfono
     private void modificarTelefono() {
         int id = leerEntero("ID del teléfono a modificar: ");
         try {
@@ -110,7 +105,6 @@ public class TeleITRConsola extends UIBase {
             mostrarInfo("Campos actuales:");
             System.out.println(t);
 
-            // Leer nuevos valores usando métodos opcionales de UIBase
             String numero = leerTexto("Nuevo número (vacío para no cambiar): ", t.getNumero());
             int idItr = leerEntero("Nuevo ID ITR (vacío para no cambiar): ", t.getIdItr());
 
@@ -118,10 +112,8 @@ public class TeleITRConsola extends UIBase {
             t.setIdItr(idItr);
 
             boolean exito = proxy.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdItr());
-
             if (exito) mostrarExito("Teléfono modificado correctamente.");
             else mostrarError("No se pudo modificar el teléfono.");
-
         } catch (SecurityException e) {
             mostrarInfo(e.getMessage());
         } catch (SQLException e) {
@@ -131,9 +123,7 @@ public class TeleITRConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // ELIMINAR TELÉFONO
-    // ============================================================
+    // Eliminar un teléfono
     private void eliminarTelefono() {
         int id = leerEntero("ID del teléfono a eliminar: ");
         try {

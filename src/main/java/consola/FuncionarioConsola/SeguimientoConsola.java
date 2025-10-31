@@ -13,10 +13,12 @@ public class SeguimientoConsola extends UIBase {
 
     private final SeguimientoProxy facade;
 
+    // Constructor: inicializa el proxy de seguimientos
     public SeguimientoConsola() throws SQLException {
         this.facade = new SeguimientoProxy();
     }
 
+    // Muestra el menú principal de opciones
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ SEGUIMIENTOS ---");
@@ -28,6 +30,7 @@ public class SeguimientoConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Ejecuta la opción seleccionada
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -41,9 +44,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
-    // ==========================================================
-    // AGREGAR SEGUIMIENTO
-    // ==========================================================
+    // Agrega un nuevo seguimiento
     private void agregarSeguimiento() {
         int idEstudiante = leerEntero("ID Estudiante: ");
         LocalDate fecInicio = leerFecha("Fecha de inicio (yyyy-MM-dd): ");
@@ -60,9 +61,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
-    // ==========================================================
-    // LISTAR SEGUIMIENTOS
-    // ==========================================================
+    // Lista todos los seguimientos registrados
     private void listarTodos() {
         try {
             List<Seguimiento> list = facade.listarTodos();
@@ -73,6 +72,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
+    // Busca un seguimiento por su ID
     private void buscarPorId() {
         int id = leerEntero("ID del seguimiento: ");
         try {
@@ -84,9 +84,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
-    // ==========================================================
-    // MODIFICAR SEGUIMIENTO
-    // ==========================================================
+    // Modifica los datos de un seguimiento existente
     private void modificarSeguimiento() {
         int id = leerEntero("ID del seguimiento a modificar: ");
         try {
@@ -99,14 +97,14 @@ public class SeguimientoConsola extends UIBase {
             mostrarInfo("Campos actuales:");
             System.out.println(s);
 
-            // Leer nuevos valores usando métodos opcionales de UIBase
-            Integer idInforme = leerEntero("Nuevo ID Informe (dejar vacío para no cambiar): ", s.getIdInforme());
-            int idEstudiante = leerEntero("Nuevo ID Estudiante (dejar vacío para no cambiar): ", s.getIdEstudiante());
-            LocalDate fecInicio = leerFecha("Nueva fecha de inicio (yyyy-MM-dd, vacío para no cambiar): ", s.getFecInicio());
-            LocalDate fecCierre = leerFecha("Nueva fecha de cierre (yyyy-MM-dd, vacío para no cambiar): ", s.getFecCierre());
-            boolean estActivo = leerBoolean("Está activo? (true/false, vacío para no cambiar): ", s.isEstActivo());
+            // Leer nuevos valores (pueden dejarse vacíos para mantener los actuales)
+            Integer idInforme = leerEntero("Nuevo ID Informe (vacío = sin cambios): ", s.getIdInforme());
+            int idEstudiante = leerEntero("Nuevo ID Estudiante (vacío = sin cambios): ", s.getIdEstudiante());
+            LocalDate fecInicio = leerFecha("Nueva fecha de inicio (vacío = sin cambios): ", s.getFecInicio());
+            LocalDate fecCierre = leerFecha("Nueva fecha de cierre (vacío = sin cambios): ", s.getFecCierre());
+            boolean estActivo = leerBoolean("¿Está activo? (vacío = sin cambios): ", s.isEstActivo());
 
-            // Actualizar objeto
+            // Actualizar el objeto
             s.setIdInforme(idInforme);
             s.setIdEstudiante(idEstudiante);
             s.setFecInicio(fecInicio);
@@ -124,7 +122,6 @@ public class SeguimientoConsola extends UIBase {
 
             if (exito) mostrarExito("Seguimiento modificado correctamente.");
             else mostrarError("No se pudo modificar el seguimiento.");
-
         } catch (SQLException e) {
             mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (IllegalArgumentException e) {
@@ -132,9 +129,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
-    // ==========================================================
-    // ELIMINAR SEGUIMIENTO
-    // ==========================================================
+    // Elimina un seguimiento existente
     private void eliminarSeguimiento() {
         int id = leerEntero("ID del seguimiento a eliminar: ");
         try {

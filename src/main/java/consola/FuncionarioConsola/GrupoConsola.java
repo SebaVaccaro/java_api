@@ -12,10 +12,12 @@ public class GrupoConsola extends UIBase {
 
     private final GrupoProxy proxy;
 
+    // Constructor: inicializa el proxy encargado de gestionar las operaciones de los grupos
     public GrupoConsola() throws Exception {
         this.proxy = new GrupoProxy();
     }
 
+    // Muestra el menú principal del módulo de grupos
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== MENÚ GRUPOS =====");
@@ -29,16 +31,17 @@ public class GrupoConsola extends UIBase {
         System.out.println("========================");
     }
 
+    // Maneja la opción seleccionada por el usuario en el menú
     @Override
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> crearGrupo();
-                case 2 -> listarTodos();
-                case 3 -> buscarPorId();
-                case 4 -> listarPorCarrera();
-                case 5 -> modificarGrupo();
-                case 6 -> eliminarGrupo();
+                case 1 -> crearGrupo();          // Crea un nuevo grupo
+                case 2 -> listarTodos();         // Lista todos los grupos registrados
+                case 3 -> buscarPorId();         // Busca un grupo por su ID
+                case 4 -> listarPorCarrera();    // Lista los grupos de una carrera específica
+                case 5 -> modificarGrupo();      // Modifica los datos de un grupo existente
+                case 6 -> eliminarGrupo();       // Elimina un grupo del sistema
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -47,6 +50,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Crea un nuevo grupo solicitando los datos al usuario
     private void crearGrupo() {
         String nombre = leerTexto("Nombre del grupo: ");
         int idCarrera = leerEntero("ID de la carrera: ");
@@ -62,6 +66,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Lista todos los grupos registrados en el sistema
     private void listarTodos() {
         try {
             List<Grupo> lista = proxy.listarTodos();
@@ -74,6 +79,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Busca y muestra un grupo según su ID
     private void buscarPorId() {
         int id = leerEntero("ID del grupo: ");
         try {
@@ -87,6 +93,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Lista los grupos pertenecientes a una carrera específica
     private void listarPorCarrera() {
         int idCarrera = leerEntero("ID de la carrera: ");
         try {
@@ -100,6 +107,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Modifica los datos de un grupo existente
     private void modificarGrupo() {
         int id = leerEntero("ID del grupo a modificar: ");
         String nombre = leerTexto("Nuevo nombre: ");
@@ -117,6 +125,7 @@ public class GrupoConsola extends UIBase {
         }
     }
 
+    // Elimina un grupo del sistema según su ID
     private void eliminarGrupo() {
         int id = leerEntero("ID del grupo a eliminar: ");
         try {

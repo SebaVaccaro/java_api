@@ -12,10 +12,12 @@ public class RecibeConsola extends UIBase {
 
     private final RecibeProxy facade;
 
+    // Constructor: inicializa el proxy
     public RecibeConsola() throws SQLException {
         this.facade = new RecibeProxy();
     }
 
+    // Muestra el menú principal del módulo
     @Override
     public void mostrarMenu() {
         System.out.println("\n=== Gestión de Recibe (Notificación ↔ Usuario) ===");
@@ -27,6 +29,7 @@ public class RecibeConsola extends UIBase {
         System.out.println("0. Salir");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -40,30 +43,33 @@ public class RecibeConsola extends UIBase {
         }
     }
 
+    // Agrega una relación entre notificación y usuario
     private void agregarRelacion() {
         int idNot = leerEntero("ID de notificación: ");
         int idUsu = leerEntero("ID de usuario: ");
         try {
             boolean exito = facade.agregarRecibe(idNot, idUsu);
-            if (exito) mostrarExito("Relación agregada.");
+            if (exito) mostrarExito("Relación agregada correctamente.");
             else mostrarError("No se pudo agregar la relación.");
         } catch (SQLException e) {
             mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // Elimina una relación existente
     private void eliminarRelacion() {
         int idNot = leerEntero("ID de notificación: ");
         int idUsu = leerEntero("ID de usuario: ");
         try {
             boolean exito = facade.eliminarRecibe(idNot, idUsu);
-            if (exito) mostrarExito("Relación eliminada.");
+            if (exito) mostrarExito("Relación eliminada correctamente.");
             else mostrarError("No se pudo eliminar la relación.");
         } catch (SQLException e) {
             mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // Lista todas las relaciones notificación ↔ usuario
     private void listarTodos() {
         try {
             List<Recibe> relaciones = facade.listarTodos();
@@ -74,24 +80,31 @@ public class RecibeConsola extends UIBase {
         }
     }
 
+    // Lista los usuarios asociados a una notificación
     private void listarUsuariosPorNotificacion() {
         int idNot = leerEntero("ID de notificación: ");
         try {
             List<Integer> usuarios = facade.listarUsuariosPorNotificacion(idNot);
-            mostrarInfo("Usuarios: " + usuarios);
+            mostrarInfo("Usuarios asociados: " + usuarios);
         } catch (SQLException e) {
             mostrarError("Error al listar usuarios: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
+    // Lista las notificaciones recibidas por un usuario
     private void listarNotificacionesPorUsuario() {
         int idUsu = leerEntero("ID de usuario: ");
         try {
             List<Integer> notificaciones = facade.listarNotificacionesPorUsuario(idUsu);
-            mostrarInfo("Notificaciones: " + notificaciones);
+            mostrarInfo("Notificaciones recibidas: " + notificaciones);
         } catch (SQLException e) {
             mostrarError("Error al listar notificaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
-}
 
+    // Permite ejecutar directamente la consola
+    public static void main(String[] args) throws SQLException {
+        RecibeConsola ui = new RecibeConsola();
+        ui.iniciar();
+    }
+}

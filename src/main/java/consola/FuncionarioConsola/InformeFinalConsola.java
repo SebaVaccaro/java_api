@@ -13,10 +13,12 @@ public class InformeFinalConsola extends UIBase {
 
     private final InformeFinalProxy proxy;
 
+    // Constructor: inicializa el proxy que gestiona las operaciones con informes finales
     public InformeFinalConsola() throws Exception {
         this.proxy = new InformeFinalProxy();
     }
 
+    // Muestra el menú principal del módulo de informes finales
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ INFORMES FINALES ---");
@@ -28,19 +30,21 @@ public class InformeFinalConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Maneja la opción seleccionada por el usuario en el menú
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearInforme();
-            case 2 -> listarTodos();
-            case 3 -> buscarPorId();
-            case 4 -> modificarInforme();
-            case 5 -> eliminarInforme();
+            case 1 -> crearInforme();      // Crear un nuevo informe
+            case 2 -> listarTodos();       // Listar todos los informes
+            case 3 -> buscarPorId();       // Buscar informe por ID
+            case 4 -> modificarInforme();  // Modificar un informe existente
+            case 5 -> eliminarInforme();   // Eliminar un informe
             case 0 -> System.out.println("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
+    // Crea un nuevo informe final solicitando los datos al usuario
     private void crearInforme() {
         String contenido = leerTexto("Contenido: ");
         int valoracion = leerEntero("Valoración (0-100): ");
@@ -59,6 +63,7 @@ public class InformeFinalConsola extends UIBase {
         }
     }
 
+    // Lista todos los informes finales existentes
     private void listarTodos() {
         try {
             List<InformeFinal> lista = proxy.listarInformes();
@@ -76,6 +81,7 @@ public class InformeFinalConsola extends UIBase {
         }
     }
 
+    // Busca un informe final según su ID
     private void buscarPorId() {
         int id = leerEntero("ID del informe: ");
         try {
@@ -94,6 +100,7 @@ public class InformeFinalConsola extends UIBase {
         }
     }
 
+    // Modifica los datos de un informe existente
     private void modificarInforme() {
         int id = leerEntero("ID del informe a modificar: ");
         String contenido = leerTexto("Nuevo contenido: ");
@@ -116,6 +123,7 @@ public class InformeFinalConsola extends UIBase {
         }
     }
 
+    // Elimina un informe final según su ID
     private void eliminarInforme() {
         int id = leerEntero("ID del informe a eliminar: ");
         try {

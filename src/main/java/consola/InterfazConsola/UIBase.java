@@ -4,13 +4,18 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Scanner;
 
+// Clase base para todas las interfaces de consola
+// Proporciona métodos comunes de lectura y manejo de menús
 public abstract class UIBase implements UIMenu {
 
+    // Scanner para leer datos desde la consola
     protected final Scanner scanner = new Scanner(System.in);
 
+    // Métodos abstractos que deben implementar las subclases
     protected abstract void mostrarMenu();
     protected abstract void manejarOpcion(int opcion);
 
+    // Método principal que inicia el ciclo del menú
     @Override
     public void iniciar() {
         int opcion;
@@ -22,7 +27,7 @@ public abstract class UIBase implements UIMenu {
         System.out.println("🔒 Saliendo del menú...");
     }
 
-    // ==== MÉTODOS DE LECTURA OBLIGATORIOS ====
+    // Lee un número entero del usuario
     protected int leerEntero(String mensaje) {
         System.out.print(mensaje);
         while (!scanner.hasNextInt()) {
@@ -30,15 +35,17 @@ public abstract class UIBase implements UIMenu {
             scanner.next();
         }
         int valor = scanner.nextInt();
-        scanner.nextLine();
+        scanner.nextLine(); // limpiar buffer
         return valor;
     }
 
+    // Lee texto ingresado por el usuario
     protected String leerTexto(String mensaje) {
         System.out.print(mensaje);
         return scanner.nextLine();
     }
 
+    // Lee un valor booleano (true/false)
     protected boolean leerBoolean(String mensaje) {
         System.out.print(mensaje);
         while (true) {
@@ -51,6 +58,7 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
+    // Lee una fecha y hora en formato ISO (YYYY-MM-DDTHH:MM)
     protected OffsetDateTime leerFechaHora(String mensaje) {
         System.out.print(mensaje);
         while (true) {
@@ -63,6 +71,7 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
+    // Lee una fecha simple (YYYY-MM-DD)
     protected LocalDate leerFecha(String mensaje) {
         System.out.print(mensaje);
         while (true) {
@@ -75,13 +84,14 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
-    // ==== MÉTODOS DE LECTURA OPCIONALES (para actualizaciones) ====
+    // Lee texto opcional (si está vacío, mantiene el valor actual)
     protected String leerTexto(String mensaje, String valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine();
         return input.isBlank() ? valorActual : input;
     }
 
+    // Lee entero opcional
     protected int leerEntero(String mensaje, int valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine();
@@ -93,6 +103,7 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
+    // Lee boolean opcional
     protected boolean leerBoolean(String mensaje, boolean valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine().trim();
@@ -101,9 +112,10 @@ public abstract class UIBase implements UIMenu {
             return true;
         if (input.equalsIgnoreCase("false") || input.equalsIgnoreCase("f") || input.equalsIgnoreCase("no") || input.equalsIgnoreCase("n"))
             return false;
-        return valorActual; // si es inválido, devuelve el valor actual
+        return valorActual;
     }
 
+    // Lee fecha opcional
     protected LocalDate leerFecha(String mensaje, LocalDate valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine().trim();
@@ -115,6 +127,7 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
+    // Lee fecha y hora opcional
     protected OffsetDateTime leerFechaHora(String mensaje, OffsetDateTime valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine().trim();
@@ -126,17 +139,18 @@ public abstract class UIBase implements UIMenu {
         }
     }
 
-    // ==== MÉTODOS DE MENSAJES ====
+    // Muestra un mensaje de éxito
     protected void mostrarExito(String mensaje) {
         System.out.println("✅ " + mensaje);
     }
 
+    // Muestra un mensaje de error
     protected void mostrarError(String mensaje) {
         System.out.println("❌ " + mensaje);
     }
 
+    // Muestra un mensaje informativo
     protected void mostrarInfo(String mensaje) {
         System.out.println("ℹ️ " + mensaje);
     }
 }
-

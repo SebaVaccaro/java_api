@@ -13,10 +13,12 @@ public class IncidenciaConsola extends UIBase {
 
     private final IncidenciaProxy proxy;
 
+    // Constructor: inicializa el proxy que gestiona las operaciones relacionadas con incidencias
     public IncidenciaConsola() throws Exception {
         this.proxy = new IncidenciaProxy();
     }
 
+    // Muestra el menú principal del módulo de incidencias
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== MENÚ INCIDENCIAS =====");
@@ -30,16 +32,17 @@ public class IncidenciaConsola extends UIBase {
         System.out.println("=============================");
     }
 
+    // Maneja la opción seleccionada por el usuario en el menú de incidencias
     @Override
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> crearIncidencia();
-                case 2 -> listarTodas();
-                case 3 -> buscarPorInstancia();
-                case 4 -> listarPorFuncionario();
-                case 5 -> modificarIncidencia();
-                case 6 -> eliminarIncidencia();
+                case 1 -> crearIncidencia();        // Crea una nueva incidencia
+                case 2 -> listarTodas();            // Lista todas las incidencias
+                case 3 -> buscarPorInstancia();     // Busca una incidencia por ID de instancia
+                case 4 -> listarPorFuncionario();   // Lista incidencias según el funcionario
+                case 5 -> modificarIncidencia();    // Modifica una incidencia existente
+                case 6 -> eliminarIncidencia();     // Elimina una incidencia
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -48,8 +51,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
-    // ==== CRUD ====
-
+    // Crea una nueva incidencia solicitando los datos al usuario
     private void crearIncidencia() {
         String titulo = leerTexto("Título: ");
         OffsetDateTime fecha = leerFechaHora("Fecha y hora (YYYY-MM-DDTHH:MM): ");
@@ -70,6 +72,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
+    // Lista todas las incidencias registradas en el sistema
     private void listarTodas() {
         try {
             List<Incidencia> lista = proxy.listarIncidencias();
@@ -82,6 +85,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
+    // Busca una incidencia según el ID de la instancia asociada
     private void buscarPorInstancia() {
         int idInstancia = leerEntero("ID de la instancia: ");
         try {
@@ -95,6 +99,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
+    // Lista todas las incidencias registradas por un funcionario específico
     private void listarPorFuncionario() {
         int idFuncionario = leerEntero("ID del funcionario: ");
         try {
@@ -108,6 +113,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
+    // Modifica los datos de una incidencia existente
     private void modificarIncidencia() {
         int id = leerEntero("ID de la incidencia a modificar: ");
         String titulo = leerTexto("Nuevo título: ");
@@ -130,6 +136,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
+    // Elimina una incidencia del sistema según su ID
     private void eliminarIncidencia() {
         int id = leerEntero("ID de la incidencia a eliminar: ");
         try {

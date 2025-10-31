@@ -15,11 +15,13 @@ public class NotificacionConsola extends UIBase {
     private final NotificacionProxy notiFacade;
     private final RecibeProxy recibeProxy;
 
+    // Constructor: inicializa los proxies de notificaciones y recepción
     public NotificacionConsola() throws Exception {
         this.notiFacade = new NotificacionProxy();
         this.recibeProxy = new RecibeProxy();
     }
 
+    // Mostrar el menú principal de gestión de notificaciones
     @Override
     protected void mostrarMenu() {
         if (!LoginSingleton.getInstance().haySesionActiva()) {
@@ -34,17 +36,19 @@ public class NotificacionConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Controla las acciones del menú según la opción seleccionada
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarMisNotificaciones();
-            case 2 -> buscarPorId();
-            case 3 -> eliminarNotificacion();
+            case 1 -> listarMisNotificaciones(); // Listar todas las notificaciones del usuario actual
+            case 2 -> buscarPorId();             // Buscar una notificación específica por su ID
+            case 3 -> eliminarNotificacion();    // Desactivar una notificación existente
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
+    // Listar todas las notificaciones activas pertenecientes al usuario autenticado
     private void listarMisNotificaciones() {
         try {
             int idUsuario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
@@ -74,6 +78,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Buscar una notificación por su ID y mostrar sus detalles
     private void buscarPorId() {
         int id = leerEntero("Ingrese el ID de la notificación: ");
         try {
@@ -94,6 +99,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Desactivar (eliminar lógicamente) una notificación existente
     private void eliminarNotificacion() {
         int id = leerEntero("Ingrese el ID de la notificación a eliminar: ");
         try {
@@ -110,4 +116,3 @@ public class NotificacionConsola extends UIBase {
         }
     }
 }
-

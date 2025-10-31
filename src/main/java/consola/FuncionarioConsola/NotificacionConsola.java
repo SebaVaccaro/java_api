@@ -13,10 +13,12 @@ public class NotificacionConsola extends UIBase {
 
     private final NotificacionProxy proxy;
 
+    // Constructor: inicializa el proxy de notificaciones
     public NotificacionConsola() throws Exception {
         this.proxy = new NotificacionProxy();
     }
 
+    // Muestra el menú principal de notificaciones
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ NOTIFICACIONES ---");
@@ -28,22 +30,21 @@ public class NotificacionConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearNotificacion();
-            case 2 -> listarTodas();
-            case 3 -> buscarPorId();
-            case 4 -> modificarNotificacion();
-            case 5 -> desactivarNotificacion();
+            case 1 -> crearNotificacion();       // Crear una nueva notificación
+            case 2 -> listarTodas();             // Listar todas las notificaciones
+            case 3 -> buscarPorId();             // Buscar una notificación por su ID
+            case 4 -> modificarNotificacion();   // Modificar una notificación existente
+            case 5 -> desactivarNotificacion();  // Desactivar una notificación
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // ============================================================
-    // CRUD
-    // ============================================================
+    // Crea una nueva notificación solicitando los datos al usuario
     private void crearNotificacion() {
         int idInstancia = leerEntero("ID de instancia: ");
         String asunto = leerTexto("Asunto: ");
@@ -63,6 +64,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Lista todas las notificaciones registradas
     private void listarTodas() {
         try {
             List<Notificacion> lista = proxy.listarTodas();
@@ -77,6 +79,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Busca una notificación por su ID
     private void buscarPorId() {
         int id = leerEntero("ID de notificación: ");
         try {
@@ -92,6 +95,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Modifica una notificación existente
     private void modificarNotificacion() {
         int id = leerEntero("ID de notificación a modificar: ");
         String asunto = leerTexto("Nuevo asunto: ");
@@ -114,6 +118,7 @@ public class NotificacionConsola extends UIBase {
         }
     }
 
+    // Desactiva una notificación por su ID
     private void desactivarNotificacion() {
         int id = leerEntero("ID de notificación a desactivar: ");
         try {

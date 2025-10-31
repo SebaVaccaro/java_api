@@ -12,10 +12,12 @@ public class TeleUsuarioConsola extends UIBase {
 
     private final TeleUsuarioProxy proxy;
 
+    // Constructor: inicializa el proxy de teléfonos de usuario
     public TeleUsuarioConsola() throws Exception {
         this.proxy = new TeleUsuarioProxy();
     }
 
+    // Muestra el menú principal
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ TELÉFONOS DE USUARIO ---");
@@ -28,6 +30,7 @@ public class TeleUsuarioConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Ejecuta la opción seleccionada
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
@@ -42,9 +45,7 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // CREAR TELÉFONO
-    // ============================================================
+    // Agregar un nuevo teléfono
     private void agregarTelefono() {
         String numero = leerTexto("Número de teléfono: ");
         int idUsuario = leerEntero("ID del usuario: ");
@@ -58,9 +59,7 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // LISTAR TODOS
-    // ============================================================
+    // Listar todos los teléfonos registrados
     private void listarTodos() {
         try {
             List<TeleUsuario> list = proxy.listarTelefonos();
@@ -71,9 +70,7 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // BUSCAR POR ID
-    // ============================================================
+    // Buscar un teléfono por su ID
     private void buscarPorId() {
         int id = leerEntero("ID del teléfono: ");
         try {
@@ -85,9 +82,7 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // MODIFICAR TELÉFONO
-    // ============================================================
+    // Modificar los datos de un teléfono
     private void modificarTelefono() {
         int id = leerEntero("ID del teléfono a modificar: ");
         try {
@@ -100,7 +95,6 @@ public class TeleUsuarioConsola extends UIBase {
             mostrarInfo("Campos actuales:");
             System.out.println(t);
 
-            // Usar métodos opcionales de UIBase
             String numero = leerTexto("Nuevo número (vacío para no cambiar): ", t.getNumero());
             int idUsuario = leerEntero("Nuevo ID de usuario (vacío para no cambiar): ", t.getIdUsuario());
 
@@ -108,18 +102,14 @@ public class TeleUsuarioConsola extends UIBase {
             t.setIdUsuario(idUsuario);
 
             boolean exito = proxy.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdUsuario());
-
             if (exito) mostrarExito("Teléfono modificado correctamente.");
             else mostrarError("No se pudo modificar el teléfono.");
-
         } catch (SQLException e) {
             mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
 
-    // ============================================================
-    // ELIMINAR TELÉFONO
-    // ============================================================
+    // Eliminar un teléfono
     private void eliminarTelefono() {
         int id = leerEntero("ID del teléfono a eliminar: ");
         try {
@@ -131,9 +121,7 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // LISTAR POR USUARIO
-    // ============================================================
+    // Listar teléfonos pertenecientes a un usuario
     private void listarPorUsuario() {
         int idUsuario = leerEntero("ID del usuario: ");
         try {
@@ -145,4 +133,3 @@ public class TeleUsuarioConsola extends UIBase {
         }
     }
 }
-

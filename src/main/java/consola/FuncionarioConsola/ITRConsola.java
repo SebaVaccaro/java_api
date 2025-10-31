@@ -12,10 +12,12 @@ public class ITRConsola extends UIBase {
 
     private final ITRProxy proxy;
 
+    // Constructor: inicializa el proxy que maneja las operaciones de ITR
     public ITRConsola() throws Exception {
         this.proxy = new ITRProxy();
     }
 
+    // Muestra el menú principal del módulo de ITR
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ ITR ---");
@@ -27,20 +29,21 @@ public class ITRConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearITR();
-            case 2 -> listarTodos();
-            case 3 -> buscarPorId();
-            case 4 -> modificarITR();
-            case 5 -> eliminarITR();
+            case 1 -> crearITR();         // Crear un nuevo ITR
+            case 2 -> listarTodos();      // Listar todos los ITR existentes
+            case 3 -> buscarPorId();      // Buscar un ITR por su ID
+            case 4 -> modificarITR();     // Modificar los datos de un ITR
+            case 5 -> eliminarITR();      // Eliminar un ITR existente
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // ==== CRUD ====
+    // Crea un nuevo ITR solicitando los datos al usuario
     private void crearITR() {
         int idDireccion = leerEntero("ID de dirección: ");
         try {
@@ -56,6 +59,7 @@ public class ITRConsola extends UIBase {
         }
     }
 
+    // Lista todos los ITR registrados
     private void listarTodos() {
         try {
             List<ITR> lista = proxy.listarTodos();
@@ -68,6 +72,7 @@ public class ITRConsola extends UIBase {
         }
     }
 
+    // Busca un ITR por su ID
     private void buscarPorId() {
         int idItr = leerEntero("ID del ITR: ");
         try {
@@ -81,6 +86,7 @@ public class ITRConsola extends UIBase {
         }
     }
 
+    // Modifica los datos de un ITR existente
     private void modificarITR() {
         int idItr = leerEntero("ID del ITR a modificar: ");
         int idDireccion = leerEntero("Nuevo ID de dirección: ");
@@ -98,6 +104,7 @@ public class ITRConsola extends UIBase {
         }
     }
 
+    // Elimina un ITR por su ID
     private void eliminarITR() {
         int idItr = leerEntero("ID del ITR a eliminar: ");
         try {

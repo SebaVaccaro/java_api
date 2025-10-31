@@ -15,6 +15,7 @@ public class SeguimientoConsola extends UIBase {
     private final SeguimientoProxy seguimientoProxy;
     private final int idEstudiante;
 
+    // Constructor: valida sesión activa y obtiene el ID del estudiante autenticado
     public SeguimientoConsola() throws SQLException {
         if (!LoginSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
@@ -23,6 +24,7 @@ public class SeguimientoConsola extends UIBase {
         this.seguimientoProxy = new SeguimientoProxy();
     }
 
+    // Mostrar el menú principal del módulo de seguimientos del estudiante
     @Override
     protected void mostrarMenu() {
         System.out.println("\n--- MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE ---");
@@ -32,17 +34,19 @@ public class SeguimientoConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Gestionar la opción seleccionada por el estudiante
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarMisSeguimientos();
-            case 2 -> buscarPorId();
-            case 3 -> cerrarSeguimiento();
+            case 1 -> listarMisSeguimientos(); // Mostrar todos los seguimientos del estudiante actual
+            case 2 -> buscarPorId();           // Consultar un seguimiento específico
+            case 3 -> cerrarSeguimiento();     // Cerrar un seguimiento activo
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
+    // Listar todos los seguimientos activos del estudiante autenticado
     private void listarMisSeguimientos() {
         try {
             List<Seguimiento> lista = seguimientoProxy.listarTodos();
@@ -62,6 +66,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
+    // Buscar un seguimiento por su ID y mostrar sus detalles
     private void buscarPorId() {
         int id = leerEntero("Ingrese el ID del seguimiento: ");
         try {
@@ -84,6 +89,7 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 
+    // Cerrar un seguimiento activo perteneciente al estudiante autenticado
     private void cerrarSeguimiento() {
         int id = leerEntero("Ingrese el ID del seguimiento a cerrar: ");
         try {
@@ -121,4 +127,3 @@ public class SeguimientoConsola extends UIBase {
         }
     }
 }
-

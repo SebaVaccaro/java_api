@@ -13,10 +13,12 @@ public class ObservacionConsola extends UIBase {
 
     private final ObservacionProxy facade;
 
+    // Constructor: inicializa el proxy de observaciones
     public ObservacionConsola() throws SQLException {
         this.facade = new ObservacionProxy();
     }
 
+    // Muestra el menú principal de observaciones
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ OBSERVACIONES ---");
@@ -28,20 +30,21 @@ public class ObservacionConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearObservacion();
-            case 2 -> listarTodas();
-            case 3 -> buscarPorId();
-            case 4 -> modificarObservacion();
-            case 5 -> desactivarObservacion();
+            case 1 -> crearObservacion();        // Crear una nueva observación
+            case 2 -> listarTodas();             // Listar todas las observaciones
+            case 3 -> buscarPorId();             // Buscar observación por ID
+            case 4 -> modificarObservacion();    // Modificar una observación existente
+            case 5 -> desactivarObservacion();   // Desactivar observación
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // ==== CRUD ====
+    // Crea una nueva observación
     private void crearObservacion() {
         int idFuncionario = leerEntero("ID del funcionario: ");
         int idEstudiante = leerEntero("ID del estudiante: ");
@@ -57,6 +60,7 @@ public class ObservacionConsola extends UIBase {
         }
     }
 
+    // Lista todas las observaciones registradas
     private void listarTodas() {
         try {
             List<Observacion> lista = facade.listarTodas();
@@ -67,6 +71,7 @@ public class ObservacionConsola extends UIBase {
         }
     }
 
+    // Busca una observación por su ID
     private void buscarPorId() {
         int id = leerEntero("ID de observación: ");
         try {
@@ -78,6 +83,7 @@ public class ObservacionConsola extends UIBase {
         }
     }
 
+    // Modifica una observación existente
     private void modificarObservacion() {
         int id = leerEntero("ID de observación a modificar: ");
         int idFuncionario = leerEntero("Nuevo ID funcionario: ");
@@ -96,6 +102,7 @@ public class ObservacionConsola extends UIBase {
         }
     }
 
+    // Desactiva una observación por su ID
     private void desactivarObservacion() {
         int id = leerEntero("ID de observación a desactivar: ");
         try {

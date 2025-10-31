@@ -12,10 +12,12 @@ public class InstanciaComunConsola extends UIBase {
 
     private final InstanciaComunProxy proxy;
 
+    // Constructor: inicializa el proxy que gestiona las operaciones de instancias comunes
     public InstanciaComunConsola() throws SQLException {
         this.proxy = new InstanciaComunProxy();
     }
 
+    // Muestra el menú principal del módulo de instancias comunes
     @Override
     public void mostrarMenu() {
         System.out.println("\n--- MENÚ INSTANCIAS COMUNES ---");
@@ -28,21 +30,22 @@ public class InstanciaComunConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Maneja la opción seleccionada por el usuario en el menú
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearInstanciaComun();
-            case 2 -> listarTodos();
-            case 3 -> buscarPorInstancia();
-            case 4 -> listarPorSeguimiento();
-            case 5 -> actualizarInstanciaComun();
-            case 6 -> eliminarPorInstancia();
+            case 1 -> crearInstanciaComun();       // Crear nueva instancia común
+            case 2 -> listarTodos();               // Listar todas las instancias comunes
+            case 3 -> buscarPorInstancia();        // Buscar una instancia por su ID
+            case 4 -> listarPorSeguimiento();      // Listar instancias según un seguimiento
+            case 5 -> actualizarInstanciaComun();  // Actualizar una instancia existente
+            case 6 -> eliminarPorInstancia();      // Eliminar una instancia
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // ==== CRUD ====
+    // Crea una nueva instancia común solicitando los datos al usuario
     private void crearInstanciaComun() {
         try {
             String titulo = leerTexto("Título: ");
@@ -59,6 +62,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Lista todas las instancias comunes registradas
     private void listarTodos() {
         try {
             List<InstanciaComun> lista = proxy.listarInstanciasComunes();
@@ -69,6 +73,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Busca una instancia común por su ID
     private void buscarPorInstancia() {
         int id = leerEntero("ID de instancia: ");
         try {
@@ -80,6 +85,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Lista todas las instancias comunes asociadas a un seguimiento
     private void listarPorSeguimiento() {
         int idSeg = leerEntero("ID de seguimiento: ");
         try {
@@ -91,6 +97,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Actualiza los datos de una instancia común existente
     private void actualizarInstanciaComun() {
         int id = leerEntero("ID de instancia a actualizar: ");
         try {
@@ -115,6 +122,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Elimina una instancia común según su ID
     private void eliminarPorInstancia() {
         int id = leerEntero("ID de instancia a eliminar: ");
         try {

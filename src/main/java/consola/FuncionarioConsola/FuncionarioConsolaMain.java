@@ -6,43 +6,58 @@ import modelo.Funcionario;
 import servicios.FuncionarioServicio;
 
 public class FuncionarioConsolaMain extends UIBase {
+
+    // Servicio encargado de las operaciones relacionadas con funcionarios
     private final FuncionarioServicio funcionarioServicio;
+
+    // Referencia al funcionario actualmente logueado
     private Funcionario funcionarioActual;
+
+    // Rol actual del usuario (por ejemplo: Administrador, Tutor, Analista)
     private String rolActual;
 
+    // Constructor: inicializa el servicio de funcionarios
     public FuncionarioConsolaMain() {
         FuncionarioServicio tempService = null;
         try {
             tempService = new FuncionarioServicio();
         } catch (Exception e) {
-            mostrarError("Error al inicializar FuncionarioService: " + e.getMessage());
+            mostrarError("Error al inicializar FuncionarioServicio: " + e.getMessage());
         }
         this.funcionarioServicio = tempService;
     }
 
+    // Inicia el módulo principal del funcionario
     @Override
     public void iniciar() {
+        // Se obtiene la instancia del login (Singleton)
         LoginSingleton login = LoginSingleton.getInstance();
 
+        // Verifica si hay una sesión activa
         if (!login.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        // Validar que el usuario sea un Funcionario (cualquier rol de funcionario)
+        // Verifica que el usuario actual sea un funcionario
         if (!(login.getUsuarioActual() instanceof Funcionario)) {
             mostrarError("El usuario actual no es un funcionario.");
             return;
         }
 
+        // Guarda los datos del funcionario actual y su rol
         funcionarioActual = (Funcionario) login.getUsuarioActual();
         rolActual = login.getRolActual();
 
-        super.iniciar(); // 🔁 ejecuta el bucle de menú común
-        mostrarInfo("Sesión finalizada correctamente.\n");
+        // Llama al método iniciar() de la clase base para mostrar el menú
+        super.iniciar();
+
+        // Cierra la sesión al finalizar
+        mostrarInfo("Sesión finalizada correctamente.");
         login.cerrarSesion();
     }
 
+    // Muestra el menú principal del funcionario según su rol
     @Override
     protected void mostrarMenu() {
         System.out.println("\n===== MENÚ " + rolActual.toUpperCase() + " =====");
@@ -72,33 +87,35 @@ public class FuncionarioConsolaMain extends UIBase {
         System.out.println("====================================");
     }
 
+    // Maneja la opción seleccionada por el usuario en el menú
     @Override
     protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> new ArchivoAdjuntoConsola().iniciar();
-                case 2 -> new CarreraConsola().iniciar();
-                case 3 -> new CiudadConsola().iniciar();
-                case 4 -> new DireccionConsola().iniciar();
-                case 5 -> new EstudianteConsola().iniciar();
-                case 6 -> new FuncionarioConsola().iniciar();
-                case 7 -> new GrupoConsola().iniciar();
-                case 8 -> new ITRConsola().iniciar();
-                case 9 -> new IncidenciaConsola().iniciar();
-                case 10 -> new InstanciaComunConsola().iniciar();
-                case 11 -> new NotificacionConsola().iniciar();
-                case 12 -> new ObservacionConsola().iniciar();
-                case 13 -> new RolConsola().iniciar();
-                case 14 -> new SeguimientoConsola().iniciar();
-                case 15 -> new TeleUsuarioConsola().iniciar();
-                case 16 -> new PartSeguimientoConsola().iniciar();
-                case 17 -> new PerteneceConsola().iniciar();
-                case 18 -> new RecibeConsola().iniciar();
-                case 19 -> new TeleITRConsola().iniciar();
-                case 0 -> mostrarInfo("🔒 Cerrando sesión de " + rolActual + "...");
-                default -> mostrarError("Opción inválida. Intente nuevamente.");
+                case 1 -> new ArchivoAdjuntoConsola().iniciar();   // Módulo de archivos adjuntos
+                case 2 -> new CarreraConsola().iniciar();          // Módulo de carreras
+                case 3 -> new CiudadConsola().iniciar();           // Módulo de ciudades
+                case 4 -> new DireccionConsola().iniciar();        // Módulo de direcciones
+                case 5 -> new EstudianteConsola().iniciar();       // Módulo de estudiantes
+                case 6 -> new FuncionarioConsola().iniciar();      // Módulo de funcionarios
+                case 7 -> new GrupoConsola().iniciar();            // Módulo de grupos
+                case 8 -> new ITRConsola().iniciar();              // Módulo de ITRs
+                case 9 -> new IncidenciaConsola().iniciar();       // Módulo de incidencias
+                case 10 -> new InstanciaComunConsola().iniciar();  // Módulo de instancias comunes
+                case 11 -> new NotificacionConsola().iniciar();    // Módulo de notificaciones
+                case 12 -> new ObservacionConsola().iniciar();     // Módulo de observaciones
+                case 13 -> new RolConsola().iniciar();             // Módulo de roles
+                case 14 -> new SeguimientoConsola().iniciar();     // Módulo de seguimientos
+                case 15 -> new TeleUsuarioConsola().iniciar();     // Módulo de teléfonos de usuarios
+                case 16 -> new PartSeguimientoConsola().iniciar(); // Módulo de participantes en seguimientos
+                case 17 -> new PerteneceConsola().iniciar();       // Módulo de pertenece (Carrera ↔ ITR)
+                case 18 -> new RecibeConsola().iniciar();          // Módulo de recibe (Notificación ↔ Usuario)
+                case 19 -> new TeleITRConsola().iniciar();         // Módulo de teléfonos de ITR
+                case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "..."); // Cierra sesión
+                default -> mostrarError("Opción inválida. Intente nuevamente.");  // Opción incorrecta
             }
         } catch (Exception e) {
+            // Maneja cualquier error que ocurra al ejecutar un módulo
             mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }

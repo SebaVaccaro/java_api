@@ -12,10 +12,12 @@ public class PartInstanciaConsola extends UIBase {
 
     private final PartInstanciaProxy facade;
 
+    // Constructor: inicializa el proxy de participante-instancia
     public PartInstanciaConsola() throws SQLException {
         this.facade = new PartInstanciaProxy();
     }
 
+    // Muestra el menú principal del módulo
     @Override
     protected void mostrarMenu() {
         System.out.println("\n=== Gestión de Participantes en Instancias ===");
@@ -27,19 +29,21 @@ public class PartInstanciaConsola extends UIBase {
         System.out.println("0. Salir");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> agregarParticipante();
-            case 2 -> eliminarParticipante();
-            case 3 -> listarTodos();
-            case 4 -> listarInstanciasPorParticipante();
-            case 5 -> listarParticipantesPorInstancia();
+            case 1 -> agregarParticipante();              // Agregar participante
+            case 2 -> eliminarParticipante();             // Eliminar participante
+            case 3 -> listarTodos();                      // Listar todas las relaciones
+            case 4 -> listarInstanciasPorParticipante();  // Listar instancias de un participante
+            case 5 -> listarParticipantesPorInstancia();  // Listar participantes de una instancia
             case 0 -> mostrarInfo("Saliendo...");
             default -> mostrarError("Opción no válida.");
         }
     }
 
+    // Agrega un participante a una instancia
     private void agregarParticipante() {
         int idPart = leerEntero("ID del participante: ");
         int idInst = leerEntero("ID de la instancia: ");
@@ -53,6 +57,7 @@ public class PartInstanciaConsola extends UIBase {
         }
     }
 
+    // Elimina un participante de una instancia
     private void eliminarParticipante() {
         int idPart = leerEntero("ID del participante: ");
         int idInst = leerEntero("ID de la instancia: ");
@@ -66,6 +71,7 @@ public class PartInstanciaConsola extends UIBase {
         }
     }
 
+    // Lista todas las relaciones entre participantes e instancias
     public void listarTodos() {
         try {
             List<PartInstancia> relaciones = facade.listarTodos();
@@ -76,6 +82,7 @@ public class PartInstanciaConsola extends UIBase {
         }
     }
 
+    // Lista las instancias asociadas a un participante
     public void listarInstanciasPorParticipante() {
         int idPart = leerEntero("ID del participante: ");
         try {
@@ -86,6 +93,7 @@ public class PartInstanciaConsola extends UIBase {
         }
     }
 
+    // Lista los participantes asociados a una instancia
     private void listarParticipantesPorInstancia() {
         int idInst = leerEntero("ID de la instancia: ");
         try {
@@ -95,5 +103,5 @@ public class PartInstanciaConsola extends UIBase {
             mostrarError("Error al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
     }
-
 }
+

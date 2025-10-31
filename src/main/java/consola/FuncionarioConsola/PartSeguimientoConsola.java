@@ -12,10 +12,12 @@ public class PartSeguimientoConsola extends UIBase {
 
     private final PartSeguimientoProxy facade;
 
+    // Constructor: inicializa el proxy de participante-seguimiento
     public PartSeguimientoConsola() throws SQLException {
         this.facade = new PartSeguimientoProxy();
     }
 
+    // Muestra el menú principal del módulo
     @Override
     public void mostrarMenu() {
         System.out.println("\n=== Gestión de Participantes en Seguimientos ===");
@@ -27,19 +29,21 @@ public class PartSeguimientoConsola extends UIBase {
         System.out.println("0. Salir");
     }
 
+    // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> agregarParticipante();
-            case 2 -> eliminarParticipante();
-            case 3 -> listarTodos();
-            case 4 -> listarSeguimientosPorParticipante();
-            case 5 -> listarParticipantesPorSeguimiento();
+            case 1 -> agregarParticipante();              // Agregar participante
+            case 2 -> eliminarParticipante();             // Eliminar participante
+            case 3 -> listarTodos();                      // Listar todas las relaciones
+            case 4 -> listarSeguimientosPorParticipante();// Listar seguimientos por participante
+            case 5 -> listarParticipantesPorSeguimiento();// Listar participantes por seguimiento
             case 0 -> mostrarInfo("Saliendo...");
             default -> mostrarError("Opción no válida.");
         }
     }
 
+    // Agrega un participante a un seguimiento
     private void agregarParticipante() {
         int idPart = leerEntero("ID del participante: ");
         int idSeg = leerEntero("ID del seguimiento: ");
@@ -52,6 +56,7 @@ public class PartSeguimientoConsola extends UIBase {
         }
     }
 
+    // Elimina un participante de un seguimiento
     private void eliminarParticipante() {
         int idPart = leerEntero("ID del participante: ");
         int idSeg = leerEntero("ID del seguimiento: ");
@@ -64,6 +69,7 @@ public class PartSeguimientoConsola extends UIBase {
         }
     }
 
+    // Lista todas las relaciones entre participantes y seguimientos
     private void listarTodos() {
         try {
             List<PartSeguimiento> relaciones = facade.listarTodos();
@@ -74,6 +80,7 @@ public class PartSeguimientoConsola extends UIBase {
         }
     }
 
+    // Lista los seguimientos asociados a un participante
     private void listarSeguimientosPorParticipante() {
         int idPart = leerEntero("ID del participante: ");
         try {
@@ -84,6 +91,7 @@ public class PartSeguimientoConsola extends UIBase {
         }
     }
 
+    // Lista los participantes asociados a un seguimiento
     private void listarParticipantesPorSeguimiento() {
         int idSeg = leerEntero("ID del seguimiento: ");
         try {
@@ -94,7 +102,7 @@ public class PartSeguimientoConsola extends UIBase {
         }
     }
 
-    // Para ejecutar directamente
+    // Permite ejecutar el módulo directamente
     public static void main(String[] args) throws SQLException {
         PartSeguimientoConsola ui = new PartSeguimientoConsola();
         ui.iniciar();

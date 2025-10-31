@@ -14,6 +14,7 @@ public class TelefonoConsola extends UIBase {
     private final TeleUsuarioProxy teleUsuarioProxy;
     private final int idUsuario;
 
+    // Constructor: valida sesión activa y obtiene el ID del usuario autenticado
     public TelefonoConsola() throws SQLException {
         if (!LoginSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
@@ -22,6 +23,7 @@ public class TelefonoConsola extends UIBase {
         this.teleUsuarioProxy = new TeleUsuarioProxy();
     }
 
+    // Mostrar el menú principal del módulo de teléfonos del usuario
     @Override
     protected void mostrarMenu() {
         System.out.println("\n📱 GESTIÓN DE TELÉFONOS DEL USUARIO ID: " + idUsuario);
@@ -32,14 +34,15 @@ public class TelefonoConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Gestionar la opción seleccionada por el usuario
     @Override
     protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> crearTelefono();
-                case 2 -> listarTelefonos();
-                case 3 -> actualizarTelefono();
-                case 4 -> eliminarTelefono();
+                case 1 -> crearTelefono();      // Crear un nuevo teléfono
+                case 2 -> listarTelefonos();    // Listar todos los teléfonos del usuario
+                case 3 -> actualizarTelefono(); // Actualizar un teléfono existente
+                case 4 -> eliminarTelefono();   // Eliminar (desactivar) un teléfono
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida.");
             }
@@ -48,15 +51,14 @@ public class TelefonoConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // CRUD DE TELÉFONOS
-    // ============================================================
+    // Crear un nuevo teléfono asociado al usuario autenticado
     private void crearTelefono() throws SQLException {
         String numero = leerTexto("Ingrese el número de teléfono: ");
         TeleUsuario nuevo = teleUsuarioProxy.crearTelefono(numero, idUsuario);
         mostrarExito("Teléfono creado con éxito. ID generado: " + nuevo.getIdTelefono());
     }
 
+    // Listar todos los teléfonos registrados por el usuario actual
     private void listarTelefonos() throws SQLException {
         List<TeleUsuario> lista = teleUsuarioProxy.listarTelefonosPorUsuario(idUsuario);
 
@@ -70,6 +72,7 @@ public class TelefonoConsola extends UIBase {
         }
     }
 
+    // Actualizar un teléfono existente perteneciente al usuario autenticado
     private void actualizarTelefono() throws SQLException {
         int idTel = leerEntero("Ingrese el ID del teléfono a actualizar: ");
         String numero = leerTexto("Ingrese el nuevo número: ");
@@ -81,6 +84,7 @@ public class TelefonoConsola extends UIBase {
             mostrarError("No se pudo actualizar el teléfono. Verifica que el ID te pertenezca.");
     }
 
+    // Eliminar (desactivar) un teléfono del usuario autenticado
     private void eliminarTelefono() throws SQLException {
         int idTel = leerEntero("Ingrese el ID del teléfono a eliminar: ");
         boolean eliminado = teleUsuarioProxy.eliminarTelefono(idTel);

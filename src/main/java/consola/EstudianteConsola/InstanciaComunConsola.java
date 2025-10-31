@@ -15,6 +15,7 @@ public class InstanciaComunConsola extends UIBase {
     private final InstanciaComunProxy instanciaFacade;
     private final int idFuncionario;
 
+    // Constructor: valida la sesión y obtiene el usuario autenticado
     public InstanciaComunConsola() throws SQLException {
         if (!LoginSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
@@ -23,6 +24,7 @@ public class InstanciaComunConsola extends UIBase {
         this.instanciaFacade = new InstanciaComunProxy();
     }
 
+    // Mostrar el menú principal de gestión de instancias comunes
     @Override
     protected void mostrarMenu() {
         System.out.println("\n=== MENÚ DE INSTANCIAS COMUNES ===");
@@ -35,20 +37,22 @@ public class InstanciaComunConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
     }
 
+    // Controla las acciones seleccionadas en el menú
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarInstancias();
-            case 2 -> listarPorSeguimiento();
-            case 3 -> buscarPorId();
-            case 4 -> crearInstanciaComun();
-            case 5 -> actualizarInstanciaComun();
-            case 6 -> eliminarInstanciaComun();
+            case 1 -> listarInstancias();         // Listar todas las instancias comunes
+            case 2 -> listarPorSeguimiento();     // Listar instancias por ID de seguimiento
+            case 3 -> buscarPorId();              // Buscar una instancia común por su ID
+            case 4 -> crearInstanciaComun();      // Crear una nueva instancia común
+            case 5 -> actualizarInstanciaComun(); // Actualizar los datos de una instancia
+            case 6 -> eliminarInstanciaComun();   // Eliminar (desactivar) una instancia común
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
+    // Listar todas las instancias comunes existentes
     private void listarInstancias() {
         try {
             List<InstanciaComun> lista = instanciaFacade.listarInstanciasComunes();
@@ -63,6 +67,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Listar las instancias comunes asociadas a un seguimiento específico
     private void listarPorSeguimiento() {
         int idSeg = leerEntero("Ingrese el ID del seguimiento: ");
         try {
@@ -78,6 +83,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Buscar y mostrar los detalles de una instancia común por su ID
     private void buscarPorId() {
         int id = leerEntero("Ingrese el ID de la instancia: ");
         try {
@@ -93,6 +99,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Crear una nueva instancia común asociada a un seguimiento
     private void crearInstanciaComun() {
         mostrarInfo("🆕 Crear nueva instancia común");
         String titulo = leerTexto("Título: ");
@@ -102,7 +109,9 @@ public class InstanciaComunConsola extends UIBase {
 
         try {
             OffsetDateTime fecha = OffsetDateTime.now();
-            InstanciaComun nueva = instanciaFacade.crearInstanciaComun(titulo, fecha, descripcion, estActivo, idFuncionario, idSeg);
+            InstanciaComun nueva = instanciaFacade.crearInstanciaComun(
+                    titulo, fecha, descripcion, estActivo, idFuncionario, idSeg
+            );
             mostrarExito("Instancia común creada correctamente:");
             System.out.println(nueva);
         } catch (SQLException e) {
@@ -110,6 +119,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Actualizar la información de una instancia común existente
     private void actualizarInstanciaComun() {
         int id = leerEntero("Ingrese el ID de la instancia a actualizar: ");
         String titulo = leerTexto("Nuevo título: ");
@@ -118,7 +128,9 @@ public class InstanciaComunConsola extends UIBase {
         int idSeg = leerEntero("Nuevo ID de seguimiento: ");
 
         try {
-            boolean exito = instanciaFacade.actualizarInstanciaComun(id, titulo, OffsetDateTime.now(), descripcion, estActivo, idFuncionario, idSeg);
+            boolean exito = instanciaFacade.actualizarInstanciaComun(
+                    id, titulo, OffsetDateTime.now(), descripcion, estActivo, idFuncionario, idSeg
+            );
             if (exito) mostrarExito("Instancia actualizada correctamente.");
             else mostrarError("No se pudo actualizar la instancia.");
         } catch (SQLException e) {
@@ -126,6 +138,7 @@ public class InstanciaComunConsola extends UIBase {
         }
     }
 
+    // Eliminar (desactivar) una instancia común por su ID
     private void eliminarInstanciaComun() {
         int id = leerEntero("Ingrese el ID de la instancia a eliminar: ");
         try {

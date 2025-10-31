@@ -14,17 +14,19 @@ public class DireccionConsola extends UIBase {
     private final DireccionProxy direccionProxy;
     private final int idUsuario; // usuario autenticado
 
+    // Inicialización de la consola del estudiante (direcciones)
     public DireccionConsola() throws SQLException {
+        // Verificar que haya sesión activa antes de permitir acciones
         if (!LoginSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
         }
+        // Obtener el ID del usuario actualmente autenticado
         this.idUsuario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        // Inicializar el proxy encargado de las operaciones sobre direcciones
         this.direccionProxy = new DireccionProxy();
     }
 
-    // ============================================================
-    // Implementación de UIBase
-    // ============================================================
+    // Implementación de UIBase - Menú principal
     @Override
     protected void mostrarMenu() {
         System.out.println("\n--- MENÚ MIS DIRECCIONES ---");
@@ -38,18 +40,16 @@ public class DireccionConsola extends UIBase {
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearDireccion();
-            case 2 -> listarMisDirecciones();
-            case 3 -> modificarDireccion();
-            case 4 -> eliminarDireccion();
+            case 1 -> crearDireccion();       // Crear una nueva dirección
+            case 2 -> listarMisDirecciones(); // Listar todas las direcciones del usuario
+            case 3 -> modificarDireccion();   // Modificar una dirección existente
+            case 4 -> eliminarDireccion();    // Eliminar una dirección existente
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // ============================================================
-    // CREAR DIRECCIÓN
-    // ============================================================
+    // Crear una nueva dirección para el usuario autenticado
     private void crearDireccion() {
         int idCiudad = leerEntero("ID de ciudad: ");
         String calle = leerTexto("Calle: ");
@@ -74,9 +74,7 @@ public class DireccionConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // LISTAR DIRECCIONES
-    // ============================================================
+    // Listar todas las direcciones activas pertenecientes al usuario autenticado
     private void listarMisDirecciones() {
         try {
             List<Direccion> lista = direccionProxy.listarPorUsuario(idUsuario, idUsuario);
@@ -100,9 +98,7 @@ public class DireccionConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // MODIFICAR DIRECCIÓN
-    // ============================================================
+    // Permitir al usuario modificar un campo específico de una dirección existente
     private void modificarDireccion() {
         int idDireccion = leerEntero("ID de la dirección a modificar: ");
         try {
@@ -138,9 +134,7 @@ public class DireccionConsola extends UIBase {
         }
     }
 
-    // ============================================================
-    // ELIMINAR DIRECCIÓN
-    // ============================================================
+    // Eliminar una dirección del usuario (validando propiedad y existencia)
     private void eliminarDireccion() {
         int idDireccion = leerEntero("ID de la dirección a eliminar: ");
         try {
