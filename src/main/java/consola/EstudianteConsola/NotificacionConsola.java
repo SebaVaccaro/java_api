@@ -25,16 +25,18 @@ public class NotificacionConsola extends UIBase {
     @Override
     protected void mostrarMenu() {
         if (!LoginSingleton.getInstance().haySesionActiva()) {
-            mostrarError("No hay un usuario logueado. Por favor inicia sesión.");
+            mostrarError("No hay un usuario logueado. Por favor, inicia sesión.");
             return;
         }
 
-        System.out.println("\n--- MENÚ DE NOTIFICACIONES ---");
+        System.out.println("\n===== MENÚ DE NOTIFICACIONES =====");
         System.out.println("1. Ver todas mis notificaciones");
         System.out.println("2. Buscar notificación por ID");
-        System.out.println("3. Eliminar (desactivar) notificación");
+        System.out.println("3. Eliminar o desactivar notificación");
         System.out.println("0. Volver al menú principal");
+        System.out.println("==================================");
     }
+
 
     // Controla las acciones del menú según la opción seleccionada
     @Override

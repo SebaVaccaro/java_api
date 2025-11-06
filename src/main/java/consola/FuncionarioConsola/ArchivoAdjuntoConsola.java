@@ -2,6 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.ArchivoAdjuntoProxy;
+import SINGLETON.LoginSingleton;
 import modelo.ArchivoAdjunto;
 import utils.CapturadoraDeErrores;
 
@@ -11,33 +12,36 @@ import java.util.List;
 public class ArchivoAdjuntoConsola extends UIBase {
 
     private final ArchivoAdjuntoProxy facade;
+    private final LoginSingleton loginSingleton;
 
     // Constructor: inicializa el proxy para manejar las operaciones de archivos adjuntos
     public ArchivoAdjuntoConsola() throws Exception {
         this.facade = new ArchivoAdjuntoProxy();
+        this.loginSingleton = LoginSingleton.getInstance();
     }
 
     // Mostrar el menú principal de gestión de archivos adjuntos
     @Override
     public void mostrarMenu() {
-        System.out.println("\n--- MENÚ ARCHIVOS ADJUNTOS (ADMIN) ---");
-        System.out.println("1. Crear archivo");
-        System.out.println("2. Listar activos");
-        System.out.println("3. Listar por estudiante");
-        System.out.println("4. Modificar archivo");
+        System.out.println("\n===== GESTIÓN DE ARCHIVOS ADJUNTOS =====");
+        System.out.println("1. Crear nuevo archivo");
+        System.out.println("2. Listar archivos activos");
+        System.out.println("3. Listar archivos por estudiante");
+        System.out.println("4. Modificar archivo existente");
         System.out.println("5. Eliminar archivo");
         System.out.println("0. Volver al menú principal");
+        System.out.println("========================================");
     }
 
     // Manejar la opción elegida por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearArchivo();       // Crear un nuevo archivo adjunto
-            case 2 -> listarActivos();      // Listar archivos activos
-            case 3 -> listarPorEstudiante();// Listar archivos de un estudiante específico
-            case 4 -> modificarArchivo();   // Modificar un archivo existente
-            case 5 -> eliminarArchivo();    // Eliminar (desactivar) un archivo
+            case 1 -> crearArchivo();
+            case 2 -> listarActivos();
+            case 3 -> listarPorEstudiante();
+            case 4 -> modificarArchivo();
+            case 5 -> eliminarArchivo();
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
@@ -45,17 +49,20 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Crear un nuevo archivo adjunto
     private void crearArchivo() {
-        int idUsuario = leerEntero("ID Usuario (quien crea el archivo): ");
-        int idEstudiante = leerEntero("ID Estudiante: ");
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("No hay sesión activa.");
+            return;
+        }
+
+        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
+        int idEstudiante = leerEntero("ID del estudiante: ");
         String ruta = leerTexto("Ruta del archivo: ");
         String categoria = leerTexto("Categoría: ");
 
         try {
             ArchivoAdjunto archivo = facade.crearArchivo(idUsuario, idEstudiante, ruta, categoria);
             mostrarExito("Archivo creado con éxito: " + archivo);
-        } catch (SecurityException se) {
-            mostrarError(se.getMessage());
-        } catch (IllegalArgumentException e) {
+        } catch (SecurityException | IllegalArgumentException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
             mostrarError("Error SQL al crear archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
@@ -81,8 +88,13 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Listar archivos adjuntos de un estudiante específico
     private void listarPorEstudiante() {
-        int idUsuario = leerEntero("ID Usuario (quien consulta): ");
-        int idEstudiante = leerEntero("ID Estudiante: ");
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("No hay sesión activa.");
+            return;
+        }
+
+        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
+        int idEstudiante = leerEntero("ID del estudiante: ");
 
         try {
             List<ArchivoAdjunto> list = facade.listarPorEstudiante(idUsuario, idEstudiante);
@@ -103,7 +115,12 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Modificar un archivo adjunto existente
     private void modificarArchivo() {
-        int idUsuario = leerEntero("ID Usuario (quien modifica): ");
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("No hay sesión activa.");
+            return;
+        }
+
+        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
         int idArchivo = leerEntero("ID del archivo a modificar: ");
 
         try {
@@ -121,7 +138,6 @@ public class ArchivoAdjuntoConsola extends UIBase {
             String campo = leerTexto("Campo a modificar: ");
             boolean exito = false;
 
-            // Se modifica el campo indicado por el usuario
             switch (campo.toLowerCase()) {
                 case "ruta" -> {
                     String nuevaRuta = leerTexto("Nueva ruta: ");
@@ -181,5 +197,6 @@ public class ArchivoAdjuntoConsola extends UIBase {
         }
     }
 }
+
 
 

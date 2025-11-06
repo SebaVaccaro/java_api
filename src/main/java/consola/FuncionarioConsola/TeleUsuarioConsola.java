@@ -13,72 +13,97 @@ public class TeleUsuarioConsola extends UIBase {
     private final TeleUsuarioProxy proxy;
 
     // Constructor: inicializa el proxy de teléfonos de usuario
-    public TeleUsuarioConsola() throws Exception {
+    public TeleUsuarioConsola() throws SQLException {
         this.proxy = new TeleUsuarioProxy();
     }
 
     // Muestra el menú principal
     @Override
     public void mostrarMenu() {
-        System.out.println("\n--- MENÚ TELÉFONOS DE USUARIO ---");
+        System.out.println("\n===== GESTIÓN DE TELÉFONOS DE USUARIO =====");
         System.out.println("1. Agregar teléfono");
-        System.out.println("2. Listar todos");
-        System.out.println("3. Buscar por ID");
+        System.out.println("2. Listar todos los teléfonos");
+        System.out.println("3. Buscar teléfono por ID");
         System.out.println("4. Modificar teléfono");
         System.out.println("5. Eliminar teléfono");
-        System.out.println("6. Listar por usuario");
+        System.out.println("6. Listar teléfonos por usuario");
         System.out.println("0. Volver al menú principal");
+        System.out.println("============================================");
     }
 
     // Ejecuta la opción seleccionada
     @Override
     public void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> agregarTelefono();
-            case 2 -> listarTodos();
-            case 3 -> buscarPorId();
-            case 4 -> modificarTelefono();
-            case 5 -> eliminarTelefono();
-            case 6 -> listarPorUsuario();
-            case 0 -> mostrarInfo("Volviendo al menú principal...");
-            default -> mostrarError("Opción inválida.");
+        try {
+            switch (opcion) {
+                case 1 -> agregarTelefono();
+                case 2 -> listarTodos();
+                case 3 -> buscarPorId();
+                case 4 -> modificarTelefono();
+                case 5 -> eliminarTelefono();
+                case 6 -> listarPorUsuario();
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Agregar un nuevo teléfono
+    // Agrega un nuevo teléfono
     private void agregarTelefono() {
         String numero = leerTexto("Número de teléfono: ");
         int idUsuario = leerEntero("ID del usuario: ");
 
         try {
             TeleUsuario t = proxy.crearTelefono(numero, idUsuario);
-            if (t != null) mostrarExito("Teléfono agregado: " + t);
+            if (t != null) mostrarExito("Teléfono agregado correctamente: " + t);
             else mostrarError("No se pudo agregar el teléfono.");
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al agregar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al agregar teléfono: " + e.getMessage());
         }
     }
 
-    // Listar todos los teléfonos registrados
+    // Lista todos los teléfonos registrados
     private void listarTodos() {
         try {
-            List<TeleUsuario> list = proxy.listarTelefonos();
-            if (list == null || list.isEmpty()) mostrarInfo("No hay teléfonos registrados.");
-            else list.forEach(System.out::println);
+            List<TeleUsuario> lista = proxy.listarTelefonos();
+            if (lista == null || lista.isEmpty()) {
+                mostrarInfo("No hay teléfonos registrados.");
+            } else {
+                mostrarInfo("=== LISTA DE TELÉFONOS DE USUARIO ===");
+                lista.forEach(System.out::println);
+            }
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar teléfonos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar teléfonos: " + e.getMessage());
         }
     }
 
-    // Buscar un teléfono por su ID
+    // Busca un teléfono por su ID
     private void buscarPorId() {
         int id = leerEntero("ID del teléfono: ");
         try {
             TeleUsuario t = proxy.obtenerTelefono(id);
-            if (t != null) System.out.println(t);
-            else mostrarError("No se encontró teléfono con ese ID.");
+            if (t != null) {
+                mostrarInfo("=== TELÉFONO ENCONTRADO ===");
+                System.out.println(t);
+            } else {
+                mostrarError("No se encontró teléfono con ese ID.");
+            }
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al buscar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al buscar teléfono: " + e.getMessage());
         }
     }
 
@@ -95,8 +120,8 @@ public class TeleUsuarioConsola extends UIBase {
             mostrarInfo("Campos actuales:");
             System.out.println(t);
 
-            String numero = leerTexto("Nuevo número (vacío para no cambiar): ", t.getNumero());
-            int idUsuario = leerEntero("Nuevo ID de usuario (vacío para no cambiar): ", t.getIdUsuario());
+            String numero = leerTexto("Nuevo número (ENTER para mantener): ", t.getNumero());
+            int idUsuario = leerEntero("Nuevo ID de usuario (ENTER para mantener): ", t.getIdUsuario());
 
             t.setNumero(numero);
             t.setIdUsuario(idUsuario);
@@ -104,32 +129,48 @@ public class TeleUsuarioConsola extends UIBase {
             boolean exito = proxy.actualizarTelefono(t.getIdTelefono(), t.getNumero(), t.getIdUsuario());
             if (exito) mostrarExito("Teléfono modificado correctamente.");
             else mostrarError("No se pudo modificar el teléfono.");
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al modificar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al modificar teléfono: " + e.getMessage());
         }
     }
 
-    // Eliminar un teléfono
+    // Elimina un teléfono existente
     private void eliminarTelefono() {
         int id = leerEntero("ID del teléfono a eliminar: ");
         try {
             boolean exito = proxy.eliminarTelefono(id);
             if (exito) mostrarExito("Teléfono eliminado correctamente.");
             else mostrarError("No se pudo eliminar el teléfono.");
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al eliminar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al eliminar teléfono: " + e.getMessage());
         }
     }
 
-    // Listar teléfonos pertenecientes a un usuario
+    // Lista teléfonos pertenecientes a un usuario específico
     private void listarPorUsuario() {
         int idUsuario = leerEntero("ID del usuario: ");
         try {
-            List<TeleUsuario> list = proxy.listarTelefonosPorUsuario(idUsuario);
-            if (list == null || list.isEmpty()) mostrarInfo("No hay teléfonos para este usuario.");
-            else list.forEach(System.out::println);
+            List<TeleUsuario> lista = proxy.listarTelefonosPorUsuario(idUsuario);
+            if (lista == null || lista.isEmpty()) {
+                mostrarInfo("No hay teléfonos registrados para este usuario.");
+            } else {
+                mostrarInfo("=== TELÉFONOS DEL USUARIO " + idUsuario + " ===");
+                lista.forEach(System.out::println);
+            }
+        } catch (SecurityException e) {
+            mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar teléfonos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar teléfonos: " + e.getMessage());
         }
     }
 }

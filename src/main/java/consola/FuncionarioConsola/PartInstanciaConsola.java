@@ -10,98 +10,114 @@ import java.util.List;
 
 public class PartInstanciaConsola extends UIBase {
 
-    private final PartInstanciaProxy facade;
+    private final PartInstanciaProxy proxy;
 
-    // Constructor: inicializa el proxy de participante-instancia
-    public PartInstanciaConsola() throws SQLException {
-        this.facade = new PartInstanciaProxy();
+    // Constructor: inicializa el proxy de relaciones participante-instancia
+    public PartInstanciaConsola() throws Exception {
+        this.proxy = new PartInstanciaProxy();
     }
 
     // Muestra el menú principal del módulo
     @Override
-    protected void mostrarMenu() {
-        System.out.println("\n=== Gestión de Participantes en Instancias ===");
+    public void mostrarMenu() {
+        System.out.println("\n===== MENÚ PARTICIPANTES EN INSTANCIAS =====");
         System.out.println("1. Agregar participante a instancia");
         System.out.println("2. Eliminar participante de instancia");
         System.out.println("3. Listar todas las relaciones");
         System.out.println("4. Listar instancias de un participante");
         System.out.println("5. Listar participantes de una instancia");
-        System.out.println("0. Salir");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("============================================");
     }
 
     // Maneja la opción seleccionada por el usuario
     @Override
-    protected void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> agregarParticipante();              // Agregar participante
-            case 2 -> eliminarParticipante();             // Eliminar participante
-            case 3 -> listarTodos();                      // Listar todas las relaciones
-            case 4 -> listarInstanciasPorParticipante();  // Listar instancias de un participante
-            case 5 -> listarParticipantesPorInstancia();  // Listar participantes de una instancia
-            case 0 -> mostrarInfo("Saliendo...");
-            default -> mostrarError("Opción no válida.");
+    public void manejarOpcion(int opcion) {
+        try {
+            switch (opcion) {
+                case 1 -> agregarParticipante();
+                case 2 -> eliminarParticipante();
+                case 3 -> listarTodos();
+                case 4 -> listarInstanciasPorParticipante();
+                case 5 -> listarParticipantesPorInstancia();
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error al procesar la opción: " + e.getMessage());
         }
     }
 
     // Agrega un participante a una instancia
     private void agregarParticipante() {
-        int idPart = leerEntero("ID del participante: ");
-        int idInst = leerEntero("ID de la instancia: ");
+        int idParticipante = leerEntero("ID del participante: ");
+        int idInstancia = leerEntero("ID de la instancia: ");
 
         try {
-            boolean exito = facade.agregarParticipante(idPart, idInst);
-            if (exito) mostrarExito("Participante agregado correctamente.");
+            boolean exito = proxy.agregarParticipante(idParticipante, idInstancia);
+            if (exito) mostrarExito("Participante agregado correctamente a la instancia.");
             else mostrarError("No se pudo agregar el participante.");
         } catch (SQLException e) {
-            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al agregar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al agregar participante: " + e.getMessage());
         }
     }
 
     // Elimina un participante de una instancia
     private void eliminarParticipante() {
-        int idPart = leerEntero("ID del participante: ");
-        int idInst = leerEntero("ID de la instancia: ");
+        int idParticipante = leerEntero("ID del participante: ");
+        int idInstancia = leerEntero("ID de la instancia: ");
 
         try {
-            boolean exito = facade.eliminarParticipante(idPart, idInst);
-            if (exito) mostrarExito("Participante eliminado correctamente.");
+            boolean exito = proxy.eliminarParticipante(idParticipante, idInstancia);
+            if (exito) mostrarExito("Participante eliminado correctamente de la instancia.");
             else mostrarError("No se pudo eliminar el participante.");
         } catch (SQLException e) {
-            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al eliminar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar participante: " + e.getMessage());
         }
     }
 
     // Lista todas las relaciones entre participantes e instancias
-    public void listarTodos() {
+    private void listarTodos() {
         try {
-            List<PartInstancia> relaciones = facade.listarTodos();
+            List<PartInstancia> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
         } catch (SQLException e) {
-            mostrarError("Error al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar relaciones: " + e.getMessage());
         }
     }
 
     // Lista las instancias asociadas a un participante
-    public void listarInstanciasPorParticipante() {
-        int idPart = leerEntero("ID del participante: ");
+    private void listarInstanciasPorParticipante() {
+        int idParticipante = leerEntero("ID del participante: ");
         try {
-            List<Integer> instancias = facade.listarInstanciasPorParticipante(idPart);
-            mostrarInfo("Instancias del participante: " + instancias);
+            List<Integer> instancias = proxy.listarInstanciasPorParticipante(idParticipante);
+            if (instancias.isEmpty()) mostrarInfo("El participante no tiene instancias asociadas.");
+            else mostrarInfo("Instancias del participante: " + instancias);
         } catch (SQLException e) {
-            mostrarError("Error al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar instancias: " + e.getMessage());
         }
     }
 
     // Lista los participantes asociados a una instancia
     private void listarParticipantesPorInstancia() {
-        int idInst = leerEntero("ID de la instancia: ");
+        int idInstancia = leerEntero("ID de la instancia: ");
         try {
-            List<Integer> participantes = facade.listarParticipantesPorInstancia(idInst);
-            mostrarInfo("Participantes de la instancia: " + participantes);
+            List<Integer> participantes = proxy.listarParticipantesPorInstancia(idInstancia);
+            if (participantes.isEmpty()) mostrarInfo("No hay participantes registrados para esta instancia.");
+            else mostrarInfo("Participantes de la instancia: " + participantes);
         } catch (SQLException e) {
-            mostrarError("Error al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar participantes: " + e.getMessage());
         }
     }
 }
-

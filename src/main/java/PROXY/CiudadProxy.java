@@ -54,30 +54,6 @@ public class CiudadProxy {
         return service.actualizarCiudad(idCiudad, codPostal, nombre, departamento);
     }
 
-    // Actualizar solo el nombre de la ciudad (solo administradores)
-    public boolean actualizarNombre(int idCiudad, String nombre) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar ciudades.");
-        }
-        return service.actualizarCiudad(idCiudad, 0, nombre, null);
-    }
-
-    // Actualizar solo el departamento de la ciudad (solo administradores)
-    public boolean actualizarDepartamento(int idCiudad, String departamento) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar ciudades.");
-        }
-        return service.actualizarCiudad(idCiudad, 0, null, departamento);
-    }
-
-    // Actualizar solo el código postal de la ciudad (solo administradores)
-    public boolean actualizarCodPostal(int idCiudad, int codPostal) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar ciudades.");
-        }
-        return service.actualizarCiudad(idCiudad, codPostal, null, null);
-    }
-
     // Eliminar ciudad (solo administradores)
     public boolean eliminarCiudad(int idCiudad) throws Exception {
         if (!validarUsuario.esAdministrador()) {

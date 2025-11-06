@@ -19,7 +19,11 @@ public class InformeFinalServicio {
     // Crear nuevo informe final
     public InformeFinal crearInforme(String contenido, int valoracion, LocalDate fecCreacion) throws SQLException {
         InformeFinal informe = new InformeFinal(contenido, valoracion, fecCreacion);
-        return informeDAO.crearInformeFinal(informe);
+        InformeFinal informeGuardado = informeDAO.crearInformeFinal(informe);
+        /*
+            y ahora que hago?
+         */
+        return informeGuardado;
     }
 
     // Obtener informe por ID

@@ -26,6 +26,12 @@ public class ValidarUsuario {
         return "PSICOPEDAGOGO".equalsIgnoreCase(getRolActual());
     }
 
+    // Verificar si el usuario actual es Administrador o Psicopedagogo
+    public boolean esAdminOPsico() {
+        String rol = getRolActual();
+        return "ADMINISTRADOR".equalsIgnoreCase(rol) || "PSICOPEDAGOGO".equalsIgnoreCase(rol);
+    }
+
     // Verificar si el usuario actual es Estudiante
     public boolean esEstudiante() {
         return "ESTUDIANTE".equalsIgnoreCase(getRolActual());

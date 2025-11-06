@@ -13,7 +13,7 @@ public class InformeFinalConsola extends UIBase {
 
     private final InformeFinalProxy proxy;
 
-    // Constructor: inicializa el proxy que gestiona las operaciones con informes finales
+    // Constructor: inicializa el proxy encargado de las operaciones con informes finales
     public InformeFinalConsola() throws Exception {
         this.proxy = new InformeFinalProxy();
     }
@@ -21,49 +21,33 @@ public class InformeFinalConsola extends UIBase {
     // Muestra el menú principal del módulo de informes finales
     @Override
     public void mostrarMenu() {
-        System.out.println("\n--- MENÚ INFORMES FINALES ---");
-        System.out.println("1. Crear informe");
-        System.out.println("2. Listar todos");
-        System.out.println("3. Buscar por ID");
-        System.out.println("4. Modificar informe");
-        System.out.println("5. Eliminar informe");
+        System.out.println("\n===== MENÚ INFORMES FINALES =====");
+        System.out.println("1. Listar todos");
+        System.out.println("2. Buscar por ID");
+        System.out.println("3. Modificar informe");
+        System.out.println("4. Eliminar informe");
         System.out.println("0. Volver al menú principal");
+        System.out.println("=================================");
     }
 
     // Maneja la opción seleccionada por el usuario en el menú
     @Override
     public void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> crearInforme();      // Crear un nuevo informe
-            case 2 -> listarTodos();       // Listar todos los informes
-            case 3 -> buscarPorId();       // Buscar informe por ID
-            case 4 -> modificarInforme();  // Modificar un informe existente
-            case 5 -> eliminarInforme();   // Eliminar un informe
-            case 0 -> System.out.println("Volviendo al menú principal...");
-            default -> mostrarError("Opción inválida.");
-        }
-    }
-
-    // Crea un nuevo informe final solicitando los datos al usuario
-    private void crearInforme() {
-        String contenido = leerTexto("Contenido: ");
-        int valoracion = leerEntero("Valoración (0-100): ");
-        LocalDate fecha = leerFecha("Fecha de creación (YYYY-MM-DD): ");
-        int idUsuarioPropietario = leerEntero("ID del usuario propietario: ");
-
         try {
-            InformeFinal i = proxy.crearInforme(contenido, valoracion, fecha, idUsuarioPropietario);
-            mostrarExito("Informe creado: " + i);
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al crear informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            switch (opcion) {
+                case 1 -> listarTodos();       // Listar todos los informes
+                case 2 -> buscarPorId();       // Buscar informe por ID
+                case 3 -> modificarInforme();  // Modificar un informe existente
+                case 4 -> eliminarInforme();   // Eliminar un informe
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
         } catch (Exception e) {
-            mostrarError("Error general al crear informe: " + e.getMessage());
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
         }
     }
 
-    // Lista todos los informes finales existentes
+    // Lista todos los informes finales registrados
     private void listarTodos() {
         try {
             List<InformeFinal> lista = proxy.listarInformes();
@@ -72,12 +56,12 @@ public class InformeFinalConsola extends UIBase {
             } else {
                 lista.forEach(System.out::println);
             }
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al listar informes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al listar informes: " + e.getMessage());
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al listar informes: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al listar informes: " + ex.getMessage());
         }
     }
 
@@ -89,14 +73,14 @@ public class InformeFinalConsola extends UIBase {
             if (i != null) {
                 System.out.println(i);
             } else {
-                mostrarError("Informe no encontrado.");
+                mostrarInfo("Informe no encontrado.");
             }
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al buscar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al buscar informe: " + e.getMessage());
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al buscar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al buscar informe: " + ex.getMessage());
         }
     }
 
@@ -110,16 +94,16 @@ public class InformeFinalConsola extends UIBase {
         try {
             boolean exito = proxy.actualizarInforme(id, contenido, valoracion, fecha);
             if (exito) {
-                mostrarExito("Informe modificado.");
+                mostrarExito("Informe modificado correctamente.");
             } else {
                 mostrarError("No se pudo modificar el informe.");
             }
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al modificar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al modificar informe: " + e.getMessage());
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al modificar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al modificar informe: " + ex.getMessage());
         }
     }
 
@@ -129,16 +113,16 @@ public class InformeFinalConsola extends UIBase {
         try {
             boolean exito = proxy.eliminarInforme(id);
             if (exito) {
-                mostrarExito("Informe eliminado.");
+                mostrarExito("Informe eliminado correctamente.");
             } else {
                 mostrarError("No se pudo eliminar el informe.");
             }
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al eliminar informe: " + e.getMessage());
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al eliminar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al eliminar informe: " + ex.getMessage());
         }
     }
 }

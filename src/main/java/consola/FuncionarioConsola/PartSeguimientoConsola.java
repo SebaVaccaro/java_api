@@ -10,101 +10,112 @@ import java.util.List;
 
 public class PartSeguimientoConsola extends UIBase {
 
-    private final PartSeguimientoProxy facade;
+    private final PartSeguimientoProxy proxy;
 
-    // Constructor: inicializa el proxy de participante-seguimiento
-    public PartSeguimientoConsola() throws SQLException {
-        this.facade = new PartSeguimientoProxy();
+    // Constructor: inicializa el proxy de relaciones participante-seguimiento
+    public PartSeguimientoConsola() throws Exception {
+        this.proxy = new PartSeguimientoProxy();
     }
 
     // Muestra el menú principal del módulo
     @Override
     public void mostrarMenu() {
-        System.out.println("\n=== Gestión de Participantes en Seguimientos ===");
+        System.out.println("\n===== MENÚ PARTICIPANTES EN SEGUIMIENTOS =====");
         System.out.println("1. Agregar participante a seguimiento");
         System.out.println("2. Eliminar participante de seguimiento");
         System.out.println("3. Listar todas las relaciones");
         System.out.println("4. Listar seguimientos de un participante");
         System.out.println("5. Listar participantes de un seguimiento");
-        System.out.println("0. Salir");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("===============================================");
     }
 
     // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> agregarParticipante();              // Agregar participante
-            case 2 -> eliminarParticipante();             // Eliminar participante
-            case 3 -> listarTodos();                      // Listar todas las relaciones
-            case 4 -> listarSeguimientosPorParticipante();// Listar seguimientos por participante
-            case 5 -> listarParticipantesPorSeguimiento();// Listar participantes por seguimiento
-            case 0 -> mostrarInfo("Saliendo...");
-            default -> mostrarError("Opción no válida.");
+        try {
+            switch (opcion) {
+                case 1 -> agregarParticipante();
+                case 2 -> eliminarParticipante();
+                case 3 -> listarTodos();
+                case 4 -> listarSeguimientosPorParticipante();
+                case 5 -> listarParticipantesPorSeguimiento();
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error inesperado al procesar la opción: " + e.getMessage());
         }
     }
 
     // Agrega un participante a un seguimiento
     private void agregarParticipante() {
-        int idPart = leerEntero("ID del participante: ");
-        int idSeg = leerEntero("ID del seguimiento: ");
+        int idParticipante = leerEntero("ID del participante: ");
+        int idSeguimiento = leerEntero("ID del seguimiento: ");
         try {
-            boolean exito = facade.agregarParticipante(idPart, idSeg);
-            if (exito) mostrarExito("Participante agregado correctamente.");
+            boolean exito = proxy.agregarParticipante(idParticipante, idSeguimiento);
+            if (exito) mostrarExito("Participante agregado correctamente al seguimiento.");
             else mostrarError("No se pudo agregar el participante.");
         } catch (SQLException e) {
-            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al agregar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al agregar participante: " + e.getMessage());
         }
     }
 
     // Elimina un participante de un seguimiento
     private void eliminarParticipante() {
-        int idPart = leerEntero("ID del participante: ");
-        int idSeg = leerEntero("ID del seguimiento: ");
+        int idParticipante = leerEntero("ID del participante: ");
+        int idSeguimiento = leerEntero("ID del seguimiento: ");
         try {
-            boolean exito = facade.eliminarParticipante(idPart, idSeg);
-            if (exito) mostrarExito("Participante eliminado correctamente.");
+            boolean exito = proxy.eliminarParticipante(idParticipante, idSeguimiento);
+            if (exito) mostrarExito("Participante eliminado correctamente del seguimiento.");
             else mostrarError("No se pudo eliminar el participante.");
         } catch (SQLException e) {
-            mostrarError("Error de base de datos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al eliminar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al eliminar participante: " + e.getMessage());
         }
     }
 
     // Lista todas las relaciones entre participantes y seguimientos
     private void listarTodos() {
         try {
-            List<PartSeguimiento> relaciones = facade.listarTodos();
+            List<PartSeguimiento> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
         } catch (SQLException e) {
-            mostrarError("Error al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar relaciones: " + e.getMessage());
         }
     }
 
     // Lista los seguimientos asociados a un participante
     private void listarSeguimientosPorParticipante() {
-        int idPart = leerEntero("ID del participante: ");
+        int idParticipante = leerEntero("ID del participante: ");
         try {
-            List<Integer> seguimientos = facade.listarSeguimientosPorParticipante(idPart);
-            mostrarInfo("Seguimientos del participante: " + seguimientos);
+            List<Integer> seguimientos = proxy.listarSeguimientosPorParticipante(idParticipante);
+            if (seguimientos.isEmpty()) mostrarInfo("El participante no tiene seguimientos asociados.");
+            else mostrarInfo("Seguimientos del participante: " + seguimientos);
         } catch (SQLException e) {
-            mostrarError("Error al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar seguimientos: " + e.getMessage());
         }
     }
 
     // Lista los participantes asociados a un seguimiento
     private void listarParticipantesPorSeguimiento() {
-        int idSeg = leerEntero("ID del seguimiento: ");
+        int idSeguimiento = leerEntero("ID del seguimiento: ");
         try {
-            List<Integer> participantes = facade.listarParticipantesPorSeguimiento(idSeg);
-            mostrarInfo("Participantes del seguimiento: " + participantes);
+            List<Integer> participantes = proxy.listarParticipantesPorSeguimiento(idSeguimiento);
+            if (participantes.isEmpty()) mostrarInfo("No hay participantes registrados para este seguimiento.");
+            else mostrarInfo("Participantes del seguimiento: " + participantes);
         } catch (SQLException e) {
-            mostrarError("Error al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error general al listar participantes: " + e.getMessage());
         }
-    }
-
-    // Permite ejecutar el módulo directamente
-    public static void main(String[] args) throws SQLException {
-        PartSeguimientoConsola ui = new PartSeguimientoConsola();
-        ui.iniciar();
     }
 }

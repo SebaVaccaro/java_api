@@ -12,7 +12,7 @@ public class ITRConsola extends UIBase {
 
     private final ITRProxy proxy;
 
-    // Constructor: inicializa el proxy que maneja las operaciones de ITR
+    // Constructor: inicializa el proxy que maneja las operaciones con ITR
     public ITRConsola() throws Exception {
         this.proxy = new ITRProxy();
     }
@@ -20,26 +20,31 @@ public class ITRConsola extends UIBase {
     // Muestra el menú principal del módulo de ITR
     @Override
     public void mostrarMenu() {
-        System.out.println("\n--- MENÚ ITR ---");
+        System.out.println("\n===== MENÚ ITR =====");
         System.out.println("1. Crear ITR");
         System.out.println("2. Listar todos");
         System.out.println("3. Buscar por ID");
         System.out.println("4. Modificar ITR");
         System.out.println("5. Eliminar ITR");
         System.out.println("0. Volver al menú principal");
+        System.out.println("====================");
     }
 
     // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> crearITR();         // Crear un nuevo ITR
-            case 2 -> listarTodos();      // Listar todos los ITR existentes
-            case 3 -> buscarPorId();      // Buscar un ITR por su ID
-            case 4 -> modificarITR();     // Modificar los datos de un ITR
-            case 5 -> eliminarITR();      // Eliminar un ITR existente
-            case 0 -> mostrarInfo("Volviendo al menú principal...");
-            default -> mostrarError("Opción inválida.");
+        try {
+            switch (opcion) {
+                case 1 -> crearITR();        // Crear un nuevo ITR
+                case 2 -> listarTodos();     // Listar todos los ITR
+                case 3 -> buscarPorId();     // Buscar un ITR por ID
+                case 4 -> modificarITR();    // Modificar un ITR existente
+                case 5 -> eliminarITR();     // Eliminar un ITR
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
         }
     }
 
@@ -47,8 +52,8 @@ public class ITRConsola extends UIBase {
     private void crearITR() {
         int idDireccion = leerEntero("ID de dirección: ");
         try {
-            ITR nuevoITR = new ITR(idDireccion);
-            ITR creado = proxy.crearITR(nuevoITR);
+            ITR nuevo = new ITR(idDireccion);
+            ITR creado = proxy.crearITR(nuevo);
             mostrarExito("ITR creado correctamente: " + creado);
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
@@ -77,8 +82,8 @@ public class ITRConsola extends UIBase {
         int idItr = leerEntero("ID del ITR: ");
         try {
             ITR itr = proxy.obtenerITR(idItr);
-            if (itr != null) mostrarInfo(itr.toString());
-            else mostrarError("ITR no encontrado.");
+            if (itr != null) System.out.println(itr);
+            else mostrarInfo("ITR no encontrado.");
         } catch (SQLException e) {
             mostrarError("Error SQL al buscar ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
@@ -89,10 +94,17 @@ public class ITRConsola extends UIBase {
     // Modifica los datos de un ITR existente
     private void modificarITR() {
         int idItr = leerEntero("ID del ITR a modificar: ");
-        int idDireccion = leerEntero("Nuevo ID de dirección: ");
         try {
-            ITR itrModificado = new ITR(idItr, idDireccion);
-            boolean exito = proxy.actualizarITR(itrModificado);
+            ITR existente = proxy.obtenerITR(idItr);
+            if (existente == null) {
+                mostrarInfo("ITR no encontrado.");
+                return;
+            }
+
+            int idDireccion = leerEntero("Nuevo ID de dirección [" + existente.getIdDireccion() + "]: ", existente.getIdDireccion());
+            ITR actualizado = new ITR(idItr, idDireccion);
+
+            boolean exito = proxy.actualizarITR(actualizado);
             if (exito) mostrarExito("ITR modificado correctamente.");
             else mostrarError("No se pudo modificar el ITR.");
         } catch (SecurityException e) {

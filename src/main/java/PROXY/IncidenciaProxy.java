@@ -26,28 +26,32 @@ public class IncidenciaProxy {
                                       int idFuncionario,
                                       String lugar) throws Exception {
         if (!validarUsuario.esPropietario(idFuncionario)) {
-            throw new SecurityException("Solo el propietario puede crear esta incidencia.");
+            throw new SecurityException("Solo el propietario puede crear sus Incidencias.");
         }
         return incidenciaServicio.crearIncidencia(titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
     }
 
-    // Obtener incidencia por ID (sin restricción de permisos, puede validar luego según rol)
+    // Obtener incidencia por ID (solo administradores, psicopedagogos o el propietario)
     public Incidencia obtenerIncidencia(int idIncidencia) throws Exception {
-        return incidenciaServicio.obtenerIncidencia(idIncidencia);
+        Incidencia incidencia = incidenciaServicio.obtenerIncidencia(idIncidencia);
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(incidencia.getIdFuncionario())) {
+            throw new SecurityException("Solo administradores psicopedagogos o el propietario pueden ver esta Incidencia.");
+        }
+        return incidencia;
     }
 
     // Listar todas las incidencias (solo administradores o psicopedagogos)
     public List<Incidencia> listarIncidencias() throws Exception {
-        if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("Solo administradores o psicopedagogos pueden listar incidencias.");
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("Solo administradores o psicopedagogos pueden listar Incidencias.");
         }
         return incidenciaServicio.listarIncidencias();
     }
 
-    // Listar incidencias por funcionario (solo administradores o psicopedagogos)
+    // Listar incidencias por funcionario (solo administradores, psicopedagogos o el propietario)
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws Exception {
-        if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
-            throw new SecurityException("Solo administradores o psicopedagogos pueden listar incidencias de un funcionario.");
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idFuncionario)){
+            throw new SecurityException("Solo administradores psicopedagogos o el propietario pueden listar estas Incidencias.");
         }
         return incidenciaServicio.listarPorFuncionario(idFuncionario);
     }

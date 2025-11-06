@@ -35,20 +35,29 @@ public class FuncionarioProxy {
         }
     }
 
-    // Obtener funcionario por ID (sin restricción de permisos)
+    // Obtener funcionario por ID (solo admin, psicopedagogo o propietario)
     public Funcionario obtenerPorId(int idUsuario) throws SQLException {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+            throw new SecurityException("No tiene permiso para crear este archivo.");
+        }
         return funcionarioServicio.obtenerPorId(idUsuario);
     }
 
-    // Listar todos los funcionarios (sin restricción de permisos)
+    // Listar todos los funcionarios (solo admin o psicopedagogo)
     public List<Funcionario> listarTodos() throws SQLException {
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("Solo administradores o psicopedagogo pueden listar funcionarios.");
+        }
         return funcionarioServicio.listarTodos();
     }
 
-    // Actualizar funcionario (sin restricción de permisos)
+    // Actualizar funcionario (solo admin, psicopedagogo o propietario)
     public boolean actualizarFuncionario(int idUsuario, String cedula, String nombre, String apellido,
                                          String username, String password, String correo,
                                          int idRol, boolean estActivo) throws SQLException {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+            throw new SecurityException("No tiene permiso para actualizar funcionario.");
+        }
         try {
             return funcionarioServicio.actualizarFuncionario(idUsuario, cedula, nombre, apellido, username, password, correo, idRol, estActivo);
         } catch (Exception e) {
@@ -64,8 +73,11 @@ public class FuncionarioProxy {
         return funcionarioServicio.desactivarFuncionario(idUsuario);
     }
 
-    // Verificar si un funcionario está activo (sin restricción de permisos)
+    // Verificar si un funcionario está activo (solo admin, psicopedagogo o propietario)
     public boolean estaActivo(int idUsuario) throws SQLException {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+            throw new SecurityException("No tiene permiso para actualizar funcionario.");
+        }
         return funcionarioServicio.estaActivo(idUsuario);
     }
 }

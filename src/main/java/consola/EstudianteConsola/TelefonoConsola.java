@@ -26,13 +26,16 @@ public class TelefonoConsola extends UIBase {
     // Mostrar el menú principal del módulo de teléfonos del usuario
     @Override
     protected void mostrarMenu() {
-        System.out.println("\n📱 GESTIÓN DE TELÉFONOS DEL USUARIO ID: " + idUsuario);
-        System.out.println("1. Crear teléfono");
+        System.out.println("\n===== MENÚ DE GESTIÓN DE TELÉFONOS =====");
+        System.out.println("Usuario ID: " + idUsuario);
+        System.out.println("1. Crear nuevo teléfono");
         System.out.println("2. Listar mis teléfonos");
-        System.out.println("3. Actualizar teléfono");
+        System.out.println("3. Actualizar teléfono existente");
         System.out.println("4. Eliminar teléfono");
         System.out.println("0. Volver al menú principal");
+        System.out.println("=========================================");
     }
+
 
     // Gestionar la opción seleccionada por el usuario
     @Override

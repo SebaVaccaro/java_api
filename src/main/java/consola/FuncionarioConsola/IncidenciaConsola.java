@@ -13,12 +13,12 @@ public class IncidenciaConsola extends UIBase {
 
     private final IncidenciaProxy proxy;
 
-    // Constructor: inicializa el proxy que gestiona las operaciones relacionadas con incidencias
+    // Constructor: inicializa el proxy encargado de las operaciones de incidencias
     public IncidenciaConsola() throws Exception {
         this.proxy = new IncidenciaProxy();
     }
 
-    // Muestra el menú principal del módulo de incidencias
+    // Mostrar el menú principal del módulo de incidencias
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== MENÚ INCIDENCIAS =====");
@@ -32,17 +32,17 @@ public class IncidenciaConsola extends UIBase {
         System.out.println("=============================");
     }
 
-    // Maneja la opción seleccionada por el usuario en el menú de incidencias
+    // Manejar la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> crearIncidencia();        // Crea una nueva incidencia
-                case 2 -> listarTodas();            // Lista todas las incidencias
-                case 3 -> buscarPorInstancia();     // Busca una incidencia por ID de instancia
-                case 4 -> listarPorFuncionario();   // Lista incidencias según el funcionario
-                case 5 -> modificarIncidencia();    // Modifica una incidencia existente
-                case 6 -> eliminarIncidencia();     // Elimina una incidencia
+                case 1 -> crearIncidencia();       // Crear nueva incidencia
+                case 2 -> listarTodas();           // Listar todas las incidencias
+                case 3 -> buscarPorInstancia();    // Buscar incidencia por instancia
+                case 4 -> listarPorFuncionario();  // Listar incidencias por funcionario
+                case 5 -> modificarIncidencia();   // Modificar una incidencia existente
+                case 6 -> eliminarIncidencia();    // Eliminar incidencia
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -51,7 +51,7 @@ public class IncidenciaConsola extends UIBase {
         }
     }
 
-    // Crea una nueva incidencia solicitando los datos al usuario
+    // Crear una nueva incidencia
     private void crearIncidencia() {
         String titulo = leerTexto("Título: ");
         OffsetDateTime fecha = leerFechaHora("Fecha y hora (YYYY-MM-DDTHH:MM): ");
@@ -62,93 +62,108 @@ public class IncidenciaConsola extends UIBase {
 
         try {
             Incidencia incidencia = proxy.crearIncidencia(titulo, fecha, descripcion, activo, idFuncionario, lugar);
-            mostrarExito("Incidencia creada: " + incidencia);
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al crear incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al crear incidencia: " + e.getMessage());
+            mostrarExito("Incidencia creada correctamente: " + incidencia);
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al crear incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al crear incidencia: " + ex.getMessage());
         }
     }
 
-    // Lista todas las incidencias registradas en el sistema
+    // Listar todas las incidencias registradas
     private void listarTodas() {
         try {
             List<Incidencia> lista = proxy.listarIncidencias();
-            if (lista.isEmpty()) mostrarInfo("No hay incidencias registradas.");
-            else lista.forEach(System.out::println);
-        } catch (SQLException e) {
-            mostrarError("Error SQL al listar incidencias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al listar incidencias: " + e.getMessage());
+            if (lista.isEmpty()) {
+                mostrarInfo("No hay incidencias registradas.");
+            } else {
+                lista.forEach(System.out::println);
+            }
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al listar incidencias: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al listar incidencias: " + ex.getMessage());
         }
     }
 
-    // Busca una incidencia según el ID de la instancia asociada
+    // Buscar una incidencia por su instancia asociada
     private void buscarPorInstancia() {
         int idInstancia = leerEntero("ID de la instancia: ");
         try {
             Incidencia i = proxy.obtenerIncidencia(idInstancia);
-            if (i != null) System.out.println(i);
-            else mostrarInfo("Incidencia no encontrada.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al buscar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al buscar incidencia: " + e.getMessage());
+            if (i != null) {
+                System.out.println(i);
+            } else {
+                mostrarInfo("Incidencia no encontrada.");
+            }
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al buscar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al buscar incidencia: " + ex.getMessage());
         }
     }
 
-    // Lista todas las incidencias registradas por un funcionario específico
+    // Listar incidencias de un funcionario específico
     private void listarPorFuncionario() {
         int idFuncionario = leerEntero("ID del funcionario: ");
         try {
             List<Incidencia> lista = proxy.listarPorFuncionario(idFuncionario);
-            if (lista.isEmpty()) mostrarInfo("No hay incidencias registradas para este funcionario.");
-            else lista.forEach(System.out::println);
-        } catch (SQLException e) {
-            mostrarError("Error SQL al listar incidencias por funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al listar incidencias por funcionario: " + e.getMessage());
+            if (lista.isEmpty()) {
+                mostrarInfo("No hay incidencias registradas para este funcionario.");
+            } else {
+                lista.forEach(System.out::println);
+            }
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al listar incidencias por funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al listar incidencias por funcionario: " + ex.getMessage());
         }
     }
 
-    // Modifica los datos de una incidencia existente
+    // Modificar los datos de una incidencia existente
     private void modificarIncidencia() {
         int id = leerEntero("ID de la incidencia a modificar: ");
         String titulo = leerTexto("Nuevo título: ");
         OffsetDateTime fecha = leerFechaHora("Nueva fecha y hora (YYYY-MM-DDTHH:MM): ");
         String descripcion = leerTexto("Nueva descripción: ");
         boolean activo = leerBoolean("¿Está activa? (true/false): ");
-        int idFuncionario = leerEntero("Nuevo ID de funcionario: ");
+        int idFuncionario = leerEntero("Nuevo ID del funcionario: ");
         String lugar = leerTexto("Nuevo lugar: ");
 
         try {
             boolean exito = proxy.actualizarIncidencia(id, titulo, fecha, descripcion, activo, idFuncionario, lugar);
-            if (exito) mostrarExito("Incidencia modificada correctamente.");
-            else mostrarError("No se pudo modificar la incidencia.");
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al modificar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al modificar incidencia: " + e.getMessage());
+            if (exito) {
+                mostrarExito("Incidencia modificada correctamente.");
+            } else {
+                mostrarError("No se pudo modificar la incidencia.");
+            }
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al modificar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al modificar incidencia: " + ex.getMessage());
         }
     }
 
-    // Elimina una incidencia del sistema según su ID
+    // Eliminar una incidencia del sistema
     private void eliminarIncidencia() {
         int id = leerEntero("ID de la incidencia a eliminar: ");
         try {
             boolean exito = proxy.eliminarIncidencia(id);
-            if (exito) mostrarExito("Incidencia eliminada correctamente.");
-            else mostrarError("No se pudo eliminar la incidencia.");
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al eliminar incidencia: " + e.getMessage());
+            if (exito) {
+                mostrarExito("Incidencia eliminada correctamente.");
+            } else {
+                mostrarError("No se pudo eliminar la incidencia.");
+            }
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError("Error SQL al eliminar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError("Error general al eliminar incidencia: " + ex.getMessage());
         }
     }
 }

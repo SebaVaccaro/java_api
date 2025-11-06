@@ -18,29 +18,34 @@ public class NotificacionConsola extends UIBase {
         this.proxy = new NotificacionProxy();
     }
 
-    // Muestra el menú principal de notificaciones
+    // Muestra el menú principal del módulo de notificaciones
     @Override
     public void mostrarMenu() {
-        System.out.println("\n--- MENÚ NOTIFICACIONES ---");
+        System.out.println("\n===== MENÚ NOTIFICACIONES =====");
         System.out.println("1. Crear notificación");
         System.out.println("2. Listar todas");
         System.out.println("3. Buscar por ID");
         System.out.println("4. Modificar notificación");
         System.out.println("5. Desactivar notificación");
         System.out.println("0. Volver al menú principal");
+        System.out.println("================================");
     }
 
     // Maneja la opción seleccionada por el usuario
     @Override
     public void manejarOpcion(int opcion) {
-        switch (opcion) {
-            case 1 -> crearNotificacion();       // Crear una nueva notificación
-            case 2 -> listarTodas();             // Listar todas las notificaciones
-            case 3 -> buscarPorId();             // Buscar una notificación por su ID
-            case 4 -> modificarNotificacion();   // Modificar una notificación existente
-            case 5 -> desactivarNotificacion();  // Desactivar una notificación
-            case 0 -> mostrarInfo("Volviendo al menú principal...");
-            default -> mostrarError("Opción inválida.");
+        try {
+            switch (opcion) {
+                case 1 -> crearNotificacion();      // Crear una nueva notificación
+                case 2 -> listarTodas();            // Listar todas las notificaciones
+                case 3 -> buscarPorId();            // Buscar una notificación por su ID
+                case 4 -> modificarNotificacion();  // Modificar una notificación existente
+                case 5 -> desactivarNotificacion(); // Desactivar una notificación
+                case 0 -> mostrarInfo("Volviendo al menú principal...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            }
+        } catch (Exception e) {
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
         }
     }
 
@@ -84,8 +89,8 @@ public class NotificacionConsola extends UIBase {
         int id = leerEntero("ID de notificación: ");
         try {
             Notificacion n = proxy.obtenerNotificacion(id);
-            if (n != null) mostrarInfo(n.toString());
-            else mostrarError("Notificación no encontrada.");
+            if (n != null) System.out.println(n);
+            else mostrarInfo("Notificación no encontrada.");
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
@@ -98,15 +103,30 @@ public class NotificacionConsola extends UIBase {
     // Modifica una notificación existente
     private void modificarNotificacion() {
         int id = leerEntero("ID de notificación a modificar: ");
-        String asunto = leerTexto("Nuevo asunto: ");
-        String mensaje = leerTexto("Nuevo mensaje: ");
-        String destinatario = leerTexto("Nuevo destinatario: ");
-        LocalDate fecEnvio = leerFecha("Nueva fecha de envío (YYYY-MM-DD): ");
-        boolean estActivo = true;
-
         try {
-            Notificacion n = new Notificacion(id, 0, asunto, mensaje, destinatario, fecEnvio, estActivo);
-            boolean exito = proxy.actualizarNotificacion(n);
+            Notificacion existente = proxy.obtenerNotificacion(id);
+            if (existente == null) {
+                mostrarInfo("Notificación no encontrada.");
+                return;
+            }
+
+            String asunto = leerTexto("Nuevo asunto [" + existente.getAsunto() + "]: ", existente.getAsunto());
+            String mensaje = leerTexto("Nuevo mensaje [" + existente.getMensaje() + "]: ", existente.getMensaje());
+            String destinatario = leerTexto("Nuevo destinatario [" + existente.getDestinatario() + "]: ", existente.getDestinatario());
+            LocalDate fecEnvio = leerFecha("Nueva fecha de envío [" + existente.getFecEnvio() + "]: ", existente.getFecEnvio());
+            boolean estActivo = true;
+
+            Notificacion actualizada = new Notificacion(
+                    id,
+                    existente.getIdInstancia(),
+                    asunto,
+                    mensaje,
+                    destinatario,
+                    fecEnvio,
+                    estActivo
+            );
+
+            boolean exito = proxy.actualizarNotificacion(actualizada);
             if (exito) mostrarExito("Notificación modificada correctamente.");
             else mostrarError("No se pudo modificar la notificación.");
         } catch (SecurityException e) {
@@ -134,3 +154,4 @@ public class NotificacionConsola extends UIBase {
         }
     }
 }
+

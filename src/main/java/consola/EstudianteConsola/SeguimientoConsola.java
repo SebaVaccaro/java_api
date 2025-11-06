@@ -27,12 +27,14 @@ public class SeguimientoConsola extends UIBase {
     // Mostrar el menú principal del módulo de seguimientos del estudiante
     @Override
     protected void mostrarMenu() {
-        System.out.println("\n--- MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE ---");
+        System.out.println("\n===== MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE =====");
         System.out.println("1. Ver mis seguimientos");
         System.out.println("2. Buscar seguimiento por ID");
         System.out.println("3. Cerrar seguimiento");
         System.out.println("0. Volver al menú principal");
+        System.out.println("===============================================");
     }
+
 
     // Gestionar la opción seleccionada por el estudiante
     @Override

@@ -29,14 +29,17 @@ public class ArchivoAdjuntoProxy {
     // Obtener archivo por ID (solo admin, psicopedagogo o propietario)
     public ArchivoAdjunto obtenerPorId(int idUsuario, int idArchivo) throws Exception {
         ArchivoAdjunto archivo = service.obtenerArchivo(idArchivo);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdEstudiante())) {
             throw new SecurityException("No tiene permiso para ver este archivo.");
         }
         return archivo;
     }
 
-    // Listar archivos activos (sin restricción de permisos)
+    // Listar archivos activos (solo admin o psicopedagogo)
     public List<ArchivoAdjunto> listarActivos() throws SQLException {
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("No tiene permiso para ver este archivo.");
+        }
         return service.listarActivos();
     }
 
@@ -50,7 +53,7 @@ public class ArchivoAdjuntoProxy {
 
     // Actualizar archivo (solo admin, psicopedagogo o propietario)
     public boolean actualizarArchivo(ArchivoAdjunto archivo) throws Exception {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdUsuario())) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdEstudiante())) {
             throw new SecurityException("No tiene permiso para actualizar este archivo.");
         }
         return service.actualizarArchivo(archivo);
@@ -59,17 +62,16 @@ public class ArchivoAdjuntoProxy {
     // Eliminar archivo (baja lógica, solo admin, psicopedagogo o propietario)
     public boolean eliminar(int idArchivo) throws Exception {
         ArchivoAdjunto archivo = service.obtenerArchivo(idArchivo);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdUsuario())) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdEstudiante())) {
             throw new SecurityException("No tiene permiso para eliminar este archivo.");
         }
         return service.eliminarArchivo(idArchivo);
     }
 
-    // Eliminar archivo físicamente (solo admin, psicopedagogo o propietario)
+    // Eliminar archivo físicamente (solo ADMIN)
     public boolean eliminarFisico(int idArchivo) throws Exception {
-        ArchivoAdjunto archivo = service.obtenerArchivo(idArchivo);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdUsuario())) {
-            throw new SecurityException("No tiene permiso para eliminar físicamente este archivo.");
+        if (!validarUsuario.esAdministrador()) {
+            throw new SecurityException("Solo un administrador puede eliminar físicamente este archivo.");
         }
         return service.eliminarFisico(idArchivo);
     }

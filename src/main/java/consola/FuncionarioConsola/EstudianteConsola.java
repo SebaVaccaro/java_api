@@ -2,6 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.EstudianteProxy;
+import SINGLETON.LoginSingleton;
 import modelo.Estudiante;
 import utils.CapturadoraDeErrores;
 
@@ -12,45 +13,49 @@ import java.util.List;
 public class EstudianteConsola extends UIBase {
 
     private final EstudianteProxy proxy;
+    private final LoginSingleton loginSingleton;
 
-    // Constructor: inicializa el proxy que gestiona las operaciones de estudiantes
+    // Constructor
     public EstudianteConsola() throws Exception {
         this.proxy = new EstudianteProxy();
+        this.loginSingleton = LoginSingleton.getInstance();
     }
 
-    // Mostrar el menú principal del módulo de gestión de estudiantes
+    // Mostrar menú principal
     @Override
     public void mostrarMenu() {
-        System.out.println("\n===== MENÚ ESTUDIANTES =====");
-        System.out.println("1. Crear estudiante");
-        System.out.println("2. Listar todos");
-        System.out.println("3. Buscar por ID");
-        System.out.println("4. Modificar estudiante");
+        System.out.println("\n===== MENÚ DE GESTIÓN DE ESTUDIANTES =====");
+        System.out.println("1. Crear nuevo estudiante");
+        System.out.println("2. Listar todos los estudiantes");
+        System.out.println("3. Buscar estudiante por ID");
+        System.out.println("4. Modificar estudiante existente");
         System.out.println("5. Desactivar estudiante");
-        System.out.println("0. Volver al menú anterior");
-        System.out.println("=============================");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("==========================================");
     }
 
-    // Manejar la opción seleccionada por el usuario
+
+    // Manejar opción seleccionada
     @Override
     public void manejarOpcion(int opcion) {
-        try {
-            switch (opcion) {
-                case 1 -> crearEstudiante();       // Crear nuevo estudiante
-                case 2 -> listarTodos();           // Listar todos los estudiantes
-                case 3 -> buscarPorId();           // Buscar estudiante por ID
-                case 4 -> modificarEstudiante();   // Modificar información de un estudiante
-                case 5 -> desactivarEstudiante();  // Desactivar estudiante
-                case 0 -> mostrarInfo("Volviendo al menú principal...");
-                default -> mostrarError("Opción inválida. Intente nuevamente.");
-            }
-        } catch (Exception e) {
-            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        switch (opcion) {
+            case 1 -> crearEstudiante();
+            case 2 -> listarTodos();
+            case 3 -> buscarPorId();
+            case 4 -> modificarEstudiante();
+            case 5 -> desactivarEstudiante();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida. Intente nuevamente.");
         }
     }
 
-    // Crear un nuevo estudiante
+    // Crear nuevo estudiante
     private void crearEstudiante() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("❌ No hay sesión activa.");
+            return;
+        }
+
         String cedula = leerTexto("Cédula: ");
         String nombre = leerTexto("Nombre: ");
         String apellido = leerTexto("Apellido: ");
@@ -59,75 +64,114 @@ public class EstudianteConsola extends UIBase {
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
-            Estudiante e = proxy.crearEstudiante(cedula, nombre, apellido, password, idGrupo, fechaNacimiento);
+            Estudiante e = proxy.crearEstudiante(
+                    cedula, nombre, apellido, password, idGrupo, fechaNacimiento
+            );
             mostrarExito("✅ Estudiante creado correctamente: " + e);
-        } catch (SecurityException ex) {
-            mostrarError(ex.getMessage());
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al crear estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al crear estudiante: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError("Error SQL al crear estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Listar todos los estudiantes registrados
+    // Listar todos los estudiantes
     private void listarTodos() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("❌ No hay sesión activa.");
+            return;
+        }
+
         try {
             List<Estudiante> lista = proxy.listarTodos();
             if (lista.isEmpty())
                 mostrarInfo("No hay estudiantes registrados.");
             else
                 lista.forEach(System.out::println);
-        } catch (SQLException ex) {
-            mostrarError("Error al listar estudiantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al listar estudiantes: " + ex.getMessage());
+        } catch (SQLException e) {
+            mostrarError("Error SQL al listar estudiantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Buscar un estudiante por su ID
+    // Buscar estudiante por ID
     private void buscarPorId() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("❌ No hay sesión activa.");
+            return;
+        }
+
         int idEstudiante = leerEntero("ID del estudiante: ");
         try {
             Estudiante e = proxy.obtenerPorId(idEstudiante);
             if (e != null)
                 System.out.println(e);
             else
-                mostrarInfo("Estudiante no encontrado.");
-        } catch (SQLException ex) {
-            mostrarError("Error al buscar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al buscar estudiante: " + ex.getMessage());
+                mostrarInfo("No se encontró ningún estudiante con ese ID.");
+        } catch (SQLException e) {
+            mostrarError("Error SQL al buscar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Modificar los datos de un estudiante existente
+    // Modificar estudiante existente
     private void modificarEstudiante() {
-        int idEstudiante = leerEntero("ID del estudiante a modificar: ");
-        String cedula = leerTexto("Nueva cédula: ");
-        String nombre = leerTexto("Nuevo nombre: ");
-        String apellido = leerTexto("Nuevo apellido: ");
-        String username = leerTexto("Nuevo username: ");
-        String password = leerTexto("Nuevo password: ");
-        int idGrupo = leerEntero("Nuevo ID de grupo: ");
-        boolean activo = leerBoolean("¿Activo? (true/false): ");
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("❌ No hay sesión activa.");
+            return;
+        }
 
+        int idEstudiante = leerEntero("ID del estudiante a modificar: ");
         try {
-            Estudiante e = new Estudiante(idEstudiante, cedula, nombre, apellido, username, password, null, idGrupo, activo);
-            boolean exito = proxy.actualizarEstudiante(e);
+            Estudiante e = proxy.obtenerPorId(idEstudiante);
+            if (e == null) {
+                mostrarInfo("El estudiante no existe.");
+                return;
+            }
+
+            System.out.println("Estudiante seleccionado: " + e);
+            System.out.println("Campos modificables: cedula, nombre, apellido, password, idGrupo, activo");
+
+            String campo = leerTexto("Campo a modificar: ");
+            boolean exito = false;
+
+            switch (campo.toLowerCase()) {
+                case "cedula" -> e.setCedula(leerTexto("Nueva cédula: "));
+                case "nombre" -> e.setNombre(leerTexto("Nuevo nombre: "));
+                case "apellido" -> e.setApellido(leerTexto("Nuevo apellido: "));
+                case "password" -> e.setPassword(leerTexto("Nuevo password: "));
+                case "idgrupo" -> e.setIdGrupo(leerEntero("Nuevo ID de grupo: "));
+                case "activo" -> e.setActivo(leerBoolean("¿Activo? (true/false): "));
+                default -> {
+                    mostrarError("Campo inválido.");
+                    return;
+                }
+            }
+
+            exito = proxy.actualizarEstudiante(e);
             if (exito)
                 mostrarExito("✅ Estudiante modificado correctamente.");
             else
                 mostrarError("No se pudo modificar el estudiante.");
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al modificar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al modificar estudiante: " + ex.getMessage());
+
+        } catch (SQLException e) {
+            mostrarError("Error SQL al modificar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Desactivar un estudiante (cambia su estado a inactivo)
+    // Desactivar estudiante
     private void desactivarEstudiante() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("❌ No hay sesión activa.");
+            return;
+        }
+
         int idEstudiante = leerEntero("ID del estudiante a desactivar: ");
         try {
             boolean exito = proxy.desactivarEstudiante(idEstudiante);
@@ -135,12 +179,12 @@ public class EstudianteConsola extends UIBase {
                 mostrarExito("✅ Estudiante desactivado correctamente.");
             else
                 mostrarError("No se pudo desactivar el estudiante.");
-        } catch (SecurityException ex) {
-            mostrarError(ex.getMessage());
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al desactivar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al desactivar estudiante: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError("Error SQL al desactivar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

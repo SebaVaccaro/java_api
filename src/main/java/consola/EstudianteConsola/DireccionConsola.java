@@ -29,13 +29,15 @@ public class DireccionConsola extends UIBase {
     // Implementación de UIBase - Menú principal
     @Override
     protected void mostrarMenu() {
-        System.out.println("\n--- MENÚ MIS DIRECCIONES ---");
-        System.out.println("1. Crear dirección");
+        System.out.println("\n===== MENÚ DE MIS DIRECCIONES =====");
+        System.out.println("1. Crear nueva dirección");
         System.out.println("2. Listar mis direcciones");
-        System.out.println("3. Modificar dirección");
+        System.out.println("3. Modificar dirección existente");
         System.out.println("4. Eliminar dirección");
         System.out.println("0. Volver al menú principal");
+        System.out.println("==================================");
     }
+
 
     @Override
     protected void manejarOpcion(int opcion) {
@@ -77,7 +79,7 @@ public class DireccionConsola extends UIBase {
     // Listar todas las direcciones activas pertenecientes al usuario autenticado
     private void listarMisDirecciones() {
         try {
-            List<Direccion> lista = direccionProxy.listarPorUsuario(idUsuario, idUsuario);
+            List<Direccion> lista = direccionProxy.listarPorUsuario(idUsuario);
             if (lista.isEmpty()) {
                 mostrarInfo("No tienes direcciones registradas.");
             } else {
@@ -102,7 +104,7 @@ public class DireccionConsola extends UIBase {
     private void modificarDireccion() {
         int idDireccion = leerEntero("ID de la dirección a modificar: ");
         try {
-            Direccion d = direccionProxy.obtenerDireccion(idUsuario, idDireccion);
+            Direccion d = direccionProxy.obtenerDireccion(idDireccion);
             if (d == null) {
                 mostrarError("Dirección no encontrada.");
                 return;
@@ -138,13 +140,13 @@ public class DireccionConsola extends UIBase {
     private void eliminarDireccion() {
         int idDireccion = leerEntero("ID de la dirección a eliminar: ");
         try {
-            Direccion d = direccionProxy.obtenerDireccion(idUsuario, idDireccion);
+            Direccion d = direccionProxy.obtenerDireccion(idDireccion);
             if (d == null) {
                 mostrarError("Dirección no encontrada.");
                 return;
             }
 
-            boolean exito = direccionProxy.eliminarDireccion(idUsuario, idDireccion);
+            boolean exito = direccionProxy.eliminarDireccion(idDireccion);
             if (exito) mostrarExito("Dirección eliminada correctamente.");
             else mostrarError("No se pudo eliminar la dirección.");
 

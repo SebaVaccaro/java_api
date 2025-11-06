@@ -1,7 +1,8 @@
 package consola.FuncionarioConsola;
 
-import PROXY.CarreraProxy;
 import consola.InterfazConsola.UIBase;
+import PROXY.CarreraProxy;
+import SINGLETON.LoginSingleton;
 import modelo.Carrera;
 import utils.CapturadoraDeErrores;
 
@@ -11,146 +12,197 @@ import java.util.List;
 public class CarreraConsola extends UIBase {
 
     private final CarreraProxy proxy;
+    private final LoginSingleton loginSingleton;
 
-    // Constructor: inicializa el proxy que maneja las operaciones sobre carreras
+    // Constructor: inicializa el proxy para manejar las operaciones de carreras
     public CarreraConsola() throws Exception {
         this.proxy = new CarreraProxy();
+        this.loginSingleton = LoginSingleton.getInstance();
     }
 
     // Mostrar el menú principal de gestión de carreras
     @Override
     public void mostrarMenu() {
-        System.out.println("\n🎓 MENÚ DE GESTIÓN DE CARRERAS");
-        System.out.println("1. Crear carrera");
-        System.out.println("2. Listar todas");
-        System.out.println("3. Buscar por ID");
-        System.out.println("4. Buscar por código");
-        System.out.println("5. Modificar carrera");
+        System.out.println("\n===== GESTIÓN DE CARRERAS =====");
+        System.out.println("1. Crear nueva carrera");
+        System.out.println("2. Listar carreras activas");
+        System.out.println("3. Buscar carrera por ID");
+        System.out.println("4. Buscar carrera por código");
+        System.out.println("5. Modificar carrera existente");
         System.out.println("6. Eliminar carrera");
-        System.out.println("0. Volver al menú anterior");
+        System.out.println("0. Volver al menú principal");
+        System.out.println("================================");
     }
 
-    // Manejar la opción seleccionada por el usuario
+
+    // Manejar la opción elegida por el usuario
     @Override
     public void manejarOpcion(int opcion) {
-        try {
-            switch (opcion) {
-                case 1 -> crearCarrera();       // Crear una nueva carrera
-                case 2 -> listarTodas();        // Listar todas las carreras registradas
-                case 3 -> buscarPorId();        // Buscar una carrera por su ID
-                case 4 -> buscarPorCodigo();    // Buscar una carrera por su código
-                case 5 -> modificarCarrera();   // Modificar los datos de una carrera
-                case 6 -> eliminarCarrera();    // Eliminar (desactivar) una carrera
-                case 0 -> mostrarInfo("Volviendo al menú principal...");
-                default -> mostrarError("Opción inválida. Intente nuevamente.");
-            }
-        } catch (Exception e) {
-            mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        switch (opcion) {
+            case 1 -> crearCarrera();
+            case 2 -> listarActivas();
+            case 3 -> buscarPorId();
+            case 4 -> buscarPorCodigo();
+            case 5 -> modificarCarrera();
+            case 6 -> eliminarCarrera();
+            case 0 -> mostrarInfo("Volviendo al menú principal...");
+            default -> mostrarError("Opción inválida.");
         }
     }
 
-    // Crear una nueva carrera con código, nombre y plan de estudio
+    // Crear una nueva carrera
     private void crearCarrera() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("No hay sesión activa.");
+            return;
+        }
+
         String codigo = leerTexto("Código de la carrera: ");
-        String nombre = leerTexto("Nombre de la carrera: ");
+        String nombre = leerTexto("Nombre: ");
         String plan = leerTexto("Plan de estudio: ");
 
         try {
-            Carrera c = proxy.crearCarrera(codigo, nombre, plan);
-            mostrarInfo("✅ Carrera creada con éxito: " + c);
-        } catch (SecurityException e) {
+            Carrera carrera = proxy.crearCarrera(codigo, nombre, plan);
+            mostrarExito("Carrera creada con éxito: " + carrera);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (IllegalArgumentException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
             mostrarError("Error SQL al crear carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al crear carrera: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Listar todas las carreras registradas en el sistema
-    private void listarTodas() {
+    // Listar todas las carreras activas
+    private void listarActivas() {
         try {
-            List<Carrera> lista = proxy.listarTodas();
+            List<Carrera> list = proxy.listarTodas(); // si el servicio diferencia activas, usar listarActivas()
 
-            if (lista.isEmpty())
-                mostrarInfo("No hay carreras registradas.");
+            if (list.isEmpty())
+                mostrarInfo("No hay carreras activas.");
             else
-                lista.forEach(System.out::println);
+                list.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error al listar carreras: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al listar carreras: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Buscar y mostrar una carrera por su ID
+    // Buscar una carrera por ID
     private void buscarPorId() {
         int id = leerEntero("ID de la carrera: ");
         try {
-            Carrera c = proxy.buscarCarreraPorId(id);
-            if (c != null)
-                System.out.println(c);
+            Carrera carrera = proxy.buscarCarreraPorId(id);
+
+            if (carrera != null)
+                System.out.println(carrera);
             else
-                mostrarInfo("Carrera no encontrada.");
+                mostrarInfo("No se encontró ninguna carrera con ese ID.");
+
         } catch (SQLException e) {
-            mostrarError("Error al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Buscar y mostrar una carrera por su código
+    // Buscar una carrera por su código
     private void buscarPorCodigo() {
         String codigo = leerTexto("Código de la carrera: ");
         try {
-            Carrera c = proxy.buscarCarreraPorCodigo(codigo);
-            if (c != null)
-                System.out.println(c);
+            Carrera carrera = proxy.buscarCarreraPorCodigo(codigo);
+
+            if (carrera != null)
+                System.out.println(carrera);
             else
-                mostrarInfo("Carrera no encontrada.");
+                mostrarInfo("No se encontró ninguna carrera con ese código.");
+
         } catch (SQLException e) {
-            mostrarError("Error al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error SQL al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Modificar los datos de una carrera existente
+    // Modificar una carrera existente
     private void modificarCarrera() {
+        if (!loginSingleton.haySesionActiva()) {
+            mostrarError("No hay sesión activa.");
+            return;
+        }
+
         int id = leerEntero("ID de la carrera a modificar: ");
-        String codigo = leerTexto("Nuevo código: ");
-        String nombre = leerTexto("Nuevo nombre: ");
-        String plan = leerTexto("Nuevo plan de estudio: ");
 
         try {
-            boolean exito = proxy.actualizarCarrera(id, codigo, nombre, plan);
+            Carrera carrera = proxy.buscarCarreraPorId(id);
+
+            if (carrera == null) {
+                mostrarInfo("La carrera no existe.");
+                return;
+            }
+
+            System.out.println("Carrera seleccionada:");
+            System.out.println(carrera);
+            System.out.println("\nCampos modificables: código, nombre, plan");
+
+            String campo = leerTexto("Campo a modificar: ");
+            boolean exito = false;
+
+            switch (campo.toLowerCase()) {
+                case "codigo" -> {
+                    String nuevoCodigo = leerTexto("Nuevo código: ");
+                    carrera.setCodigo(nuevoCodigo);
+                    exito = proxy.actualizarCarrera(carrera.getIdCarrera(), carrera.getCodigo(), carrera.getNombre(), carrera.getPlan());
+                }
+                case "nombre" -> {
+                    String nuevoNombre = leerTexto("Nuevo nombre: ");
+                    carrera.setNombre(nuevoNombre);
+                    exito = proxy.actualizarCarrera(carrera.getIdCarrera(), carrera.getCodigo(), carrera.getNombre(), carrera.getPlan());
+                }
+                case "plan" -> {
+                    String nuevoPlan = leerTexto("Nuevo plan de estudio: ");
+                    carrera.setPlan(nuevoPlan);
+                    exito = proxy.actualizarCarrera(carrera.getIdCarrera(), carrera.getCodigo(), carrera.getNombre(), carrera.getPlan());
+                }
+                default -> mostrarError("Campo inválido.");
+            }
 
             if (exito)
-                mostrarInfo("✅ Carrera modificada correctamente.");
+                mostrarExito("Carrera modificada correctamente.");
             else
                 mostrarError("No se pudo modificar la carrera.");
 
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError("Error SQL al modificar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al modificar carrera: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Eliminar (desactivar) una carrera del sistema
+    // Eliminar (desactivar) una carrera
     private void eliminarCarrera() {
         int id = leerEntero("ID de la carrera a eliminar: ");
-        try {
-            boolean exito = proxy.eliminarCarrera(id);
 
-            if (exito)
-                mostrarInfo("✅ Carrera eliminada correctamente.");
+        try {
+            boolean eliminado = proxy.eliminarCarrera(id);
+
+            if (eliminado)
+                mostrarExito("Carrera eliminada correctamente.");
             else
                 mostrarError("No se pudo eliminar la carrera.");
 
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError("Error SQL al eliminar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al eliminar carrera: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }
