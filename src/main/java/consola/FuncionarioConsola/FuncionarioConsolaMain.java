@@ -4,19 +4,14 @@ import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
 import modelo.Funcionario;
 import servicios.FuncionarioServicio;
+import FACADE.SesionFacade;
 
 public class FuncionarioConsolaMain extends UIBase {
 
-    // Servicio encargado de las operaciones relacionadas con funcionarios
     private final FuncionarioServicio funcionarioServicio;
-
-    // Referencia al funcionario actualmente logueado
     private Funcionario funcionarioActual;
-
-    // Rol actual del usuario (por ejemplo: Administrador, Tutor, Analista)
     private String rolActual;
 
-    // Constructor: inicializa el servicio de funcionarios
     public FuncionarioConsolaMain() {
         FuncionarioServicio tempService = null;
         try {
@@ -27,40 +22,30 @@ public class FuncionarioConsolaMain extends UIBase {
         this.funcionarioServicio = tempService;
     }
 
-    // Inicia el módulo principal del funcionario
     @Override
     public void iniciar() {
         SesionSingleton login = SesionSingleton.getInstance();
 
-        // Verificar sesión activa
         if (!login.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
 
-        // Verificar tipo de usuario
-        if (!(login.getUsuarioActual() instanceof Funcionario)) {
-            mostrarError("⚠️ El usuario actual no es un funcionario.");
-            return;
-        }
-
-        // Guardar datos de sesión
         funcionarioActual = (Funcionario) login.getUsuarioActual();
         rolActual = login.getRolActual();
 
-        // Mostrar bienvenida
         mostrarInfo("Bienvenido/a, " + funcionarioActual.getNombre() + " " + funcionarioActual.getApellido() +
                 " (" + rolActual + ")");
 
-        // Ejecutar el menú principal
         super.iniciar();
 
-        // Cierre de sesión
+        // Cierre de sesión usando SesionFacade
+        SesionFacade facade = new SesionFacade();
+        facade.logout();
+
         mostrarInfo("👋 Sesión finalizada correctamente. Hasta pronto.");
-        login.cerrarSesion();
     }
 
-    // Muestra el menú principal del funcionario según su rol
     @Override
     protected void mostrarMenu() {
         System.out.println("\n🧭 ===== MENÚ PRINCIPAL - " + rolActual.toUpperCase() + " =====");
@@ -87,7 +72,6 @@ public class FuncionarioConsolaMain extends UIBase {
         System.out.println("=============================================");
     }
 
-    // Maneja la opción seleccionada por el usuario en el menú
     @Override
     protected void manejarOpcion(int opcion) {
         try {

@@ -15,7 +15,6 @@ public abstract class UIBase implements UIMenu {
     protected abstract void mostrarMenu();
     protected abstract void manejarOpcion(int opcion);
 
-    // Método principal que inicia el ciclo del menú
     @Override
     public void iniciar() {
         int opcion;

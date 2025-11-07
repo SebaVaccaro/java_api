@@ -21,9 +21,6 @@ public class RolConsola extends UIBase {
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== GESTIÓN DE ROLES =====");
-        System.out.println("1. Agregar rol");
-        System.out.println("2. Actualizar rol");
-        System.out.println("3. Eliminar rol");
         System.out.println("4. Listar todos los roles");
         System.out.println("5. Buscar rol por ID");
         System.out.println("0. Volver al menú principal");
@@ -35,9 +32,6 @@ public class RolConsola extends UIBase {
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> agregarRol();
-                case 2 -> actualizarRol();
-                case 3 -> eliminarRol();
                 case 4 -> listarTodos();
                 case 5 -> buscarPorId();
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
@@ -48,53 +42,7 @@ public class RolConsola extends UIBase {
         }
     }
 
-    // Crea un nuevo rol
-    private void agregarRol() {
-        String nombre = leerTexto("Nombre del rol: ");
-        boolean activo = leerBoolean("¿Activo? (true/false): ");
 
-        try {
-            boolean exito = proxy.agregarRol(nombre, activo);
-            if (exito) mostrarExito("Rol agregado correctamente.");
-            else mostrarError("No se pudo agregar el rol.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al agregar rol: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado al agregar rol: " + e.getMessage());
-        }
-    }
-
-    // Actualiza un rol existente
-    private void actualizarRol() {
-        int idRol = leerEntero("ID del rol a actualizar: ");
-        String nuevoNombre = leerTexto("Nuevo nombre: ");
-        boolean activo = leerBoolean("¿Activo? (true/false): ");
-
-        try {
-            boolean exito = proxy.actualizarRol(idRol, nuevoNombre, activo);
-            if (exito) mostrarExito("Rol actualizado correctamente.");
-            else mostrarError("No se pudo actualizar el rol.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al actualizar rol: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado al actualizar rol: " + e.getMessage());
-        }
-    }
-
-    // Elimina un rol por su ID
-    private void eliminarRol() {
-        int idRol = leerEntero("ID del rol a eliminar: ");
-
-        try {
-            boolean exito = proxy.eliminarRol(idRol);
-            if (exito) mostrarExito("Rol eliminado correctamente.");
-            else mostrarError("No se pudo eliminar el rol.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar rol: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado al eliminar rol: " + e.getMessage());
-        }
-    }
 
     // Lista todos los roles registrados
     private void listarTodos() {

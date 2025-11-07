@@ -3,6 +3,7 @@ package consola.EstudianteConsola;
 import consola.InterfazConsola.UIBase;
 import modelo.Estudiante;
 import SINGLETON.SesionSingleton;
+import FACADE.SesionFacade;
 
 import java.sql.SQLException;
 
@@ -10,40 +11,34 @@ public class EstudianteConsola extends UIBase {
 
     private Estudiante estudiante;
 
-    // Constructor vacío; la validación y carga del estudiante se realiza en iniciar()
     public EstudianteConsola() {
         // Constructor vacío
     }
 
-    // Inicia la sesión del estudiante y muestra el menú principal
     @Override
     public void iniciar() {
-        SesionSingleton login = SesionSingleton.getInstance();
+        SesionSingleton sesion = SesionSingleton.getInstance();
 
-        // Verificar que haya sesión activa
-        if (!login.haySesionActiva()) {
+        if (!sesion.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        // Validar que el usuario actual sea un estudiante
-        if (!(login.getUsuarioActual() instanceof Estudiante)) {
-            mostrarError("El usuario actual no es un estudiante.");
+        if (!"ESTUDIANTE".equalsIgnoreCase(sesion.getRolActual())) {
+            mostrarError("El usuario actual no tiene rol de estudiante.");
             return;
         }
 
-        // Asignar el usuario autenticado como estudiante
-        estudiante = (Estudiante) login.getUsuarioActual();
-
-        // Ejecutar el bucle principal del menú
+        // Ejecutar menú heredado
         super.iniciar();
 
-        // Cerrar sesión al finalizar
-        mostrarInfo("Sesión finalizada correctamente.\n");
-        login.cerrarSesion();
+        // Cerrar sesión usando la FACADE
+        SesionFacade facade = new SesionFacade();
+        facade.logout();
+
+        mostrarInfo("Sesión del estudiante finalizada.\n");
     }
 
-    // Mostrar el menú principal del estudiante
     @Override
     protected void mostrarMenu() {
         System.out.println("\n===== MENÚ ESTUDIANTE =====");
@@ -58,17 +53,16 @@ public class EstudianteConsola extends UIBase {
         System.out.println("====================================");
     }
 
-    // Controla la ejecución de las opciones del menú según la elección del usuario
     @Override
     protected void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> mostrarInformacionPersonal();  // Ver datos personales del estudiante
-                case 2 -> menuSeguimiento();              // Consultar su seguimiento académico
-                case 3 -> gestionarMisInstanciasComunes(); // Acceder a sus instancias comunes
-                case 4 -> gestionarMisTelefonos();        // Administrar sus teléfonos
-                case 5 -> gestionarMisNotificaciones();   // Ver sus notificaciones
-                case 0 -> mostrarInfo("🔒 Cerrando sesión del Estudiante...");
+                case 1 -> mostrarInformacionPersonal();
+                case 2 -> menuSeguimiento();
+                case 3 -> gestionarMisInstanciasComunes();
+                case 4 -> gestionarMisTelefonos();
+                case 5 -> gestionarMisNotificaciones();
+                case 0 -> mostrarInfo("Cerrando sesión del estudiante...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
@@ -77,7 +71,6 @@ public class EstudianteConsola extends UIBase {
         }
     }
 
-    // Mostrar la información personal del estudiante autenticado
     private void mostrarInformacionPersonal() {
         mostrarInfo("--- Información personal ---");
         System.out.println("ID: " + estudiante.getIdUsuario());
@@ -86,45 +79,40 @@ public class EstudianteConsola extends UIBase {
         System.out.println("Correo: " + estudiante.getCorreo());
     }
 
-    // Acceder al módulo de seguimiento académico del estudiante
     private void menuSeguimiento() {
         try {
-            SeguimientoConsola seguimientoUI = new SeguimientoConsola();
-            seguimientoUI.iniciar();
+            SeguimientoConsola ui = new SeguimientoConsola();
+            ui.iniciar();
         } catch (SQLException e) {
-            mostrarError("Error al acceder al módulo de seguimiento: " + e.getMessage());
+            mostrarError("Error en seguimiento: " + e.getMessage());
         }
     }
 
-    // Gestionar las instancias comunes asociadas al estudiante
     private void gestionarMisInstanciasComunes() {
         try {
-            InstanciaComunConsola instanciaComunUI = new InstanciaComunConsola();
-            instanciaComunUI.iniciar();
+            InstanciaComunConsola ui = new InstanciaComunConsola();
+            ui.iniciar();
         } catch (SQLException e) {
-            mostrarError("Error al inicializar las instancias comunes: " + e.getMessage());
+            mostrarError("Error en instancias comunes: " + e.getMessage());
         }
     }
 
-    // Gestionar los teléfonos personales del estudiante
     private void gestionarMisTelefonos() {
         try {
-            TelefonoConsola telefonoEstudianteUI = new TelefonoConsola();
-            telefonoEstudianteUI.iniciar();
+            TelefonoConsola ui = new TelefonoConsola();
+            ui.iniciar();
         } catch (SQLException e) {
-            mostrarError("Error al gestionar los teléfonos: " + e.getMessage());
+            mostrarError("Error al gestionar teléfonos: " + e.getMessage());
         }
     }
 
-    // Gestionar las notificaciones del estudiante autenticado
-    private void gestionarMisNotificaciones() {
+    private void gestionarMisNotificaciones() throws Exception {
         try {
-            NotificacionConsola notificacionUserUI = new NotificacionConsola();
-            notificacionUserUI.iniciar();
+            NotificacionConsola ui = new NotificacionConsola();
+            ui.iniciar();
         } catch (SQLException e) {
-            mostrarError("Error de base de datos al inicializar notificaciones: " + e.getMessage());
-        } catch (Exception e) {
             mostrarError("Error al inicializar notificaciones: " + e.getMessage());
         }
     }
 }
+
