@@ -1,7 +1,7 @@
 package consola.EstudianteConsola;
 
 import PROXY.DireccionProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
 import modelo.Direccion;
 import utils.CapturadoraDeErrores;
@@ -17,11 +17,11 @@ public class DireccionConsola extends UIBase {
     // Inicialización de la consola del estudiante (direcciones)
     public DireccionConsola() throws SQLException {
         // Verificar que haya sesión activa antes de permitir acciones
-        if (!LoginSingleton.getInstance().haySesionActiva()) {
+        if (!SesionSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
         }
         // Obtener el ID del usuario actualmente autenticado
-        this.idUsuario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.idUsuario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
         // Inicializar el proxy encargado de las operaciones sobre direcciones
         this.direccionProxy = new DireccionProxy();
     }

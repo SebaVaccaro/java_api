@@ -2,7 +2,7 @@ package consola.EstudianteConsola;
 
 import consola.InterfazConsola.UIBase;
 import modelo.Estudiante;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 
 import java.sql.SQLException;
 
@@ -18,7 +18,7 @@ public class EstudianteConsola extends UIBase {
     // Inicia la sesión del estudiante y muestra el menú principal
     @Override
     public void iniciar() {
-        LoginSingleton login = LoginSingleton.getInstance();
+        SesionSingleton login = SesionSingleton.getInstance();
 
         // Verificar que haya sesión activa
         if (!login.haySesionActiva()) {

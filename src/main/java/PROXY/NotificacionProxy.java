@@ -25,7 +25,7 @@ public class NotificacionProxy {
     // Crear notificación (solo administradores o psicopedagogos)
     public Notificacion crearNotificacion(int idInstancia, String asunto, String mensaje,
                                           String destinatario, LocalDate fecEnvio) throws SQLException, Exception {
-        if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores o psicopedagogos pueden crear notificaciones.");
         }
         return notificacionServicio.crearNotificacion(idInstancia, asunto, mensaje, destinatario, fecEnvio);
@@ -49,7 +49,7 @@ public class NotificacionProxy {
 
     // Listar todas las notificaciones (solo administradores o psicopedagogos)
     public List<Notificacion> listarTodas() throws SQLException, Exception {
-        if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores o psicopedagogos pueden listar notificaciones.");
         }
         return notificacionServicio.listarTodas();
@@ -57,24 +57,17 @@ public class NotificacionProxy {
 
     // Actualizar notificación (solo administradores o psicopedagogos)
     public boolean actualizarNotificacion(Notificacion notificacion) throws SQLException, Exception {
-        if (!validarUsuario.esAdministrador() && !validarUsuario.esPsicopedagogo()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores o psicopedagogos pueden actualizar notificaciones.");
         }
         return notificacionServicio.actualizarNotificacion(notificacion);
     }
 
-    // Desactivar notificación (solo administradores, psicopedagogos o propietario)
+    // Desactivar notificación (solo administradores, psicopedagogos)
     public boolean desactivarNotificacion(int id) throws SQLException, Exception {
-        Notificacion notificacion = notificacionServicio.obtenerNotificacion(id);
-        if (notificacion == null) return false;
-
-        List<Integer> usuarios = recibeServicio.listarUsuariosPorNotificacion(id);
-        Integer idPropietario = usuarios.isEmpty() ? -1 : usuarios.get(0);
-
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idPropietario)) {
-            throw new SecurityException("Solo administradores, psicopedagogos o el propietario pueden desactivar esta notificación.");
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("Solo administradores o psicopedagogos pueden desactivar esta notificación.");
         }
-
         return notificacionServicio.desactivarNotificacion(id);
     }
 }

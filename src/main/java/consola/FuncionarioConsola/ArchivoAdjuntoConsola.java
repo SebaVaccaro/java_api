@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.ArchivoAdjuntoProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.ArchivoAdjunto;
 import utils.CapturadoraDeErrores;
 
@@ -12,12 +12,12 @@ import java.util.List;
 public class ArchivoAdjuntoConsola extends UIBase {
 
     private final ArchivoAdjuntoProxy facade;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy para manejar las operaciones de archivos adjuntos
     public ArchivoAdjuntoConsola() throws Exception {
         this.facade = new ArchivoAdjuntoProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar el menú principal de gestión de archivos adjuntos
@@ -49,12 +49,12 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Crear un nuevo archivo adjunto
     private void crearArchivo() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
+        int idUsuario = sesionSingleton.getUsuarioActual().getIdUsuario();
         int idEstudiante = leerEntero("ID del estudiante: ");
         String ruta = leerTexto("Ruta del archivo: ");
         String categoria = leerTexto("Categoría: ");
@@ -88,12 +88,12 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Listar archivos adjuntos de un estudiante específico
     private void listarPorEstudiante() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
+        int idUsuario = sesionSingleton.getUsuarioActual().getIdUsuario();
         int idEstudiante = leerEntero("ID del estudiante: ");
 
         try {
@@ -115,12 +115,12 @@ public class ArchivoAdjuntoConsola extends UIBase {
 
     // Modificar un archivo adjunto existente
     private void modificarArchivo() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        int idUsuario = loginSingleton.getUsuarioActual().getIdUsuario();
+        int idUsuario = sesionSingleton.getUsuarioActual().getIdUsuario();
         int idArchivo = leerEntero("ID del archivo a modificar: ");
 
         try {

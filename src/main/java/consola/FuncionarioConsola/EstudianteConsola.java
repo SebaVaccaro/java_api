@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.EstudianteProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Estudiante;
 import utils.CapturadoraDeErrores;
 
@@ -13,12 +13,12 @@ import java.util.List;
 public class EstudianteConsola extends UIBase {
 
     private final EstudianteProxy proxy;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor
     public EstudianteConsola() throws Exception {
         this.proxy = new EstudianteProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar menú principal
@@ -51,7 +51,7 @@ public class EstudianteConsola extends UIBase {
 
     // Crear nuevo estudiante
     private void crearEstudiante() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -79,7 +79,7 @@ public class EstudianteConsola extends UIBase {
 
     // Listar todos los estudiantes
     private void listarTodos() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -99,7 +99,7 @@ public class EstudianteConsola extends UIBase {
 
     // Buscar estudiante por ID
     private void buscarPorId() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -120,7 +120,7 @@ public class EstudianteConsola extends UIBase {
 
     // Modificar estudiante existente
     private void modificarEstudiante() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -167,7 +167,7 @@ public class EstudianteConsola extends UIBase {
 
     // Desactivar estudiante
     private void desactivarEstudiante() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }

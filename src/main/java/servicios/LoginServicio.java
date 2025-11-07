@@ -5,7 +5,7 @@ import modelo.Usuario;
 import modelo.Estudiante;
 import modelo.Funcionario;
 import DAO.LoginDAOImpl;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 
 import java.sql.SQLException;
 
@@ -22,7 +22,7 @@ public class LoginServicio {
         }
     }
 
-    // 🔹 Método principal de login
+    // Metodo principal del Login
     public void login(String username, String password) throws Exception {
         // Validación de parámetros
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
@@ -77,7 +77,7 @@ public class LoginServicio {
             }
 
             // Registrar sesión
-            LoginSingleton sesion = LoginSingleton.getInstance();
+            SesionSingleton sesion = SesionSingleton.getInstance();
             sesion.setUsuarioActual(est, "estudiante");
 
             // ===================== FUNCIONARIO =====================
@@ -133,7 +133,7 @@ public class LoginServicio {
                 throw new RuntimeException("Error al obtener el rol del funcionario", e);
             }
 
-            LoginSingleton sesion = LoginSingleton.getInstance();
+            SesionSingleton sesion = SesionSingleton.getInstance();
             sesion.setUsuarioActual(func, nombreRol);
 
         } else {

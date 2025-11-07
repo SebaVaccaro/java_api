@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.CarreraProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Carrera;
 import utils.CapturadoraDeErrores;
 
@@ -12,12 +12,12 @@ import java.util.List;
 public class CarreraConsola extends UIBase {
 
     private final CarreraProxy proxy;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy para manejar las operaciones de carreras
     public CarreraConsola() throws Exception {
         this.proxy = new CarreraProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar el menú principal de gestión de carreras
@@ -52,7 +52,7 @@ public class CarreraConsola extends UIBase {
 
     // Crear una nueva carrera
     private void crearCarrera() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
@@ -130,7 +130,7 @@ public class CarreraConsola extends UIBase {
 
     // Modificar una carrera existente
     private void modificarCarrera() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }

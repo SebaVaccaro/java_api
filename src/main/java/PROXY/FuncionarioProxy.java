@@ -73,9 +73,9 @@ public class FuncionarioProxy {
         return funcionarioServicio.desactivarFuncionario(idUsuario);
     }
 
-    // Verificar si un funcionario está activo (solo admin, psicopedagogo o propietario)
+    // Verificar si un funcionario está activo (solo admin o psico)
     public boolean estaActivo(int idUsuario) throws SQLException {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("No tiene permiso para actualizar funcionario.");
         }
         return funcionarioServicio.estaActivo(idUsuario);

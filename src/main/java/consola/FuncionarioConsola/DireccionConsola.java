@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.DireccionProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Direccion;
 import utils.CapturadoraDeErrores;
 
@@ -12,12 +12,12 @@ import java.util.List;
 public class DireccionConsola extends UIBase {
 
     private final DireccionProxy proxy;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy y la sesión del usuario
     public DireccionConsola() throws Exception {
         this.proxy = new DireccionProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar menú principal
@@ -54,7 +54,7 @@ public class DireccionConsola extends UIBase {
 
     // Crear nueva dirección
     private void crearDireccion() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
@@ -66,7 +66,7 @@ public class DireccionConsola extends UIBase {
 
         try {
             Direccion direccion = proxy.crearDireccion(
-                    loginSingleton.getUsuarioActual().getIdUsuario(),
+                    sesionSingleton.getUsuarioActual().getIdUsuario(),
                     calle, numPuerta, numApto, idCiudad
             );
 
@@ -145,7 +145,7 @@ public class DireccionConsola extends UIBase {
 
         try {
             List<Direccion> lista = proxy.listarPorCiudad(
-                    loginSingleton.getUsuarioActual().getIdUsuario(),
+                    sesionSingleton.getUsuarioActual().getIdUsuario(),
                     idCiudad
             );
 
@@ -163,7 +163,7 @@ public class DireccionConsola extends UIBase {
 
     // Modificar dirección existente
     private void modificarDireccion() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
@@ -189,22 +189,22 @@ public class DireccionConsola extends UIBase {
             switch (campo.toLowerCase()) {
                 case "calle" -> {
                     d.setCalle(leerTexto("Nueva calle: "));
-                    exito = proxy.actualizarDireccion(loginSingleton.getUsuarioActual().getIdUsuario(),
+                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
                             d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
                 }
                 case "numpuerta" -> {
                     d.setNumPuerta(leerTexto("Nuevo número de puerta: "));
-                    exito = proxy.actualizarDireccion(loginSingleton.getUsuarioActual().getIdUsuario(),
+                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
                             d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
                 }
                 case "numapto" -> {
                     d.setNumApto(leerTexto("Nuevo número de apartamento: "));
-                    exito = proxy.actualizarDireccion(loginSingleton.getUsuarioActual().getIdUsuario(),
+                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
                             d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
                 }
                 case "idciudad" -> {
                     d.setIdCiudad(leerEntero("Nuevo ID de ciudad: "));
-                    exito = proxy.actualizarDireccion(loginSingleton.getUsuarioActual().getIdUsuario(),
+                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
                             d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
                 }
                 default -> mostrarError("Campo inválido.");

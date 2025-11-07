@@ -3,7 +3,7 @@ package consola.EstudianteConsola;
 import consola.InterfazConsola.UIBase;
 import PROXY.NotificacionProxy;
 import PROXY.RecibeProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Notificacion;
 import utils.CapturadoraDeErrores;
 
@@ -24,7 +24,7 @@ public class NotificacionConsola extends UIBase {
     // Mostrar el menú principal de gestión de notificaciones
     @Override
     protected void mostrarMenu() {
-        if (!LoginSingleton.getInstance().haySesionActiva()) {
+        if (!SesionSingleton.getInstance().haySesionActiva()) {
             mostrarError("No hay un usuario logueado. Por favor, inicia sesión.");
             return;
         }
@@ -53,7 +53,7 @@ public class NotificacionConsola extends UIBase {
     // Listar todas las notificaciones activas pertenecientes al usuario autenticado
     private void listarMisNotificaciones() {
         try {
-            int idUsuario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+            int idUsuario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
             List<Integer> idsNotificaciones = recibeProxy.listarNotificacionesPorUsuario(idUsuario);
 
             if (idsNotificaciones.isEmpty()) {

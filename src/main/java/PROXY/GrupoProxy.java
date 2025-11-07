@@ -1,13 +1,7 @@
 package PROXY;
 
-import SINGLETON.LoginSingleton;
-import modelo.Funcionario;
-import modelo.Rol;
-import modelo.Usuario;
 import modelo.Grupo;
 import servicios.GrupoServicio;
-import servicios.FuncionarioServicio;
-import servicios.RolServicio;
 import utils.ValidarUsuario;
 
 import java.sql.SQLException;
@@ -16,15 +10,11 @@ import java.util.List;
 public class GrupoProxy {
 
     private final GrupoServicio grupoServicio;
-    private final FuncionarioServicio funcionarioServicio;
-    private final RolServicio rolServicio;
     private final ValidarUsuario validarUsuario;
 
     // Constructor: inicializa los servicios de grupo, funcionario y rol
     public GrupoProxy() throws SQLException {
         this.grupoServicio = new GrupoServicio();
-        this.funcionarioServicio = new FuncionarioServicio();
-        this.rolServicio = new RolServicio();
         this.validarUsuario = new ValidarUsuario();
     }
 

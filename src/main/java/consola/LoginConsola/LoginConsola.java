@@ -2,7 +2,7 @@ package consola.LoginConsola;
 
 import modelo.Usuario;
 import servicios.LoginServicio;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
 
 // Clase que gestiona el inicio de sesión desde la consola
@@ -12,12 +12,12 @@ public class LoginConsola extends UIBase {
     private final LoginServicio loginServicio;
 
     // Singleton que mantiene la sesión activa del usuario
-    private final LoginSingleton sesion;
+    private final SesionSingleton sesion;
 
     // Constructor que inicializa el servicio de login y la sesión
     public LoginConsola() {
         this.loginServicio = new LoginServicio();
-        this.sesion = LoginSingleton.getInstance();
+        this.sesion = SesionSingleton.getInstance();
     }
 
     // Inicia el proceso de inicio de sesión en la consola

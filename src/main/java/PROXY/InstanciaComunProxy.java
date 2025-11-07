@@ -36,7 +36,7 @@ public class InstanciaComunProxy {
         return instanciaServicio.crearInstanciaComun(titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
     }
 
-    // Obtener instancia común por ID (admin, psico o propietar)
+    // Obtener instancia común por ID (admin, psico o propietario)
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
         InstanciaComun instancia = instanciaServicio.obtenerInstanciaComun(idInstancia);
         Seguimiento seguimiento = seguimientoServicio.buscarPorId(instancia.getIdSeguimiento());
@@ -72,8 +72,8 @@ public class InstanciaComunProxy {
                                             int idFuncionario,
                                             int idSeguimiento) throws SQLException {
 
-        if (!validarUsuario.esAdminOPsico()) {
-            throw new SecurityException("Solo un administrador o psicopedagogo puede actualizar una instancia comun.");
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idFuncionario)) {
+            throw new SecurityException("Solo un administrador o psicopedagogo o propietario puede actualizar una instancia comun.");
         }
         return instanciaServicio.actualizarInstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
     }

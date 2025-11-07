@@ -2,7 +2,7 @@ package consola.EstudianteConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.SeguimientoProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Seguimiento;
 import utils.CapturadoraDeErrores;
 
@@ -17,10 +17,10 @@ public class SeguimientoConsola extends UIBase {
 
     // Constructor: valida sesión activa y obtiene el ID del estudiante autenticado
     public SeguimientoConsola() throws SQLException {
-        if (!LoginSingleton.getInstance().haySesionActiva()) {
+        if (!SesionSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
         }
-        this.idEstudiante = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.idEstudiante = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
         this.seguimientoProxy = new SeguimientoProxy();
     }
 

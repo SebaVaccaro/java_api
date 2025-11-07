@@ -2,7 +2,7 @@ package consola.EstudianteConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.InstanciaComunProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.InstanciaComun;
 import utils.CapturadoraDeErrores;
 
@@ -17,10 +17,10 @@ public class InstanciaComunConsola extends UIBase {
 
     // Constructor: valida la sesión y obtiene el usuario autenticado
     public InstanciaComunConsola() throws SQLException {
-        if (!LoginSingleton.getInstance().haySesionActiva()) {
+        if (!SesionSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
         }
-        this.idFuncionario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.idFuncionario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
         this.instanciaFacade = new InstanciaComunProxy();
     }
 

@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.CiudadProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Ciudad;
 import utils.CapturadoraDeErrores;
 
@@ -12,12 +12,12 @@ import java.util.List;
 public class CiudadConsola extends UIBase {
 
     private final CiudadProxy proxy;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy y la sesión de usuario
     public CiudadConsola() throws Exception {
         this.proxy = new CiudadProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar menú principal de gestión de ciudades
@@ -54,7 +54,7 @@ public class CiudadConsola extends UIBase {
 
     // Crear una nueva ciudad
     private void crearCiudad() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
@@ -148,7 +148,7 @@ public class CiudadConsola extends UIBase {
 
     // Modificar ciudad
     private void modificarCiudad() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }

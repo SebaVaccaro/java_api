@@ -1,19 +1,19 @@
 package utils;
 
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Usuario;
 
 public class ValidarUsuario {
 
     // Obtener el rol del usuario actualmente logueado en mayúsculas
     private String getRolActual() {
-        String rol = LoginSingleton.getInstance().getRolActual();
+        String rol = SesionSingleton.getInstance().getRolActual();
         return rol != null ? rol.toUpperCase() : ""; // Retorna cadena vacía si no hay rol
     }
 
     // Obtener el usuario actualmente logueado
     private Usuario getUsuarioSesion() {
-        return LoginSingleton.getInstance().getUsuarioActual();
+        return SesionSingleton.getInstance().getUsuarioActual();
     }
 
     // Verificar si el usuario actual es Administrador
@@ -67,6 +67,6 @@ public class ValidarUsuario {
 
     // Verificar si hay una sesión activa
     public boolean haySesionActiva() {
-        return LoginSingleton.getInstance().haySesionActiva();
+        return SesionSingleton.getInstance().haySesionActiva();
     }
 }

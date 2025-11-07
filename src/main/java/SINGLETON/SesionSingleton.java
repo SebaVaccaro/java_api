@@ -2,10 +2,10 @@ package SINGLETON;
 
 import modelo.Usuario;
 
-public class LoginSingleton {
+public class SesionSingleton {
 
     // Instancia única de la clase (patrón Singleton)
-    private static LoginSingleton instancia;
+    private static SesionSingleton instancia;
 
     // Usuario actualmente logueado
     private Usuario usuarioActual;
@@ -14,12 +14,12 @@ public class LoginSingleton {
     private String rol;
 
     // Constructor privado para evitar instanciación externa
-    private LoginSingleton() {}
+    private SesionSingleton() {}
 
     // Obtener la instancia única de LoginSingleton (sincronizado para seguridad en multihilo)
-    public static synchronized LoginSingleton getInstance() {
+    public static synchronized SesionSingleton getInstance() {
         if (instancia == null) {
-            instancia = new LoginSingleton();
+            instancia = new SesionSingleton();
         }
         return instancia;
     }

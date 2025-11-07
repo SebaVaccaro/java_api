@@ -2,7 +2,7 @@ package consola.EstudianteConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.TeleUsuarioProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.TeleUsuario;
 import utils.CapturadoraDeErrores;
 
@@ -16,10 +16,10 @@ public class TelefonoConsola extends UIBase {
 
     // Constructor: valida sesión activa y obtiene el ID del usuario autenticado
     public TelefonoConsola() throws SQLException {
-        if (!LoginSingleton.getInstance().haySesionActiva()) {
+        if (!SesionSingleton.getInstance().haySesionActiva()) {
             throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
         }
-        this.idUsuario = LoginSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.idUsuario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
         this.teleUsuarioProxy = new TeleUsuarioProxy();
     }
 

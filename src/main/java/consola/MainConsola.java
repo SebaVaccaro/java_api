@@ -4,7 +4,7 @@ import consola.LoginConsola.LoginConsola;
 import consola.StrategyConsola.RolStrategyFactoryConsola;
 import consola.InterfazConsola.RolStrategy;
 import modelo.Usuario;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 
 // Clase principal de la consola del sistema
 public class MainConsola {
@@ -21,7 +21,7 @@ public class MainConsola {
             loginConsola.iniciar();
 
             // Obtiene la sesión actual desde el Singleton
-            LoginSingleton login = LoginSingleton.getInstance();
+            SesionSingleton login = SesionSingleton.getInstance();
             Usuario usuario = login.getUsuarioActual();
             String rol = login.getRolActual();
 

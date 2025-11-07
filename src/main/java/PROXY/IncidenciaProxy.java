@@ -25,7 +25,7 @@ public class IncidenciaProxy {
                                       boolean estActivo,
                                       int idFuncionario,
                                       String lugar) throws Exception {
-        if (!validarUsuario.esPropietario(idFuncionario)) {
+        if (!validarUsuario.esPropietario(idFuncionario) && validarUsuario.esEstudiante()) {
             throw new SecurityException("Solo el propietario puede crear sus Incidencias.");
         }
         return incidenciaServicio.crearIncidencia(titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
@@ -34,7 +34,7 @@ public class IncidenciaProxy {
     // Obtener incidencia por ID (solo administradores, psicopedagogos o el propietario)
     public Incidencia obtenerIncidencia(int idIncidencia) throws Exception {
         Incidencia incidencia = incidenciaServicio.obtenerIncidencia(idIncidencia);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(incidencia.getIdFuncionario())) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(incidencia.getIdFuncionario()) && validarUsuario.esEstudiante()) {
             throw new SecurityException("Solo administradores psicopedagogos o el propietario pueden ver esta Incidencia.");
         }
         return incidencia;
@@ -64,7 +64,7 @@ public class IncidenciaProxy {
                                         boolean estActivo,
                                         int idFuncionario,
                                         String lugar) throws Exception {
-        if (!validarUsuario.esPropietario(idFuncionario)) {
+        if (!validarUsuario.esPropietario(idFuncionario) && validarUsuario.esEstudiante()) {
             throw new SecurityException("Solo el propietario puede actualizar esta incidencia.");
         }
         return incidenciaServicio.actualizarIncidencia(idIncidencia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);

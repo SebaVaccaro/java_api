@@ -2,7 +2,7 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.FuncionarioProxy;
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import modelo.Funcionario;
 import utils.CapturadoraDeErrores;
 
@@ -13,12 +13,12 @@ import java.util.List;
 public class FuncionarioConsola extends UIBase {
 
     private final FuncionarioProxy proxy;
-    private final LoginSingleton loginSingleton;
+    private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy y la sesión del usuario
     public FuncionarioConsola() throws Exception {
         this.proxy = new FuncionarioProxy();
-        this.loginSingleton = LoginSingleton.getInstance();
+        this.sesionSingleton = SesionSingleton.getInstance();
     }
 
     // Mostrar menú principal
@@ -51,7 +51,7 @@ public class FuncionarioConsola extends UIBase {
 
     // Crear un nuevo funcionario
     private void crearFuncionario() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -80,7 +80,7 @@ public class FuncionarioConsola extends UIBase {
 
     // Listar todos los funcionarios
     private void listarTodos() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -100,7 +100,7 @@ public class FuncionarioConsola extends UIBase {
 
     // Buscar funcionario por ID
     private void buscarPorId() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -121,7 +121,7 @@ public class FuncionarioConsola extends UIBase {
 
     // Modificar los datos de un funcionario existente
     private void modificarFuncionario() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }
@@ -175,7 +175,7 @@ public class FuncionarioConsola extends UIBase {
 
     // Desactivar un funcionario (cambia su estado a inactivo)
     private void desactivarFuncionario() {
-        if (!loginSingleton.haySesionActiva()) {
+        if (!sesionSingleton.haySesionActiva()) {
             mostrarError("❌ No hay sesión activa.");
             return;
         }

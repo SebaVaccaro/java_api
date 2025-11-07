@@ -1,6 +1,6 @@
 package consola.FuncionarioConsola;
 
-import SINGLETON.LoginSingleton;
+import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
 import modelo.Funcionario;
 import servicios.FuncionarioServicio;
@@ -30,7 +30,7 @@ public class FuncionarioConsolaMain extends UIBase {
     // Inicia el módulo principal del funcionario
     @Override
     public void iniciar() {
-        LoginSingleton login = LoginSingleton.getInstance();
+        SesionSingleton login = SesionSingleton.getInstance();
 
         // Verificar sesión activa
         if (!login.haySesionActiva()) {

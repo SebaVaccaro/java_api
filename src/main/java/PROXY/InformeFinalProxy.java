@@ -12,18 +12,15 @@ public class InformeFinalProxy {
 
     private final InformeFinalServicio informeService;
     private final ValidarUsuario validarUsuario;
-    private final PartSeguimientoServicio partSeguimientoServicio;
 
     // Constructor: inicializa el servicio de informes finales y el validador de usuario
     public InformeFinalProxy() throws Exception {
         this.informeService = new InformeFinalServicio();
         this.validarUsuario = new ValidarUsuario();
-        this.partSeguimientoServicio = new PartSeguimientoServicio();
     }
 
     // Obtener informe por ID (administrador, psicopedagogo)
     public InformeFinal obtenerInforme(int idInfFinal) throws Exception {
-        InformeFinal informe = informeService.obtenerInforme(idInfFinal);
         if (!validarUsuario.esAdminOPsico()){
             throw new SecurityException("Solo el administrador o psicopedagogo puede ver este informe.");
         }
