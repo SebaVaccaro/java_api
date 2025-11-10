@@ -32,6 +32,11 @@ public class ObservacionServicio {
         return observacionDAOImpl.crearObservacion(o);
     }
 
+    // Sobrecarga de constructor para poder setearle el dao en los tests
+    public ObservacionServicio(ObservacionDAOImpl dao) {
+        this.observacionDAOImpl = dao;
+    }
+
     // Obtener observación por ID
     public Observacion obtenerObservacion(int id) throws SQLException {
         return observacionDAOImpl.obtenerObservacion(id);
