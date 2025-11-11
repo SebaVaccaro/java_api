@@ -24,13 +24,10 @@ public class CiudadConsola extends UIBase {
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== GESTIÓN DE CIUDADES =====");
-        System.out.println("1. Crear nueva ciudad");
-        System.out.println("2. Listar todas las ciudades");
-        System.out.println("3. Buscar ciudad por ID");
-        System.out.println("4. Buscar ciudad por nombre");
-        System.out.println("5. Listar ciudades por departamento");
-        System.out.println("6. Modificar ciudad existente");
-        System.out.println("7. Eliminar ciudad");
+        System.out.println("1. Listar todas las ciudades");
+        System.out.println("2. Buscar ciudad por ID");
+        System.out.println("3. Buscar ciudad por nombre");
+        System.out.println("4. Listar ciudades por departamento");
         System.out.println("0. Volver al menú principal");
         System.out.println("================================");
     }
@@ -40,40 +37,15 @@ public class CiudadConsola extends UIBase {
     @Override
     public void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> crearCiudad();
-            case 2 -> listarTodas();
-            case 3 -> buscarPorId();
-            case 4 -> buscarPorNombre();
-            case 5 -> listarPorDepartamento();
-            case 6 -> modificarCiudad();
-            case 7 -> eliminarCiudad();
+            case 1 -> listarTodas();
+            case 2 -> buscarPorId();
+            case 3 -> buscarPorNombre();
+            case 4 -> listarPorDepartamento();
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // Crear una nueva ciudad
-    private void crearCiudad() {
-        if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("No hay sesión activa.");
-            return;
-        }
-
-        int codPostal = leerEntero("Código postal: ");
-        String nombre = leerTexto("Nombre de la ciudad: ");
-        String departamento = leerTexto("Departamento: ");
-
-        try {
-            Ciudad ciudad = proxy.crearCiudad(codPostal, nombre, departamento);
-            mostrarExito("Ciudad creada con éxito: " + ciudad);
-        } catch (SecurityException se) {
-            mostrarError(se.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al crear ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
-        }
-    }
 
     // Listar todas las ciudades
     private void listarTodas() {
@@ -141,84 +113,6 @@ public class CiudadConsola extends UIBase {
 
         } catch (SQLException e) {
             mostrarError("Error SQL al listar ciudades por departamento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
-        }
-    }
-
-    // Modificar ciudad
-    private void modificarCiudad() {
-        if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("No hay sesión activa.");
-            return;
-        }
-
-        int id = leerEntero("ID de la ciudad a modificar: ");
-
-        try {
-            Ciudad ciudad = proxy.buscarCiudadPorId(id);
-
-            if (ciudad == null) {
-                mostrarInfo("La ciudad no existe.");
-                return;
-            }
-
-            System.out.println("Ciudad seleccionada:");
-            System.out.println(ciudad);
-            System.out.println("\nCampos modificables: codPostal, nombre, departamento");
-
-            String campo = leerTexto("Campo a modificar: ");
-            boolean exito = false;
-
-            switch (campo.toLowerCase()) {
-                case "codpostal" -> {
-                    int nuevoCod = leerEntero("Nuevo código postal: ");
-                    ciudad.setCodPostal(nuevoCod);
-                    exito = proxy.actualizarCiudad(ciudad.getIdCiudad(), ciudad.getCodPostal(), ciudad.getNombre(), ciudad.getDepartamento());
-                }
-                case "nombre" -> {
-                    String nuevoNombre = leerTexto("Nuevo nombre: ");
-                    ciudad.setNombre(nuevoNombre);
-                    exito = proxy.actualizarCiudad(ciudad.getIdCiudad(), ciudad.getCodPostal(), ciudad.getNombre(), ciudad.getDepartamento());
-                }
-                case "departamento" -> {
-                    String nuevoDep = leerTexto("Nuevo departamento: ");
-                    ciudad.setDepartamento(nuevoDep);
-                    exito = proxy.actualizarCiudad(ciudad.getIdCiudad(), ciudad.getCodPostal(), ciudad.getNombre(), ciudad.getDepartamento());
-                }
-                default -> mostrarError("Campo inválido.");
-            }
-
-            if (exito)
-                mostrarExito("Ciudad modificada correctamente.");
-            else
-                mostrarError("No se pudo modificar la ciudad.");
-
-        } catch (SecurityException se) {
-            mostrarError(se.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al modificar ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
-        }
-    }
-
-    // Eliminar ciudad
-    private void eliminarCiudad() {
-        int id = leerEntero("ID de la ciudad a eliminar: ");
-
-        try {
-            boolean eliminado = proxy.eliminarCiudad(id);
-
-            if (eliminado)
-                mostrarExito("Ciudad eliminada correctamente.");
-            else
-                mostrarError("No se pudo eliminar la ciudad.");
-
-        } catch (SecurityException se) {
-            mostrarError(se.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

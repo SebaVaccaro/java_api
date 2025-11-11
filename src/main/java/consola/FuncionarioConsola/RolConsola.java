@@ -21,8 +21,8 @@ public class RolConsola extends UIBase {
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== GESTIÓN DE ROLES =====");
-        System.out.println("4. Listar todos los roles");
-        System.out.println("5. Buscar rol por ID");
+        System.out.println("1. Listar todos los roles");
+        System.out.println("2. Buscar rol por ID");
         System.out.println("0. Volver al menú principal");
         System.out.println("============================");
     }
@@ -32,8 +32,8 @@ public class RolConsola extends UIBase {
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 4 -> listarTodos();
-                case 5 -> buscarPorId();
+                case 1 -> listarTodos();
+                case 2 -> buscarPorId();
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción no válida. Intente nuevamente.");
             }

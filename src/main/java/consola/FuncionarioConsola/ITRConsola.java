@@ -21,11 +21,8 @@ public class ITRConsola extends UIBase {
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== MENÚ ITR =====");
-        System.out.println("1. Crear ITR");
-        System.out.println("2. Listar todos");
-        System.out.println("3. Buscar por ID");
-        System.out.println("4. Modificar ITR");
-        System.out.println("5. Eliminar ITR");
+        System.out.println("1. Listar todos");
+        System.out.println("2. Buscar por ID");
         System.out.println("0. Volver al menú principal");
         System.out.println("====================");
     }
@@ -34,12 +31,9 @@ public class ITRConsola extends UIBase {
     @Override
     public void manejarOpcion(int opcion) {
         try {
-            switch (opcion) {
-                case 1 -> crearITR();        // Crear un nuevo ITR
-                case 2 -> listarTodos();     // Listar todos los ITR
-                case 3 -> buscarPorId();     // Buscar un ITR por ID
-                case 4 -> modificarITR();    // Modificar un ITR existente
-                case 5 -> eliminarITR();     // Eliminar un ITR
+            switch (opcion) {      // Crear un nuevo ITR
+                case 1 -> listarTodos();     // Listar todos los ITR
+                case 2 -> buscarPorId();    // Eliminar un ITR
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -48,21 +42,7 @@ public class ITRConsola extends UIBase {
         }
     }
 
-    // Crea un nuevo ITR solicitando los datos al usuario
-    private void crearITR() {
-        int idDireccion = leerEntero("ID de dirección: ");
-        try {
-            ITR nuevo = new ITR(idDireccion);
-            ITR creado = proxy.crearITR(nuevo);
-            mostrarExito("ITR creado correctamente: " + creado);
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al crear ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al crear ITR: " + e.getMessage());
-        }
-    }
+
 
     // Lista todos los ITR registrados
     private void listarTodos() {
@@ -88,47 +68,6 @@ public class ITRConsola extends UIBase {
             mostrarError("Error SQL al buscar ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al buscar ITR: " + e.getMessage());
-        }
-    }
-
-    // Modifica los datos de un ITR existente
-    private void modificarITR() {
-        int idItr = leerEntero("ID del ITR a modificar: ");
-        try {
-            ITR existente = proxy.obtenerITR(idItr);
-            if (existente == null) {
-                mostrarInfo("ITR no encontrado.");
-                return;
-            }
-
-            int idDireccion = leerEntero("Nuevo ID de dirección [" + existente.getIdDireccion() + "]: ", existente.getIdDireccion());
-            ITR actualizado = new ITR(idItr, idDireccion);
-
-            boolean exito = proxy.actualizarITR(actualizado);
-            if (exito) mostrarExito("ITR modificado correctamente.");
-            else mostrarError("No se pudo modificar el ITR.");
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al modificar ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al modificar ITR: " + e.getMessage());
-        }
-    }
-
-    // Elimina un ITR por su ID
-    private void eliminarITR() {
-        int idItr = leerEntero("ID del ITR a eliminar: ");
-        try {
-            boolean exito = proxy.eliminarITR(idItr);
-            if (exito) mostrarExito("ITR eliminado correctamente.");
-            else mostrarError("No se pudo eliminar el ITR.");
-        } catch (SecurityException e) {
-            mostrarError(e.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al eliminar ITR: " + e.getMessage());
         }
     }
 }
