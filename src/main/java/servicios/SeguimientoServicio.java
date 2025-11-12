@@ -25,24 +25,10 @@ public class SeguimientoServicio {
         return dao.agregar(s);
     }
 
-    // Sobrecarga sin idInforme ni fecCierre
-    public boolean agregarSeguimiento(int idEstudiante, LocalDate fecInicio, boolean estActivo) throws SQLException {
-        validarCampos(idEstudiante, fecInicio);
-        Seguimiento s = new Seguimiento(null, idEstudiante, fecInicio, null, estActivo);
-        return dao.agregar(s);
-    }
-
     // Actualizar seguimiento
     public boolean actualizarSeguimiento(int idSeguimiento, Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) throws SQLException {
         validarCamposActualizacion(idSeguimiento, idEstudiante, fecInicio);
         Seguimiento s = new Seguimiento(idSeguimiento, idInforme, idEstudiante, fecInicio, fecCierre, estActivo);
-        return dao.actualizar(s);
-    }
-
-    // Sobrecarga sin idInforme ni fecCierre
-    public boolean actualizarSeguimiento(int idSeguimiento, int idEstudiante, LocalDate fecInicio, boolean estActivo) throws SQLException {
-        validarCamposActualizacion(idSeguimiento, idEstudiante, fecInicio);
-        Seguimiento s = new Seguimiento(idSeguimiento, null, idEstudiante, fecInicio, null, estActivo);
         return dao.actualizar(s);
     }
 
@@ -63,6 +49,11 @@ public class SeguimientoServicio {
     // Listar todos los seguimientos
     public List<Seguimiento> listarTodos() throws SQLException {
         return dao.listarTodos();
+    }
+
+    // Listar todos los seguimientos
+    public List<Seguimiento> listarPorEstudiante(int idEstudiante) throws SQLException {
+        return dao.listarPorEstudiante(idEstudiante);
     }
 
     // Métodos privados de validación

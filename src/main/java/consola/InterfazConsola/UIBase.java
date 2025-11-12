@@ -23,7 +23,7 @@ public abstract class UIBase implements UIMenu {
             opcion = leerEntero("Seleccione una opción: ");
             manejarOpcion(opcion);
         } while (opcion != 0);
-        System.out.println("🔒 Saliendo del menú...");
+        System.out.println("Saliendo del menú...");
     }
 
     // Lee un número entero del usuario
@@ -140,16 +140,16 @@ public abstract class UIBase implements UIMenu {
 
     // Muestra un mensaje de éxito
     protected void mostrarExito(String mensaje) {
-        System.out.println("✅ " + mensaje);
+        System.out.println(mensaje);
     }
 
     // Muestra un mensaje de error
     protected void mostrarError(String mensaje) {
-        System.out.println("❌ " + mensaje);
+        System.out.println(mensaje);
     }
 
     // Muestra un mensaje informativo
     protected void mostrarInfo(String mensaje) {
-        System.out.println("ℹ️ " + mensaje);
+        System.out.println(mensaje);
     }
 }

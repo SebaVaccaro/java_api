@@ -18,7 +18,7 @@ public class SeguimientoConsola extends UIBase {
     // Constructor: valida sesión activa y obtiene el ID del estudiante autenticado
     public SeguimientoConsola() throws SQLException {
         if (!SesionSingleton.getInstance().haySesionActiva()) {
-            throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
+            throw new IllegalStateException("No hay sesión activa. Por favor inicia sesión.");
         }
         this.idEstudiante = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
         this.seguimientoProxy = new SeguimientoProxy();
@@ -30,7 +30,6 @@ public class SeguimientoConsola extends UIBase {
         System.out.println("\n===== MENÚ DE SEGUIMIENTOS DEL ESTUDIANTE =====");
         System.out.println("1. Ver mis seguimientos");
         System.out.println("2. Buscar seguimiento por ID");
-        System.out.println("3. Cerrar seguimiento");
         System.out.println("0. Volver al menú principal");
         System.out.println("===============================================");
     }
@@ -40,29 +39,23 @@ public class SeguimientoConsola extends UIBase {
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarMisSeguimientos(); // Mostrar todos los seguimientos del estudiante actual
+            case 1 -> listarPorEstudiante(); // Mostrar todos los seguimientos del estudiante actual
             case 2 -> buscarPorId();           // Consultar un seguimiento específico
-            case 3 -> cerrarSeguimiento();     // Cerrar un seguimiento activo
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
     }
 
-    // Listar todos los seguimientos activos del estudiante autenticado
-    private void listarMisSeguimientos() {
+
+    private void listarPorEstudiante(){
         try {
-            List<Seguimiento> lista = seguimientoProxy.listarTodos();
-            boolean encontrado = false;
-
-            for (Seguimiento s : lista) {
-                if (s.getIdEstudiante() == idEstudiante && s.isEstActivo()) {
-                    System.out.println(s);
-                    encontrado = true;
-                }
+            List<Seguimiento> lista = seguimientoProxy.listarPorEstudiante(idEstudiante);
+            if(lista.isEmpty()){
+                mostrarInfo("No tienes seguimientos");
             }
-
-            if (!encontrado) mostrarInfo("No tienes seguimientos activos.");
-
+            for(Seguimiento s: lista){
+                System.out.println(s.toString());
+            }
         } catch (SQLException e) {
             mostrarError("Error al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         }
@@ -73,59 +66,16 @@ public class SeguimientoConsola extends UIBase {
         int id = leerEntero("Ingrese el ID del seguimiento: ");
         try {
             Seguimiento s = seguimientoProxy.buscarPorId(id);
-            if (s == null) {
-                mostrarError("Seguimiento no encontrado.");
-                return;
+            if(s == null){
+                mostrarInfo("No se encontro seguimiento");
+            }else {
+                mostrarInfo("Detalles del seguimiento:");
+                System.out.println(s);
             }
-
-            if (s.getIdEstudiante() != idEstudiante) {
-                mostrarError("No puedes acceder a un seguimiento que no es tuyo.");
-                return;
-            }
-
-            mostrarInfo("📄 Detalles del seguimiento:");
-            System.out.println(s);
-
         } catch (SQLException e) {
             mostrarError("Error al buscar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
-
-    // Cerrar un seguimiento activo perteneciente al estudiante autenticado
-    private void cerrarSeguimiento() {
-        int id = leerEntero("Ingrese el ID del seguimiento a cerrar: ");
-        try {
-            Seguimiento s = seguimientoProxy.buscarPorId(id);
-            if (s == null) {
-                mostrarError("Seguimiento no encontrado.");
-                return;
-            }
-
-            if (s.getIdEstudiante() != idEstudiante) {
-                mostrarError("No puedes cerrar un seguimiento que no te pertenece.");
-                return;
-            }
-
-            if (!s.isEstActivo()) {
-                mostrarInfo("Este seguimiento ya está cerrado.");
-                return;
-            }
-
-            LocalDate fechaCierre = LocalDate.now();
-            boolean exito = seguimientoProxy.actualizarSeguimiento(
-                    s.getIdSeguimiento(),
-                    s.getIdInforme(),
-                    s.getIdEstudiante(),
-                    s.getFecInicio(),
-                    fechaCierre,
-                    false
-            );
-
-            if (exito) mostrarExito("Seguimiento cerrado correctamente el " + fechaCierre);
-            else mostrarError("No se pudo cerrar el seguimiento.");
-
-        } catch (SQLException e) {
-            mostrarError("Error al cerrar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch(Exception e){
+            mostrarError(e.getMessage());
         }
     }
 }

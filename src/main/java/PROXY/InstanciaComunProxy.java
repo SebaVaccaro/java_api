@@ -39,7 +39,13 @@ public class InstanciaComunProxy {
     // Obtener instancia común por ID (admin, psico o propietario)
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
         InstanciaComun instancia = instanciaServicio.obtenerInstanciaComun(idInstancia);
+        if(instancia == null){
+            throw new IllegalArgumentException("No se encontró una instancia con el ID especificado.");
+        }
         Seguimiento seguimiento = seguimientoServicio.buscarPorId(instancia.getIdSeguimiento());
+        if (seguimiento == null) {
+            throw new IllegalArgumentException("Instancia sin seguimiento.");
+        }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(seguimiento.getIdEstudiante())) {
             throw new SecurityException("Solo administrador, psicopedagogo o el propietario pueden obtener esta instancia.");
         }
@@ -54,14 +60,29 @@ public class InstanciaComunProxy {
         return instanciaServicio.listarInstanciasComunes();
     }
 
-    // Listar instancias comunes por seguimiento (admin, psico o propietar)
+    // Listar instancias comunes por estudiante (admin, psico o propietario)
+    public List<InstanciaComun> listarPorEstudiante(int idEstudiante) throws SQLException {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idEstudiante)){
+            throw new SecurityException("Solo administrador, psicopedagogo o el propietario del seguimiento pueden listar estas instancias.");
+        }
+        return instanciaServicio.listarPorEstudiante(idEstudiante);
+    }
+
+    // Listar instancias comunes por seguimiento (admin, psico o propietario)
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
         Seguimiento seguimiento = seguimientoServicio.buscarPorId(idSeguimiento);
+
+        if (seguimiento == null) {
+            throw new IllegalArgumentException("No se encontró un seguimiento con el ID especificado.");
+        }
+
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(seguimiento.getIdEstudiante())) {
             throw new SecurityException("Solo administrador, psicopedagogo o el propietario del seguimiento pueden listar estas instancias.");
         }
+
         return instanciaServicio.listarPorSeguimiento(idSeguimiento);
     }
+
 
     // Actualizar instancia común (admin o psico)
     public boolean actualizarInstanciaComun(int idInstancia,

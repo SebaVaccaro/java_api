@@ -19,6 +19,15 @@ public class InformeFinalProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
+    // Crear informe final (solo psicopedagogos o administradores)
+    public InformeFinal crearInforme(int idSeguimiento, String contenido, int valoracion, LocalDate fecCreacion) throws Exception {
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("Solo el administrador o psicopedagogo puede crear informes finales.");
+        }
+
+        return informeService.crearInforme(idSeguimiento, contenido, valoracion, fecCreacion);
+    }
+
     // Obtener informe por ID (administrador, psicopedagogo)
     public InformeFinal obtenerInforme(int idInfFinal) throws Exception {
         if (!validarUsuario.esAdminOPsico()){

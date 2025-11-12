@@ -57,6 +57,11 @@ public class InstanciaComunServicio {
     }
 
     // Listar instancias comunes por seguimiento
+    public List<InstanciaComun> listarPorEstudiante(int idEstudiante) throws SQLException {
+        return comunDao.listarPorEstudiante(idEstudiante);
+    }
+
+    // Listar instancias comunes por seguimiento
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
         return comunDao.listarPorSeguimiento(idSeguimiento);
     }

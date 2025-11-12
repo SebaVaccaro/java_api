@@ -27,12 +27,12 @@ public class MainConsola {
 
             // Verifica si hay un usuario válido con rol asignado
             if (usuario == null || rol == null || rol.isEmpty()) {
-                System.out.println("🔒 No hay usuario autenticado o rol no definido. Finalizando programa.");
+                System.out.println("No hay usuario autenticado o rol no definido. Finalizando programa.");
                 return;
             }
 
             // Mensaje de bienvenida
-            System.out.println("\n👋 Bienvenido, " + usuario.getNombre() + "!");
+            System.out.println("\nBienvenido, " + usuario.getNombre() + "!");
 
             // Obtiene la estrategia correspondiente al rol
             RolStrategy estrategia = RolStrategyFactoryConsola.obtenerEstrategia(rol);
@@ -41,12 +41,12 @@ public class MainConsola {
             if (estrategia != null) {
                 estrategia.iniciar();
             } else {
-                System.out.println("⚠️ Rol no reconocido. Acceso denegado.");
+                System.out.println("Rol no reconocido. Acceso denegado.");
             }
 
             // Cierra la sesión actual y regresa al login
             login.cerrarSesion();
-            System.out.println("\n🔁 Sesión cerrada. Volviendo al login...\n");
+            System.out.println("\nSesión cerrada. Volviendo al login...\n");
         }
     }
 }

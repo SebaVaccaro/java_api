@@ -54,6 +54,9 @@ public class TeleUsuarioProxy {
     // Eliminar un teléfono (administrador o propietario)
     public boolean eliminarTelefono(int idTelefono) throws SQLException {
         TeleUsuario tel = teleUsuarioServicio.buscarPorId(idTelefono);
+        if(tel == null){
+            throw new IllegalArgumentException("No se encontró un numero con el ID especificado.");
+        }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(tel.getIdUsuario())) {
             throw new SecurityException("Solo un administrador o el propietario pueden eliminar este teléfono.");
         }

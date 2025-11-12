@@ -133,6 +133,39 @@ public class SeguimientoDAOImpl implements SeguimientoDAO {
         return lista;
     }
 
+    @Override
+    public List<Seguimiento> listarPorEstudiante(int idEstudiante) throws SQLException {
+        List<Seguimiento> lista = new ArrayList<>();
+        String sql = """
+        SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo
+        FROM seguimientos
+        WHERE id_estudiante = ?
+        ORDER BY id_seguimiento
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idEstudiante);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Integer idInforme = rs.getObject("id_informe") != null ? rs.getInt("id_informe") : null;
+                    Date fecCierreDate = rs.getDate("fec_cierre");
+
+                    Seguimiento s = new Seguimiento(
+                            rs.getInt("id_seguimiento"),
+                            idInforme,
+                            rs.getInt("id_estudiante"),
+                            rs.getDate("fec_inicio").toLocalDate(),
+                            fecCierreDate != null ? fecCierreDate.toLocalDate() : null,
+                            rs.getBoolean("est_activo")
+                    );
+                    lista.add(s);
+                }
+            }
+        }
+        return lista;
+    }
+
+
     // Verifica si un estudiante tiene un seguimiento activo
     @Override
     public boolean tieneSeguimientoActivo(int idEstudiante) throws SQLException {
