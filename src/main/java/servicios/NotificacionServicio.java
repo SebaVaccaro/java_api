@@ -11,12 +11,12 @@ public class NotificacionServicio {
 
     private final NotificacionDAOImpl notificacionDAOImpl;
 
-    // Constructor: inicializa el DAO de notificaciones
+    // Constructor
     public NotificacionServicio() throws SQLException {
         this.notificacionDAOImpl = new NotificacionDAOImpl();
     }
 
-    // Crear notificación con validaciones básicas
+    // Crear notificación
     public Notificacion crearNotificacion(int idInstancia, String asunto, String mensaje, String destinatario, LocalDate fecEnvio) throws SQLException {
         if (asunto == null || asunto.isBlank()) {
             throw new IllegalArgumentException("El asunto no puede estar vacío.");
@@ -37,7 +37,11 @@ public class NotificacionServicio {
 
     // Obtener notificación por ID
     public Notificacion obtenerNotificacion(int id) throws SQLException {
-        return notificacionDAOImpl.obtenerNotificacion(id);
+        Notificacion notificacion = notificacionDAOImpl.obtenerNotificacion(id);
+        if (notificacion == null) {
+            throw new IllegalArgumentException("No se encontró notificación para el ID proporcionado.");
+        }
+        return notificacion;
     }
 
     // Listar todas las notificaciones activas
@@ -47,14 +51,19 @@ public class NotificacionServicio {
 
     // Actualizar notificación existente
     public boolean actualizarNotificacion(Notificacion n) throws SQLException {
-        if (n.getIdNotificacion() <= 0) {
-            throw new IllegalArgumentException("ID de notificación inválido.");
+        Notificacion existente = notificacionDAOImpl.obtenerNotificacion(n.getIdNotificacion());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró notificación para actualizar.");
         }
         return notificacionDAOImpl.actualizarNotificacion(n);
     }
 
     // Desactivar (baja lógica) notificación
     public boolean desactivarNotificacion(int id) throws SQLException {
+        Notificacion existente = notificacionDAOImpl.obtenerNotificacion(id);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró notificación para desactivar.");
+        }
         return notificacionDAOImpl.eliminarNotificacion(id);
     }
 }

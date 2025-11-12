@@ -28,7 +28,7 @@ public class EstudianteProxy {
         return estudianteServicio.registrarEstudiante(cedula, password, nombre, apellido, fechaNacimiento, idGrupo);
     }
 
-    // Obtener estudiante por ID (solo administradores, psicopedagogo o el propio usuarios)
+    // Obtener estudiante por ID (solo administradores, psicopedagogo o el propio usuario)
     public Estudiante obtenerPorId(int idUsuario) throws SQLException {
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
             throw new SecurityException("Solo administradores, psicólogos o el propio usuario pueden obtener estudiantes.");
@@ -39,7 +39,7 @@ public class EstudianteProxy {
     // Listar todos los estudiantes (solo administradores o psicopedagogo)
     public List<Estudiante> listarTodos() throws SQLException {
         if (!validarUsuario.esAdminOPsico()) {
-            throw new SecurityException("solo administradores o psicopedagogo pueden listar estudiantes.");
+            throw new SecurityException("Solo administradores o psicopedagogo pueden listar estudiantes.");
         }
         return estudianteServicio.listarTodos();
     }
@@ -60,7 +60,7 @@ public class EstudianteProxy {
         return estudianteServicio.desactivarEstudiante(idUsuario);
     }
 
-    // Verificar si un estudiante está activo (sin restricción de permisos)
+    // Verificar si un estudiante está activo (solo administradores, psicólogos o el propio usuario)
     public boolean estaActivo(int idUsuario) throws SQLException {
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
             throw new SecurityException("Solo administradores, psicólogos o el propio usuario pueden ver su estado.");
@@ -68,3 +68,4 @@ public class EstudianteProxy {
         return estudianteServicio.estaActivo(idUsuario);
     }
 }
+

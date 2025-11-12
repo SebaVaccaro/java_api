@@ -37,9 +37,6 @@ public class DireccionProxy {
     // Obtener dirección por ID (solo administradores, psicólogos o el propio usuario)
     public Direccion obtenerDireccion(int idDireccion) throws Exception {
         Direccion direccion = direccionServicio.obtenerPorId(idDireccion);
-        if (direccion == null) {
-            throw new IllegalArgumentException("No se encontro dirección.");
-        }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(direccion.getIdUsuario())) {
             throw new SecurityException("Solo administradores, psicólogos o el propietario pueden ver esta dirección.");
         }
@@ -64,7 +61,7 @@ public class DireccionProxy {
 
     // Actualizar dirección (solo administradores, psicólogos o el propio usuario)
     public boolean actualizarDireccion(int idUsuario, int idDireccion, String calle, String numPuerta, String numApto, int idCiudad) throws Exception {
-        Direccion d = obtenerDireccion(idDireccion);
+        Direccion d = direccionServicio.obtenerPorId(idDireccion);
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(d.getIdUsuario())) {
             throw new SecurityException("Solo administradores, psicólogos o el propietario pueden actualizar esta dirección.");
         }
@@ -74,9 +71,6 @@ public class DireccionProxy {
     // Eliminar dirección (solo administradores, psicólogos o el propio usuario)
     public boolean eliminarDireccion(int idDireccion) throws Exception {
         Direccion direccion = direccionServicio.obtenerPorId(idDireccion);
-        if (direccion == null) {
-            throw new IllegalArgumentException("No se encontro dirección.");
-        }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(direccion.getIdUsuario())) {
             throw new SecurityException("Solo administradores, psicólogos o el propietario pueden eliminar esta dirección.");
         }

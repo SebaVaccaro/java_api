@@ -54,19 +54,14 @@ public class DireccionConsola extends UIBase {
 
     // Crear nueva dirección
     private void crearDireccion() {
-        if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("No hay sesión activa.");
-            return;
-        }
-
-        String calle = leerTexto("Calle: ");
+        String calle = leerTextoNoNull("Calle: ");
         String numPuerta = leerTexto("Número de puerta: ");
         String numApto = leerTexto("Número de apartamento: ");
         int idCiudad = leerEntero("ID de la ciudad: ");
-
+        int idUsuario = leerEntero("ID del propietario: ");
         try {
             Direccion direccion = proxy.crearDireccion(
-                    sesionSingleton.getUsuarioActual().getIdUsuario(),
+                    idUsuario,
                     calle, numPuerta, numApto, idCiudad
             );
 
@@ -161,53 +156,90 @@ public class DireccionConsola extends UIBase {
         }
     }
 
-    // Modificar dirección existente
+    // Modificar dirección existente (versión mejorada)
     private void modificarDireccion() {
         if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
             return;
         }
 
-        int idDireccion = leerEntero("ID de la dirección a modificar: ");
+        int idDireccion = leerEntero("Ingrese el ID de la dirección a modificar: ");
 
         try {
-            Direccion d = proxy.obtenerDireccion(
-                    idDireccion
-            );
+            Direccion d = proxy.obtenerDireccion(idDireccion);
 
             if (d == null) {
-                mostrarInfo("La dirección no existe.");
+                mostrarInfo("No existe una dirección con ese ID.");
                 return;
             }
 
-            System.out.println("Dirección seleccionada: " + d);
-            System.out.println("\nCampos modificables: calle, numPuerta, numApto, idCiudad");
+            System.out.println("\nDirección seleccionada:");
+            System.out.println(d);
 
-            String campo = leerTexto("Campo a modificar: ");
+            System.out.println("\n--- Campos actuales ---");
+            System.out.println("1. Calle: " + d.getCalle());
+            System.out.println("2. Número de puerta: " + d.getNumPuerta());
+            System.out.println("3. Número de apartamento: " + d.getNumApto());
+            System.out.println("4. ID de ciudad: " + d.getIdCiudad());
+            System.out.println("0. Cancelar");
+            System.out.println("------------------------");
+
+            int opcion = leerEntero("Seleccione el campo a modificar: ");
             boolean exito = false;
 
-            switch (campo.toLowerCase()) {
-                case "calle" -> {
-                    d.setCalle(leerTexto("Nueva calle: "));
-                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
-                            d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
+            switch (opcion) {
+                case 1 -> {
+                    d.setCalle(leerTextoNoNull("Nueva calle: "));
+                    exito = proxy.actualizarDireccion(
+                            sesionSingleton.getUsuarioActual().getIdUsuario(),
+                            d.getIdDireccion(),
+                            d.getCalle(),
+                            d.getNumPuerta(),
+                            d.getNumApto(),
+                            d.getIdCiudad()
+                    );
                 }
-                case "numpuerta" -> {
+                case 2 -> {
                     d.setNumPuerta(leerTexto("Nuevo número de puerta: "));
-                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
-                            d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
+                    exito = proxy.actualizarDireccion(
+                            sesionSingleton.getUsuarioActual().getIdUsuario(),
+                            d.getIdDireccion(),
+                            d.getCalle(),
+                            d.getNumPuerta(),
+                            d.getNumApto(),
+                            d.getIdCiudad()
+                    );
                 }
-                case "numapto" -> {
+                case 3 -> {
                     d.setNumApto(leerTexto("Nuevo número de apartamento: "));
-                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
-                            d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
+                    exito = proxy.actualizarDireccion(
+                            sesionSingleton.getUsuarioActual().getIdUsuario(),
+                            d.getIdDireccion(),
+                            d.getCalle(),
+                            d.getNumPuerta(),
+                            d.getNumApto(),
+                            d.getIdCiudad()
+                    );
                 }
-                case "idciudad" -> {
+                case 4 -> {
                     d.setIdCiudad(leerEntero("Nuevo ID de ciudad: "));
-                    exito = proxy.actualizarDireccion(sesionSingleton.getUsuarioActual().getIdUsuario(),
-                            d.getIdDireccion(), d.getCalle(), d.getNumPuerta(), d.getNumApto(), d.getIdCiudad());
+                    exito = proxy.actualizarDireccion(
+                            sesionSingleton.getUsuarioActual().getIdUsuario(),
+                            d.getIdDireccion(),
+                            d.getCalle(),
+                            d.getNumPuerta(),
+                            d.getNumApto(),
+                            d.getIdCiudad()
+                    );
                 }
-                default -> mostrarError("Campo inválido.");
+                case 0 -> {
+                    mostrarInfo("Operación cancelada.");
+                    return;
+                }
+                default -> {
+                    mostrarError("Opción inválida.");
+                    return;
+                }
             }
 
             if (exito)
@@ -215,12 +247,15 @@ public class DireccionConsola extends UIBase {
             else
                 mostrarError("No se pudo modificar la dirección.");
 
+        } catch (SecurityException s) {
+            mostrarError(s.getMessage());
         } catch (SQLException e) {
             mostrarError("Error SQL al modificar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
     }
+
 
     // Eliminar dirección
     private void eliminarDireccion() {

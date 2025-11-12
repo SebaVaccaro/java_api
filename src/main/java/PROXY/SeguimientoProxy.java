@@ -30,8 +30,8 @@ public class SeguimientoProxy {
     // Obtener seguimiento por ID (administrador, psicopedagogo o propietario)
     public Seguimiento buscarPorId(int idSeguimiento) throws SQLException {
         Seguimiento seguimiento = seguimientoServicio.buscarPorId(idSeguimiento);
-        if(seguimiento == null){
-            return null;
+        if (seguimiento == null) {
+            throw new IllegalArgumentException("No se encontro seguimiento.");
         }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(seguimiento.getIdEstudiante())) {
             throw new SecurityException("Solo administrador, psicopedagogo o el propietario pueden consultar este seguimiento.");

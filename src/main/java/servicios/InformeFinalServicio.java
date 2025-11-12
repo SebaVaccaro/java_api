@@ -22,12 +22,28 @@ public class InformeFinalServicio {
 
     // Crear nuevo informe final
     public InformeFinal crearInforme(int idSeguimiento, String contenido, int valoracion, LocalDate fecCreacion) throws SQLException {
+        // Validaciones de datos
+        if (contenido == null || contenido.trim().isEmpty()) {
+            throw new IllegalArgumentException("El contenido del informe no puede estar vacío.");
+        }
+        if (fecCreacion == null) {
+            throw new IllegalArgumentException("La fecha de creación no puede ser nula.");
+        }
+        if (valoracion < 1 || valoracion > 10) {
+            throw new IllegalArgumentException("La valoración debe estar entre 1 y 10.");
+        }
+
+        // Validar existencia del seguimiento
         Seguimiento seguimiento = seguimientoDAO.buscarPorId(idSeguimiento);
+        if (seguimiento == null) {
+            throw new IllegalArgumentException("No existe un seguimiento con ID " + idSeguimiento + ".");
+        }
 
         if (seguimiento.getIdInforme() != null) {
             throw new IllegalStateException("El seguimiento ya tiene un informe final asociado.");
         }
 
+        // Crear y asociar el informe
         InformeFinal informe = new InformeFinal(contenido, valoracion, fecCreacion);
         InformeFinal informeGuardado = informeDAO.crearInformeFinal(informe);
 
@@ -37,25 +53,42 @@ public class InformeFinalServicio {
         return informeGuardado;
     }
 
-
     // Obtener informe por ID
     public InformeFinal obtenerInforme(int idInfFinal) throws SQLException {
-        return informeDAO.obtenerInformeFinal(idInfFinal);
+        InformeFinal informe = informeDAO.obtenerInformeFinal(idInfFinal);
+        if (informe == null) {
+            throw new IllegalArgumentException("No se encontró un informe con ID " + idInfFinal + ".");
+        }
+        return informe;
     }
 
     // Listar todos los informes
     public List<InformeFinal> listarInformes() throws SQLException {
-        return informeDAO.listarInformesFinales();
+        List<InformeFinal> informes = informeDAO.listarInformesFinales();
+        if (informes == null || informes.isEmpty()) {
+            throw new IllegalStateException("No existen informes finales registrados en el sistema.");
+        }
+        return informes;
     }
 
-    // Actualizar informe
+    // Actualizar informe (verifica existencia antes de actualizar)
     public boolean actualizarInforme(int idInfFinal, String contenido, int valoracion, LocalDate fecCreacion) throws SQLException {
+        InformeFinal existente = informeDAO.obtenerInformeFinal(idInfFinal);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede actualizar: el informe con ID " + idInfFinal + " no existe.");
+        }
+
         InformeFinal informe = new InformeFinal(idInfFinal, contenido, valoracion, fecCreacion);
         return informeDAO.actualizarInformeFinal(informe);
     }
 
-    // Eliminar informe
+    // Eliminar informe (verifica existencia antes de eliminar)
     public boolean eliminarInforme(int idInfFinal) throws SQLException {
+        InformeFinal existente = informeDAO.obtenerInformeFinal(idInfFinal);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede eliminar: el informe con ID " + idInfFinal + " no existe.");
+        }
+
         return informeDAO.eliminarInformeFinal(idInfFinal);
     }
 }

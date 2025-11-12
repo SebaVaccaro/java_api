@@ -30,7 +30,11 @@ public class ArchivoAdjuntoServicio {
 
     // Obtener archivo por ID
     public ArchivoAdjunto obtenerArchivo(int idArchivo) throws SQLException {
-        return archivoDAO.obtenerArchivoAdjunto(idArchivo);
+        ArchivoAdjunto archivo = archivoDAO.obtenerArchivoAdjunto(idArchivo);
+        if (archivo == null) {
+            throw new IllegalArgumentException("No se encontró archivo para esa ID.");
+        }
+        return archivo;
     }
 
     // Listar archivos activos
@@ -45,17 +49,28 @@ public class ArchivoAdjuntoServicio {
 
     // Actualizar archivo existente
     public boolean actualizarArchivo(ArchivoAdjunto archivo) throws SQLException {
-        validarArchivoExiste(archivo.getIdArchivoAdjunto());
+        ArchivoAdjunto existente = archivoDAO.obtenerArchivoAdjunto(archivo.getIdArchivoAdjunto());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró archivo para esa ID.");
+        }
         return archivoDAO.actualizarArchivoAdjunto(archivo);
     }
 
     // Eliminar archivo (baja lógica)
     public boolean eliminarArchivo(int idArchivo) throws SQLException {
+        ArchivoAdjunto archivo = archivoDAO.obtenerArchivoAdjunto(idArchivo);
+        if (archivo == null) {
+            throw new IllegalArgumentException("No se encontró archivo para esa ID.");
+        }
         return archivoDAO.eliminarArchivoAdjunto(idArchivo);
     }
 
     // Eliminar archivo físicamente
     public boolean eliminarFisico(int idArchivo) throws SQLException {
+        ArchivoAdjunto archivo = archivoDAO.obtenerArchivoAdjunto(idArchivo);
+        if (archivo == null) {
+            throw new IllegalArgumentException("No se encontró archivo para esa ID.");
+        }
         return archivoDAO.eliminarFisico(idArchivo);
     }
 
@@ -70,13 +85,6 @@ public class ArchivoAdjuntoServicio {
     private void validarFuncionarioExiste(int idUsuario) throws SQLException {
         if (funcionarioServicio.obtenerPorId(idUsuario) == null) {
             throw new IllegalArgumentException("El usuario/funcionario no existe.");
-        }
-    }
-
-    // Validar que el archivo exista
-    private void validarArchivoExiste(int idArchivo) throws SQLException {
-        if (archivoDAO.obtenerArchivoAdjunto(idArchivo) == null) {
-            throw new IllegalArgumentException("El archivo no existe.");
         }
     }
 }

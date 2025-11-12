@@ -27,7 +27,7 @@ public class ArchivoAdjuntoProxy {
     }
 
     // Obtener archivo por ID (solo admin, psicopedagogo o propietario)
-    public ArchivoAdjunto obtenerPorId(int idUsuario, int idArchivo) throws Exception {
+    public ArchivoAdjunto obtenerPorId(int idArchivo) throws Exception {
         ArchivoAdjunto archivo = service.obtenerArchivo(idArchivo);
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(archivo.getIdEstudiante())) {
             throw new SecurityException("No tiene permiso para ver este archivo.");
@@ -45,7 +45,7 @@ public class ArchivoAdjuntoProxy {
 
     // Listar archivos de un estudiante (solo admin, psicopedagogo o propietario)
     public List<ArchivoAdjunto> listarPorEstudiante(int idUsuario, int idEstudiante) throws Exception {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idEstudiante)) {
             throw new SecurityException("No tiene permiso para ver los archivos de este estudiante.");
         }
         return service.listarPorEstudiante(idEstudiante);
@@ -67,7 +67,6 @@ public class ArchivoAdjuntoProxy {
         }
         return service.eliminarArchivo(idArchivo);
     }
-
     // Eliminar archivo físicamente (solo admin)
     public boolean eliminarFisico(int idArchivo) throws Exception {
         if (!validarUsuario.esAdministrador()) {
@@ -76,4 +75,3 @@ public class ArchivoAdjuntoProxy {
         return service.eliminarFisico(idArchivo);
     }
 }
-

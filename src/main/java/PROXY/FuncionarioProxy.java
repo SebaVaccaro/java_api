@@ -20,7 +20,7 @@ public class FuncionarioProxy {
     }
 
     // Crear funcionario (solo administradores)
-    public Funcionario crearFuncionario(String cedula, String nombre, String apellido, String username,
+    public Funcionario crearFuncionario(String cedula, String nombre, String apellido,
                                         String password, int idRol, LocalDate fechaNacimiento)
             throws Exception {
 
@@ -29,7 +29,7 @@ public class FuncionarioProxy {
         }
 
         try {
-            return funcionarioServicio.registrarFuncionario(cedula, nombre, apellido, username, password, idRol, fechaNacimiento);
+            return funcionarioServicio.registrarFuncionario(cedula, nombre, apellido, password, idRol, fechaNacimiento);
         } catch (Exception e) {
             throw new SQLException("Error al registrar funcionario: " + e.getMessage(), e);
         }
@@ -38,7 +38,7 @@ public class FuncionarioProxy {
     // Obtener funcionario por ID (solo admin, psicopedagogo o propietario)
     public Funcionario obtenerPorId(int idUsuario) throws SQLException {
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
-            throw new SecurityException("No tiene permiso para crear este archivo.");
+            throw new SecurityException("No tiene permiso para obtener este funcionario.");
         }
         return funcionarioServicio.obtenerPorId(idUsuario);
     }
@@ -76,8 +76,9 @@ public class FuncionarioProxy {
     // Verificar si un funcionario está activo (solo admin o psico)
     public boolean estaActivo(int idUsuario) throws SQLException {
         if (!validarUsuario.esAdminOPsico()) {
-            throw new SecurityException("No tiene permiso para actualizar funcionario.");
+            throw new SecurityException("No tiene permiso para ver el estado de este funcionario.");
         }
         return funcionarioServicio.estaActivo(idUsuario);
     }
 }
+

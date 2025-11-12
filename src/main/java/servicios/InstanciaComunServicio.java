@@ -3,8 +3,8 @@ package servicios;
 import DAO.InstanciaDAOImpl;
 import DAO.InstanciaComunDAOImpl;
 import modelo.InstanciaComun;
-
 import SINGLETON.ConexionSingleton;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -26,6 +26,14 @@ public class InstanciaComunServicio {
     // Crear nueva instancia común
     public InstanciaComun crearInstanciaComun(String titulo, OffsetDateTime fecHora, String descripcion,
                                               boolean estActivo, int idFuncionario, int idSeguimiento) throws SQLException {
+
+        if (titulo == null || titulo.trim().isEmpty()) {
+            throw new IllegalArgumentException("El título de la instancia no puede estar vacío.");
+        }
+        if (fecHora == null) {
+            throw new IllegalArgumentException("La fecha y hora de la instancia no pueden ser nulas.");
+        }
+
         InstanciaComun instancia = new InstanciaComun(0, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
 
         try {
@@ -40,7 +48,7 @@ public class InstanciaComunServicio {
             return instancia;
         } catch (SQLException e) {
             conn.rollback();
-            throw new SQLException("Error al crear InstanciaComun: " + e.getMessage(), e);
+            throw new SQLException("Error al crear la instancia común: " + e.getMessage(), e);
         } finally {
             conn.setAutoCommit(true);
         }
@@ -48,28 +56,51 @@ public class InstanciaComunServicio {
 
     // Obtener instancia común por ID
     public InstanciaComun obtenerInstanciaComun(int idInstancia) throws SQLException {
-        return comunDao.obtenerInstanciaComun(idInstancia);
+        InstanciaComun instancia = comunDao.obtenerInstanciaComun(idInstancia);
+        if (instancia == null) {
+            throw new IllegalArgumentException("No existe una instancia común con ID " + idInstancia + ".");
+        }
+        return instancia;
     }
 
     // Listar todas las instancias comunes
     public List<InstanciaComun> listarInstanciasComunes() throws SQLException {
-        return comunDao.listarInstanciasComunes();
+        List<InstanciaComun> lista = comunDao.listarInstanciasComunes();
+        if (lista == null || lista.isEmpty()) {
+            throw new IllegalStateException("No existen instancias comunes registradas en el sistema.");
+        }
+        return lista;
     }
 
-    // Listar instancias comunes por seguimiento
+    // Listar instancias comunes por estudiante
     public List<InstanciaComun> listarPorEstudiante(int idEstudiante) throws SQLException {
-        return comunDao.listarPorEstudiante(idEstudiante);
+        List<InstanciaComun> lista = comunDao.listarPorEstudiante(idEstudiante);
+        if (lista == null || lista.isEmpty()) {
+            throw new IllegalStateException("El estudiante con ID " + idEstudiante + " no tiene instancias comunes registradas.");
+        }
+        return lista;
     }
 
     // Listar instancias comunes por seguimiento
     public List<InstanciaComun> listarPorSeguimiento(int idSeguimiento) throws SQLException {
-        return comunDao.listarPorSeguimiento(idSeguimiento);
+        List<InstanciaComun> lista = comunDao.listarPorSeguimiento(idSeguimiento);
+        if (lista == null || lista.isEmpty()) {
+            throw new IllegalStateException("El seguimiento con ID " + idSeguimiento + " no tiene instancias comunes registradas.");
+        }
+        return lista;
     }
 
-    // Actualizar instancia común
+    // Actualizar instancia común (valida existencia)
     public boolean actualizarInstanciaComun(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion,
                                             boolean estActivo, int idFuncionario, int idSeguimiento) throws SQLException {
+
+        InstanciaComun existente = comunDao.obtenerInstanciaComun(idInstancia);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede actualizar: la instancia común con ID " + idInstancia + " no existe.");
+        }
+
         InstanciaComun instancia = new InstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
+
         try {
             conn.setAutoCommit(false);
 
@@ -81,7 +112,7 @@ public class InstanciaComunServicio {
                 return true;
             } else {
                 conn.rollback();
-                return false;
+                throw new SQLException("Error: no se pudo actualizar completamente la instancia común con ID " + idInstancia + ".");
             }
         } catch (SQLException e) {
             conn.rollback();
@@ -91,8 +122,17 @@ public class InstanciaComunServicio {
         }
     }
 
-    // Eliminar instancia común (baja lógica)
+    // Eliminar instancia común (baja lógica, valida existencia)
     public boolean eliminarInstanciaComun(int idInstancia) throws SQLException {
-        return baseDao.desactivarInstancia(idInstancia);
+        InstanciaComun existente = comunDao.obtenerInstanciaComun(idInstancia);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede eliminar: la instancia común con ID " + idInstancia + " no existe.");
+        }
+
+        try {
+            return baseDao.desactivarInstancia(idInstancia);
+        } catch (SQLException e) {
+            throw new SQLException("Error al eliminar la instancia común con ID " + idInstancia + ": " + e.getMessage(), e);
+        }
     }
 }

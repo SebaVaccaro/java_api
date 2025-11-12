@@ -70,8 +70,13 @@ public class SeguimientoServicio {
     private void validarCamposActualizacion(int idSeguimiento, int idEstudiante, LocalDate fecInicio) throws SQLException {
         if (idSeguimiento <= 0)
             throw new IllegalArgumentException("ID de seguimiento inválido.");
-        validarCampos(idEstudiante, fecInicio);
+        if (idEstudiante <= 0)
+            throw new IllegalArgumentException("ID de estudiante inválido.");
+        if (fecInicio == null)
+            throw new IllegalArgumentException("Fecha de inicio requerida.");
+        validarEstudianteExiste(idEstudiante);
     }
+
 
     private void validarNoTieneSeguimientoActivo(int idEstudiante) throws SQLException {
         if (dao.tieneSeguimientoActivo(idEstudiante)) {

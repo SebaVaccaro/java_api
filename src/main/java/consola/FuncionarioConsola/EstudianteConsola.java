@@ -52,22 +52,22 @@ public class EstudianteConsola extends UIBase {
     // Crear nuevo estudiante
     private void crearEstudiante() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
-        String cedula = leerTexto("Cédula: ");
-        String nombre = leerTexto("Nombre: ");
-        String apellido = leerTexto("Apellido: ");
-        String password = leerTexto("Password: ");
-        int idGrupo = leerEntero("ID de grupo: ");
+        String cedula = leerTextoNoNull("Cédula: ");
+        String nombre = leerTextoNoNullNoNumero("Nombre: ");
+        String apellido = leerTextoNoNullNoNumero("Apellido: ");
+        String password = leerTextoNoNull("Password: ");
+        int idGrupo = leerEnteroNoNull("ID de grupo: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
             Estudiante e = proxy.crearEstudiante(
                     cedula, nombre, apellido, password, idGrupo, fechaNacimiento
             );
-            mostrarExito("✅ Estudiante creado correctamente: " + e);
+            mostrarExito("Estudiante creado correctamente: " + e);
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
@@ -80,7 +80,7 @@ public class EstudianteConsola extends UIBase {
     // Listar todos los estudiantes
     private void listarTodos() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -100,7 +100,7 @@ public class EstudianteConsola extends UIBase {
     // Buscar estudiante por ID
     private void buscarPorId() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -121,7 +121,7 @@ public class EstudianteConsola extends UIBase {
     // Modificar estudiante existente
     private void modificarEstudiante() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -141,8 +141,8 @@ public class EstudianteConsola extends UIBase {
 
             switch (campo.toLowerCase()) {
                 case "cedula" -> e.setCedula(leerTexto("Nueva cédula: "));
-                case "nombre" -> e.setNombre(leerTexto("Nuevo nombre: "));
-                case "apellido" -> e.setApellido(leerTexto("Nuevo apellido: "));
+                case "nombre" -> e.setNombre(leerTextoNoNullNoNumero("Nuevo nombre: "));
+                case "apellido" -> e.setApellido(leerTextoNoNullNoNumero("Nuevo apellido: "));
                 case "password" -> e.setPassword(leerTexto("Nuevo password: "));
                 case "idgrupo" -> e.setIdGrupo(leerEntero("Nuevo ID de grupo: "));
                 case "activo" -> e.setActivo(leerBoolean("¿Activo? (true/false): "));
@@ -154,7 +154,7 @@ public class EstudianteConsola extends UIBase {
 
             exito = proxy.actualizarEstudiante(e);
             if (exito)
-                mostrarExito("✅ Estudiante modificado correctamente.");
+                mostrarExito("Estudiante modificado correctamente.");
             else
                 mostrarError("No se pudo modificar el estudiante.");
 
@@ -168,7 +168,7 @@ public class EstudianteConsola extends UIBase {
     // Desactivar estudiante
     private void desactivarEstudiante() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -176,7 +176,7 @@ public class EstudianteConsola extends UIBase {
         try {
             boolean exito = proxy.desactivarEstudiante(idEstudiante);
             if (exito)
-                mostrarExito("✅ Estudiante desactivado correctamente.");
+                mostrarExito("Estudiante desactivado correctamente.");
             else
                 mostrarError("No se pudo desactivar el estudiante.");
         } catch (SecurityException se) {

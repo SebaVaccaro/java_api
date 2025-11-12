@@ -64,9 +64,13 @@ public class EstudianteServicio {
         return est;
     }
 
-    // Obtener estudiante por ID
+    // Obtener estudiante por ID (valida existencia)
     public Estudiante obtenerPorId(int idUsuario) throws SQLException {
-        return estudianteDAO.obtenerEstudiante(idUsuario);
+        Estudiante estudiante = estudianteDAO.obtenerEstudiante(idUsuario);
+        if (estudiante == null) {
+            throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
+        }
+        return estudiante;
     }
 
     // Listar todos los estudiantes
@@ -74,8 +78,13 @@ public class EstudianteServicio {
         return estudianteDAO.listarEstudiantes();
     }
 
-    // Actualizar estudiante con transacción
+    // Actualizar estudiante con validación de existencia
     public boolean actualizarEstudiante(Estudiante est) throws SQLException {
+        Estudiante existente = estudianteDAO.obtenerEstudiante(est.getIdUsuario());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró estudiante para actualizar.");
+        }
+
         boolean exito = false;
         try {
             conn.setAutoCommit(false);
@@ -98,13 +107,21 @@ public class EstudianteServicio {
         return exito;
     }
 
-    // Desactivar estudiante
+    // Desactivar estudiante con validación de existencia
     public boolean desactivarEstudiante(int idUsuario) throws SQLException {
+        Estudiante existente = estudianteDAO.obtenerEstudiante(idUsuario);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró estudiante para desactivar.");
+        }
         return estudianteDAO.eliminarEstudiante(idUsuario);
     }
 
-    // Verificar si el estudiante está activo
+    // Verificar si el estudiante está activo (valida existencia)
     public boolean estaActivo(int idUsuario) throws SQLException {
+        Estudiante existente = estudianteDAO.obtenerEstudiante(idUsuario);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
+        }
         return estudianteDAO.estaActivo(idUsuario);
     }
 

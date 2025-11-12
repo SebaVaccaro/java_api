@@ -23,7 +23,11 @@ public class DireccionServicio {
 
     // Obtener dirección por ID
     public Direccion obtenerPorId(int idDireccion) throws SQLException {
-        return direccionDAOImpl.obtenerDireccion(idDireccion);
+        Direccion direccion = direccionDAOImpl.obtenerDireccion(idDireccion);
+        if (direccion == null) {
+            throw new IllegalArgumentException("No se encontró dirección para esa ID.");
+        }
+        return direccion;
     }
 
     // Listar todas las direcciones
@@ -43,12 +47,20 @@ public class DireccionServicio {
 
     // Actualizar dirección
     public boolean actualizarDireccion(int idDireccion, String calle, String numPuerta, String numApto, int idCiudad, int idUsuario) throws SQLException {
+        Direccion existente = direccionDAOImpl.obtenerDireccion(idDireccion);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró dirección para actualizar.");
+        }
         Direccion direccion = new Direccion(idDireccion, calle, numPuerta, numApto, idCiudad, idUsuario);
         return direccionDAOImpl.actualizarDireccion(direccion);
     }
 
     // Eliminar dirección
     public boolean eliminarDireccion(int idDireccion) throws SQLException {
+        Direccion existente = direccionDAOImpl.obtenerDireccion(idDireccion);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró dirección para eliminar.");
+        }
         return direccionDAOImpl.eliminarDireccion(idDireccion);
     }
 }

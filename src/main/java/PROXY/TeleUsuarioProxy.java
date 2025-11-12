@@ -29,6 +29,9 @@ public class TeleUsuarioProxy {
     // Obtener teléfono por ID (administrador o propietario)
     public TeleUsuario obtenerTelefono(int idTelefono) throws SQLException {
         TeleUsuario tel = teleUsuarioServicio.buscarPorId(idTelefono);
+        if (tel == null) {
+            throw new IllegalArgumentException("No se encontro este teléfono.");
+        }
         if (!validarUsuario.tienePermisoAdminPsicoOPropietario(tel.getIdUsuario())) {
             throw new SecurityException("Solo un administrador o el propietario pueden consultar este teléfono.");
         }

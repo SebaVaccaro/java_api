@@ -50,15 +50,17 @@ public class InstanciaComunConsola extends UIBase {
     private void listarInstancias() {
         try {
             List<InstanciaComun> lista = instanciaProxy.listarPorEstudiante(idEstudiante);
-            if (lista.isEmpty() || lista == null) {
+            if (lista == null || lista.isEmpty()) {
                 mostrarInfo("No hay instancias comunes registradas.");
                 return;
             }
-            for(InstanciaComun i: lista){
+            for (InstanciaComun i : lista) {
                 System.out.println(i);
             }
         } catch (SQLException e) {
             mostrarError("Error al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar instancias: " + e.getMessage());
         }
     }
 
@@ -75,8 +77,10 @@ public class InstanciaComunConsola extends UIBase {
             lista.forEach(System.out::println);
         } catch (SQLException e) {
             mostrarError("Error al listar por seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             mostrarError(e.getMessage());
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar por seguimiento: " + e.getMessage());
         }
     }
 
@@ -93,8 +97,11 @@ public class InstanciaComunConsola extends UIBase {
             }
         } catch (SQLException e) {
             mostrarError("Error al buscar instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             mostrarError(e.getMessage());
+        } catch (Exception e) {
+            mostrarError("Error inesperado al buscar la instancia: " + e.getMessage());
         }
     }
+
 }
