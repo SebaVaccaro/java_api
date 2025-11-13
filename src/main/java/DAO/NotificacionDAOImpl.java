@@ -8,11 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad Notificacion.
- * Gestiona las operaciones CRUD sobre la tabla 'notificaciones',
- * que almacena los mensajes generados dentro del sistema.
- */
+
 public class NotificacionDAOImpl implements NotificacionDAO {
 
     // Conexión única a la base de datos mediante el Singleton

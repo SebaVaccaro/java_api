@@ -68,6 +68,7 @@ public class FuncionarioConsolaMain extends UIBase {
         System.out.println("17. Gestión de pertenece (Carrera ↔ ITR)");
         System.out.println("18. Gestión de recibe (Notificación ↔ Usuario)");
         System.out.println("19. Gestión de teléfonos de ITR");
+        System.out.println("20. Gestión de participantes en instancias");
         System.out.println("0.  Cerrar sesión");
         System.out.println("=============================================");
     }
@@ -95,6 +96,7 @@ public class FuncionarioConsolaMain extends UIBase {
                 case 17 -> new PerteneceConsola().iniciar();
                 case 18 -> new RecibeConsola().iniciar();
                 case 19 -> new TeleITRConsola().iniciar();
+                case 20 -> new PartInstanciaConsola().iniciar();
                 case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
