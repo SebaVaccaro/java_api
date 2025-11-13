@@ -75,7 +75,9 @@ public class InformeFinalConsola extends UIBase {
             if (lista.isEmpty()) {
                 mostrarInfo("No hay informes registrados.");
             } else {
-                lista.forEach(System.out::println);
+                for(InformeFinal i:lista){
+                    System.out.println(i);
+                }
             }
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());

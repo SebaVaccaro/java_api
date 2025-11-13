@@ -40,9 +40,9 @@ public class ITR {
     // Representación en texto
     @Override
     public String toString() {
-        return "ITR{" +
-                "idItr=" + idItr +
-                ", idDireccion=" + idDireccion +
-                '}';
+        return "idItr=" + idItr + "\n" +
+                "idDireccion=" + idDireccion + "\n" +
+                "----------";
     }
+
 }

@@ -34,13 +34,19 @@ public class Funcionario extends Usuario {
         this.estActivo = estActivo;
     }
 
-    // Representación en texto
     @Override
     public String toString() {
-        return "Funcionario{" + super.toString() +
-                ", idRol=" + idRol +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idUsuario=" + getIdUsuario() + "\n" +
+                "cedula='" + getCedula() + '\'' + "\n" +
+                "nombre='" + getNombre() + '\'' + "\n" +
+                "apellido='" + getApellido() + '\'' + "\n" +
+                "username='" + getUsername() + '\'' + "\n" +
+                "correo='" + getCorreo() + '\'' + "\n" +
+                "idRol=" + idRol + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
+
+
 }
 

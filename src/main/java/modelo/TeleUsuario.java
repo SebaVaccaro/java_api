@@ -51,10 +51,10 @@ public class TeleUsuario {
     // Representación en texto
     @Override
     public String toString() {
-        return "TeleUsuario{" +
-                "idTelefono=" + idTelefono +
-                ", numero='" + numero + '\'' +
-                ", idUsuario=" + idUsuario +
-                '}';
+        return "idTelefono=" + idTelefono + "\n" +
+                "numero='" + numero + '\'' + "\n" +
+                "idUsuario=" + idUsuario + "\n" +
+                "----------";
     }
+
 }

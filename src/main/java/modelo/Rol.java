@@ -51,11 +51,11 @@ public class Rol {
     // Representación en texto
     @Override
     public String toString() {
-        return "Rol{" +
-                "idRol=" + idRol +
-                ", nombre='" + nombre + '\'' +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idRol=" + idRol + "\n" +
+                "nombre='" + nombre + '\'' + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
+
 }
 

@@ -51,10 +51,10 @@ public class TeleITR {
     // Representación en texto
     @Override
     public String toString() {
-        return "TeleITR{" +
-                "idTelefono=" + idTelefono +
-                ", numero='" + numero + '\'' +
-                ", idItr=" + idItr +
-                '}';
+        return "idTelefono=" + idTelefono + "\n" +
+                "numero='" + numero + '\'' + "\n" +
+                "idItr=" + idItr + "\n" +
+                "----------";
     }
+
 }

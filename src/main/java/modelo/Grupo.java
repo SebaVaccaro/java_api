@@ -51,11 +51,11 @@ public class Grupo {
     // Representación en texto
     @Override
     public String toString() {
-        return "Grupo{" +
-                "idGrupo=" + idGrupo +
-                ", nomGrupo='" + nomGrupo + '\'' +
-                ", idCarrera=" + idCarrera +
-                '}';
+        return "idGrupo=" + idGrupo + "\n" +
+                "nomGrupo='" + nomGrupo + '\'' + "\n" +
+                "idCarrera=" + idCarrera + "\n" +
+                "----------";
     }
+
 }
 

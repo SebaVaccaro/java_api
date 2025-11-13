@@ -64,12 +64,12 @@ public class InformeFinal {
     // Representación en texto
     @Override
     public String toString() {
-        return "InformeFinal{" +
-                "idInfFinal=" + idInfFinal +
-                ", contenido='" + contenido + '\'' +
-                ", valoracion=" + valoracion +
-                ", fecCreacion=" + fecCreacion +
-                '}';
+        return "idInfFinal=" + idInfFinal + "\n" +
+                "contenido='" + contenido + '\'' + "\n" +
+                "valoracion=" + valoracion + "\n" +
+                "fecCreacion=" + fecCreacion + "\n" +
+                "----------";
     }
+
 }
 

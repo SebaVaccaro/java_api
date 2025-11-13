@@ -31,9 +31,9 @@ public class PartInstancia {
     // Representación en texto
     @Override
     public String toString() {
-        return "PartInstancia{" +
-                "idParticipante=" + idParticipante +
-                ", idInstancia=" + idInstancia +
-                '}';
+        return "idParticipante=" + idParticipante + "\n" +
+                "idInstancia=" + idInstancia + "\n" +
+                "----------";
     }
+
 }

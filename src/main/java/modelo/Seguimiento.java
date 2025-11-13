@@ -83,13 +83,12 @@ public class Seguimiento {
     // Representación en texto
     @Override
     public String toString() {
-        return "Seguimiento{" +
-                "idSeguimiento=" + idSeguimiento +
-                ", idInforme=" + idInforme +
-                ", idEstudiante=" + idEstudiante +
-                ", fecInicio=" + fecInicio +
-                ", fecCierre=" + fecCierre +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idSeguimiento=" + idSeguimiento + "\n" +
+                "idInforme=" + idInforme + "\n" +
+                "idEstudiante=" + idEstudiante + "\n" +
+                "fecInicio=" + fecInicio + "\n" +
+                "fecCierre=" + fecCierre + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
 }

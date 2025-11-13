@@ -84,13 +84,13 @@ public class Direccion {
     // Representación en texto
     @Override
     public String toString() {
-        return "Direccion{" +
-                "idDireccion=" + idDireccion +
-                ", calle='" + calle + '\'' +
-                ", numPuerta='" + numPuerta + '\'' +
-                ", numApto='" + numApto + '\'' +
-                ", idCiudad=" + idCiudad +
-                ", idUsuario=" + idUsuario +
-                '}';
+        return "idDireccion=" + idDireccion + "\n" +
+                "calle='" + calle + '\'' + "\n" +
+                "numPuerta='" + numPuerta + '\'' + "\n" +
+                "numApto='" + numApto + '\'' + "\n" +
+                "idCiudad=" + idCiudad + "\n" +
+                "idUsuario=" + idUsuario + "\n" +
+                "----------";
     }
+
 }

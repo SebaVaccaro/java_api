@@ -37,10 +37,17 @@ public class Estudiante extends Usuario {
     // Representación en texto
     @Override
     public String toString() {
-        return "Estudiante{" + super.toString() +
-                ", idGrupo=" + idGrupo +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idUsuario=" + getIdUsuario() + "\n" +
+                "cedula='" + getCedula() + '\'' + "\n" +
+                "nombre='" + getNombre() + '\'' + "\n" +
+                "apellido='" + getApellido() + '\'' + "\n" +
+                "username='" + getUsername() + '\'' + "\n" +
+                "correo='" + getCorreo() + '\'' + "\n" +
+                "idGrupo=" + idGrupo + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
+
+
 }
 

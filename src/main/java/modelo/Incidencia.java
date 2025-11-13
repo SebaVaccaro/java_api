@@ -35,9 +35,8 @@ public class Incidencia extends Instancia {
     // Representación en texto
     @Override
     public String toString() {
-        return "Incidencia{" +
-                super.toString() +
-                ", lugar='" + lugar + '\'' +
-                '}';
+        return super.toString() + "\n" +
+                "lugar='" + lugar + '\'' + "\n" +
+                "----------";
     }
 }

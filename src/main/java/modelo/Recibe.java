@@ -35,9 +35,8 @@ public class Recibe {
     // Representación en texto
     @Override
     public String toString() {
-        return "Recibe{" +
-                "idNotificacion=" + idNotificacion +
-                ", idUsuario=" + idUsuario +
-                '}';
+        return "idNotificacion=" + idNotificacion + "\n" +
+                "idUsuario=" + idUsuario + "\n" +
+                "----------";
     }
 }

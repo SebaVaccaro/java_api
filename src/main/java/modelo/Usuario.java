@@ -59,14 +59,13 @@ public abstract class Usuario {
     // Representación en texto
     @Override
     public String toString() {
-        return "Usuario{" +
-                "idUsuario=" + idUsuario +
-                ", cedula='" + cedula + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", username='" + username + '\'' +
-                ", correo='" + correo + '\'' +
-                '}';
+        return "idUsuario=" + idUsuario + "\n" +
+                "cedula='" + cedula + '\'' + "\n" +
+                "nombre='" + nombre + '\'' + "\n" +
+                "apellido='" + apellido + '\'' + "\n" +
+                "username='" + username + '\'' + "\n" +
+                "correo='" + correo + '\'' + "\n";
     }
+
 }
 

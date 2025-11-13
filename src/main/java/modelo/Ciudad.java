@@ -62,12 +62,12 @@ public class Ciudad {
     // Representación en texto
     @Override
     public String toString() {
-        return "Ciudad{" +
-                "idCiudad=" + idCiudad +
-                ", codPostal=" + codPostal +
-                ", nombre='" + nombre + '\'' +
-                ", departamento='" + departamento + '\'' +
-                '}';
+        return "idCiudad=" + idCiudad + "\n" +
+                "codPostal=" + codPostal + "\n" +
+                "nombre='" + nombre + '\'' + "\n" +
+                "departamento='" + departamento + '\'' + "\n" +
+                "----------";
     }
+
 }
 

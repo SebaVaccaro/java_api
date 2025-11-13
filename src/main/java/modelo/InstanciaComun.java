@@ -34,9 +34,9 @@ public class InstanciaComun extends Instancia {
     // Representación en texto
     @Override
     public String toString() {
-        return "InstanciaComun{" +
-                super.toString() +
-                ", idSeguimiento=" + idSeguimiento +
-                '}';
+        return super.toString() + "\n" +
+                "idSeguimiento=" + idSeguimiento + "\n" +
+                "----------";
     }
+
 }

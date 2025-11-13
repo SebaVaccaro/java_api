@@ -97,14 +97,14 @@ public class Notificacion {
     // Representación en texto
     @Override
     public String toString() {
-        return "Notificacion{" +
-                "idNotificacion=" + idNotificacion +
-                ", idInstancia=" + idInstancia +
-                ", asunto='" + asunto + '\'' +
-                ", mensaje='" + mensaje + '\'' +
-                ", destinatario='" + destinatario + '\'' +
-                ", fecEnvio=" + fecEnvio +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idNotificacion=" + idNotificacion + "\n" +
+                "idInstancia=" + idInstancia + "\n" +
+                "asunto='" + asunto + '\'' + "\n" +
+                "mensaje='" + mensaje + '\'' + "\n" +
+                "destinatario='" + destinatario + '\'' + "\n" +
+                "fecEnvio=" + fecEnvio + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
+
 }

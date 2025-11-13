@@ -81,16 +81,14 @@ public class ArchivoAdjunto {
         this.estActivo = estActivo;
     }
 
-    // Representación del objeto en texto
     @Override
     public String toString() {
-        return "ArchivoAdjunto{" +
-                "idArchivoAdjunto=" + idArchivoAdjunto +
-                ", idUsuario=" + idUsuario +
-                ", idEstudiante=" + idEstudiante +
-                ", ruta='" + ruta + '\'' +
-                ", categoria='" + categoria + '\'' +
-                ", estActivo=" + estActivo +
-                '}';
+        return  "idArchivoAdjunto=" + idArchivoAdjunto + "\n" +
+                "idUsuario=" + idUsuario + "\n" +
+                "idEstudiante=" + idEstudiante + "\n" +
+                "categoria='" + categoria + '\'' + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "ruta='" + ruta + '\'' + "\n" +
+                "----------";
     }
 }

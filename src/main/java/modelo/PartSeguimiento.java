@@ -35,9 +35,9 @@ public class PartSeguimiento {
     // Representación en texto
     @Override
     public String toString() {
-        return "PartSeguimiento{" +
-                "idParticipante=" + idParticipante +
-                ", idSeguimiento=" + idSeguimiento +
-                '}';
+        return "idParticipante=" + idParticipante + "\n" +
+                "idSeguimiento=" + idSeguimiento + "\n" +
+                "----------";
     }
+
 }
