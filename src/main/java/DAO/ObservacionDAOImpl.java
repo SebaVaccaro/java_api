@@ -34,6 +34,8 @@ public class ObservacionDAOImpl implements ObservacionDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 o.setIdObservacion(rs.getInt("id_observacion"));
+            } else {
+                throw new SQLException("No se devolvió el ID generado para la observación.");
             }
         }
         return o;

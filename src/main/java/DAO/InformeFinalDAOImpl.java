@@ -37,7 +37,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
     // Obtener un informe final específico por su ID
     @Override
     public InformeFinal obtenerInformeFinal(int idInfFinal) throws SQLException {
-        String sql = "SELECT * FROM info_final WHERE id_inf_final = ?";
+        String sql = "SELECT * FROM info_final WHERE id_inf_final = ? AND est_activo = TRUE";
         InformeFinal informe = null;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInfFinal);
@@ -58,7 +58,7 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
     @Override
     public List<InformeFinal> listarInformesFinales() throws SQLException {
         List<InformeFinal> informes = new ArrayList<>();
-        String sql = "SELECT * FROM info_final ORDER BY id_inf_final";
+        String sql = "SELECT * FROM info_final WHERE est_activo = TRUE ORDER BY id_inf_final";
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -86,10 +86,10 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
         }
     }
 
-    // Eliminar físicamente un informe final por su ID
+
     @Override
     public boolean eliminarInformeFinal(int idInfFinal) throws SQLException {
-        String sql = "DELETE FROM info_final WHERE id_inf_final = ?";
+        String sql = "UPDATE info_final SET est_activo = FALSE WHERE id_inf_final = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, idInfFinal);
             return ps.executeUpdate() > 0;
