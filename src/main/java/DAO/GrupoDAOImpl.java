@@ -8,11 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad Grupo.
- * Gestiona las operaciones CRUD (crear, leer, actualizar, eliminar)
- * sobre la tabla 'grupos' en la base de datos.
- */
 public class GrupoDAOImpl implements GrupoDAO {
 
     // Conexión única a la base de datos mediante el Singleton

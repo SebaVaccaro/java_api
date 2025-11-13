@@ -8,11 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad InformeFinal.
- * Gestiona las operaciones CRUD sobre la tabla 'info_final',
- * que almacena los informes finales generados por los usuarios o procesos del sistema.
- */
 public class InformeFinalDAOImpl implements InformeFinalDAO {
 
     // Conexión única a la base de datos mediante el Singleton

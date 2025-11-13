@@ -8,11 +8,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad InstanciaComun.
- * Gestiona las operaciones CRUD sobre la tabla 'inst_comun',
- * que representa un tipo de instancia dentro del sistema.
- */
 public class InstanciaComunDAOImpl {
 
     // Conexión única a la base de datos mediante el Singleton

@@ -57,8 +57,8 @@ public class EstudianteConsola extends UIBase {
         }
 
         String cedula = leerTextoNoNull("Cédula: ");
-        String nombre = leerTextoNoNullNoNumero("Nombre: ");
-        String apellido = leerTextoNoNullNoNumero("Apellido: ");
+        String nombre = leerNombreApellido("Nombre: ");
+        String apellido = leerNombreApellido("Apellido: ");
         String password = leerTextoNoNull("Password: ");
         int idGrupo = leerEnteroNoNull("ID de grupo: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
@@ -141,8 +141,8 @@ public class EstudianteConsola extends UIBase {
 
             switch (campo.toLowerCase()) {
                 case "cedula" -> e.setCedula(leerTexto("Nueva cédula: "));
-                case "nombre" -> e.setNombre(leerTextoNoNullNoNumero("Nuevo nombre: "));
-                case "apellido" -> e.setApellido(leerTextoNoNullNoNumero("Nuevo apellido: "));
+                case "nombre" -> e.setNombre(leerNombreApellido("Nuevo nombre: "));
+                case "apellido" -> e.setApellido(leerNombreApellido("Nuevo apellido: "));
                 case "password" -> e.setPassword(leerTexto("Nuevo password: "));
                 case "idgrupo" -> e.setIdGrupo(leerEntero("Nuevo ID de grupo: "));
                 case "activo" -> e.setActivo(leerBoolean("¿Activo? (true/false): "));

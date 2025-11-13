@@ -9,10 +9,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * Implementación del DAO para la funcionalidad de Login.
- * Gestiona el acceso y autenticación de usuarios en la base de datos.
- */
 public class LoginDAOImpl implements LoginDAO {
 
     // Conexión única a la base de datos mediante el Singleton

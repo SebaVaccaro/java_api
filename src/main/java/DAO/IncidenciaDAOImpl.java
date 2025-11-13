@@ -8,11 +8,6 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad Incidencia.
- * Gestiona las operaciones CRUD sobre la tabla 'incidencias',
- * la cual extiende la información de la tabla general 'instancias'.
- */
 public class IncidenciaDAOImpl {
 
     // Conexión única a la base de datos mediante el Singleton
