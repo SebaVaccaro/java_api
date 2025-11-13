@@ -50,9 +50,9 @@ public class InformeFinalProxy {
         return informeService.actualizarInforme(idInfFinal, contenido, valoracion, fecCreacion);
     }
 
-    // Eliminar informe final (solo administradores)
+    // Eliminar informe final (solo administradores o psicopedagogos)
     public boolean eliminarInforme(int idInfFinal) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores pueden eliminar este informe.");
         }
         return informeService.eliminarInforme(idInfFinal);

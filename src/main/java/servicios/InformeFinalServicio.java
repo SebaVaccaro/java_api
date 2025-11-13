@@ -82,13 +82,32 @@ public class InformeFinalServicio {
         return informeDAO.actualizarInformeFinal(informe);
     }
 
-    // Eliminar informe (verifica existencia antes de eliminar)
-    public boolean eliminarInforme(int idInfFinal) throws SQLException {
-        InformeFinal existente = informeDAO.obtenerInformeFinal(idInfFinal);
-        if (existente == null) {
-            throw new IllegalArgumentException("No se puede eliminar: el informe con ID " + idInfFinal + " no existe.");
+    public boolean eliminarInforme(int idSeguimiento) throws SQLException {
+
+
+        Seguimiento seguimiento = seguimientoDAO.buscarPorId(idSeguimiento);
+        if (seguimiento == null) {
+            throw new IllegalArgumentException("No existe un seguimiento con ID " + idSeguimiento + ".");
         }
 
-        return informeDAO.eliminarInformeFinal(idInfFinal);
+        Integer idInforme = seguimiento.getIdInforme();
+
+        if (idInforme == null) {
+            throw new IllegalArgumentException("El seguimiento no tiene Informe Final");
+        }
+
+        InformeFinal existente = informeDAO.obtenerInformeFinal(idInforme);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede eliminar: el informe con ID " + idInforme + " no existe.");
+        }
+
+        boolean res = informeDAO.eliminarInformeFinal(idInforme);
+        if(res) {
+            seguimiento.setIdInforme(null);
+            seguimientoDAO.actualizar(seguimiento);
+        }else{
+            throw new IllegalArgumentException("No se pudo eliminar el informe, intentelo nuevamente.");
+        }
+        return true;
     }
 }

@@ -26,6 +26,7 @@ public class InformeFinalConsola extends UIBase {
         System.out.println("2. Buscar por ID");
         System.out.println("3. Modificar informe");
         System.out.println("4. Eliminar informe");
+        System.out.println("5. Crear informe final");
         System.out.println("0. Volver al menú principal");
         System.out.println("=================================");
     }
@@ -39,11 +40,31 @@ public class InformeFinalConsola extends UIBase {
                 case 2 -> buscarPorId();       // Buscar informe por ID
                 case 3 -> modificarInforme();  // Modificar un informe existente
                 case 4 -> eliminarInforme();   // Eliminar un informe
+                case 5 -> crearInformeFinal();
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
             mostrarError("Error al ejecutar la opción: " + e.getMessage());
+        }
+    }
+
+    // Crear un nuevo informe final
+    private void crearInformeFinal() {
+        int idSeguimiento = leerEntero("ID del seguimiento: ");
+        String contenido = leerTexto("Contenido del informe: ");
+        int valoracion = leerEntero("Valoración (1-10): ");
+        LocalDate fecha = leerFecha("Fecha de creación (YYYY-MM-DD): ");
+
+        try {
+            InformeFinal nuevoInforme = proxy.crearInforme(idSeguimiento, contenido, valoracion, fecha);
+            mostrarExito("Informe creado correctamente: " + nuevoInforme);
+        } catch (SecurityException ex) {
+            mostrarError(ex.getMessage());
+        } catch (SQLException ex) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+        } catch (Exception ex) {
+            mostrarError(ex.getMessage());
         }
     }
 
@@ -59,9 +80,9 @@ public class InformeFinalConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al listar informes: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
-            mostrarError("Error general al listar informes: " + ex.getMessage());
+            mostrarError(ex.getMessage());
         }
     }
 
@@ -78,9 +99,9 @@ public class InformeFinalConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al buscar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
-            mostrarError("Error general al buscar informe: " + ex.getMessage());
+            mostrarError(ex.getMessage());
         }
     }
 
@@ -88,7 +109,7 @@ public class InformeFinalConsola extends UIBase {
     private void modificarInforme() {
         int id = leerEntero("ID del informe a modificar: ");
         String contenido = leerTexto("Nuevo contenido: ");
-        int valoracion = leerEntero("Nueva valoración (0-100): ");
+        int valoracion = leerEntero("Nueva valoración (1-10): ");
         LocalDate fecha = leerFecha("Nueva fecha de creación (YYYY-MM-DD): ");
 
         try {
@@ -101,15 +122,15 @@ public class InformeFinalConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al modificar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
-            mostrarError("Error general al modificar informe: " + ex.getMessage());
+            mostrarError(ex.getMessage());
         }
     }
 
     // Elimina un informe final según su ID
     private void eliminarInforme() {
-        int id = leerEntero("ID del informe a eliminar: ");
+        int id = leerEntero("ID del seguimiento del informe a eliminar: ");
         try {
             boolean exito = proxy.eliminarInforme(id);
             if (exito) {
@@ -120,9 +141,9 @@ public class InformeFinalConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al eliminar informe: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
-            mostrarError("Error general al eliminar informe: " + ex.getMessage());
+            mostrarError(ex.getMessage());
         }
     }
 }
