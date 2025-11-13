@@ -65,14 +65,7 @@ public class ArchivoAdjuntoServicio {
         return archivoDAO.eliminarArchivoAdjunto(idArchivo);
     }
 
-    // Eliminar archivo físicamente
-    public boolean eliminarFisico(int idArchivo) throws SQLException {
-        ArchivoAdjunto archivo = archivoDAO.obtenerArchivoAdjunto(idArchivo);
-        if (archivo == null) {
-            throw new IllegalArgumentException("No se encontró archivo para esa ID.");
-        }
-        return archivoDAO.eliminarFisico(idArchivo);
-    }
+
 
     // Validar que el estudiante exista
     private void validarEstudianteExiste(int idEstudiante) throws SQLException {

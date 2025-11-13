@@ -33,6 +33,8 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 archivo.setIdArchivoAdjunto(rs.getInt("id_archivo_adjunto"));
+            }else {
+                throw new SQLException("No se devolvió el ID del archivo adjunto generado.");
             }
         }
         return archivo;
@@ -129,13 +131,5 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         }
     }
 
-    // Eliminar físicamente un archivo adjunto de la base de datos
-    @Override
-    public boolean eliminarFisico(int idArchivo) throws SQLException {
-        String sql = "DELETE FROM arch_adjuntos WHERE id_archivo_adjunto = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idArchivo);
-            return ps.executeUpdate() > 0;
-        }
-    }
+
 }

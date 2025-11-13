@@ -24,6 +24,4 @@ public interface ArchivoAdjuntoDAO {
     // Baja lógica (desactivar archivo)
     boolean eliminarArchivoAdjunto(int idArchivo) throws SQLException;
 
-    // Eliminación física
-    boolean eliminarFisico(int idArchivo) throws SQLException;
 }

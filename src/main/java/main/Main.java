@@ -1,3 +1,5 @@
+package main;
+
 import consola.MainConsola;
 
 public class Main {
