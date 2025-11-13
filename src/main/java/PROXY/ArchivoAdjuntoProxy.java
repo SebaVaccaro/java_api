@@ -67,11 +67,5 @@ public class ArchivoAdjuntoProxy {
         }
         return service.eliminarArchivo(idArchivo);
     }
-    // Eliminar archivo físicamente (solo admin)
-    public boolean eliminarFisico(int idArchivo) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo un administrador puede eliminar físicamente este archivo.");
-        }
-        return service.eliminarFisico(idArchivo);
-    }
+
 }
