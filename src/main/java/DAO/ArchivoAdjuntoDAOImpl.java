@@ -131,13 +131,5 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
         }
     }
 
-    // Eliminar físicamente un archivo adjunto de la base de datos
-    @Override
-    public boolean eliminarFisico(int idArchivo) throws SQLException {
-        String sql = "DELETE FROM arch_adjuntos WHERE id_archivo_adjunto = ?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, idArchivo);
-            return ps.executeUpdate() > 0;
-        }
-    }
+
 }

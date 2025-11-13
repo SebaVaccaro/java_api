@@ -347,49 +347,7 @@ public class ArchivoAdjuntoDAOImplTest {
     }
 
 
-    @Test
-    void testEliminarFisicoExito() throws SQLException {
-        int idArchivo = 1;
 
-        when(preparedStatement.executeUpdate()).thenReturn(1);
-
-        boolean resultado = archivoAdjuntoDAO.eliminarFisico(idArchivo);
-
-        verify(preparedStatement).setInt(1, idArchivo);
-        verify(preparedStatement).executeUpdate();
-        verify(preparedStatement).close();
-
-        assertTrue(resultado);
-    }
-
-    @Test
-    void testEliminarFisicoLanzaSQLException() throws SQLException {
-        int idArchivo = 1;
-
-        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error al eliminar físicamente"));
-
-        SQLException exception = assertThrows(SQLException.class,
-                () -> archivoAdjuntoDAO.eliminarFisico(idArchivo));
-
-        assertEquals("Error al eliminar físicamente", exception.getMessage());
-        verify(preparedStatement).executeUpdate();
-        verify(preparedStatement).close();
-    }
-
-    @Test
-    void testEliminarFisicoSinFilasAfectadas() throws SQLException {
-        int idArchivo = 999;
-
-        when(preparedStatement.executeUpdate()).thenReturn(0);
-
-        boolean resultado = archivoAdjuntoDAO.eliminarFisico(idArchivo);
-
-        verify(preparedStatement).setInt(1, idArchivo);
-        verify(preparedStatement).executeUpdate();
-        verify(preparedStatement).close();
-
-        assertFalse(resultado);
-    }
 
 
 
