@@ -33,6 +33,8 @@ public class ArchivoAdjuntoDAOImpl implements ArchivoAdjuntoDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 archivo.setIdArchivoAdjunto(rs.getInt("id_archivo_adjunto"));
+            }else {
+                throw new SQLException("No se devolvió el ID del archivo adjunto generado.");
             }
         }
         return archivo;

@@ -29,6 +29,10 @@ public class EstudianteConsola extends UIBase {
             return;
         }
 
+        // Inicializamos estudiante desde la sesión.
+        this.estudiante = (Estudiante) sesion.getUsuarioActual();
+
+
         // Ejecutar menú heredado
         super.iniciar();
 
@@ -42,7 +46,7 @@ public class EstudianteConsola extends UIBase {
     @Override
     protected void mostrarMenu() {
         System.out.println("\n===== MENÚ ESTUDIANTE =====");
-        System.out.println("Bienvenido, " + estudiante.getNombre() + " " + estudiante.getApellido());
+        System.out.println("Bienvenido, " + estudiante.getNombre()  + " " + estudiante.getApellido());
         System.out.println("====================================");
         System.out.println("1. Ver información personal");
         System.out.println("2. Consultar seguimiento");

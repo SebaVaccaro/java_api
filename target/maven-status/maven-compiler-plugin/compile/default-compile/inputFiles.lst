@@ -1,29 +1,158 @@
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\DAO\FuncionarioDAO.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Incidencia.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\ITR.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Seguimiento.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\algoritmos\ValidadorCI.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\DAO\UsuarioDAO.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\algoritmos\Encriptador.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Ciudad.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Instancia.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\service\EstudianteServicio.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Estudiante.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\algoritmos\ValidadorPassword.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\service\UsuarioService.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Direccion.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\service\FuncionarioServicio.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Observaciones.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Funcionario.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\DAO\SeguimientoDAO.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Notificacion.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Usuario.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\InformeFinal.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\main\Main.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\ArchivoAdjunto.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\InstanciaComun.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\algoritmos\ValidadorEdad.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\DAO\EstudianteDAO.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Grupo.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\modelo\Carrera.java
-C:\Users\nicol\Documents\Nueva carpeta\ttt-utec-project\src\main\java\SINGLETON\ConexionSingleton.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\DireccionServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\ArchivoAdjunto.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\PartSeguimientoProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\ObservacionServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\IncidenciaProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\ArchivoAdjuntoProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Estudiante.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Instancia.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\DireccionConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\NotificacionDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\PerteneceDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\EstudianteDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\CarreraProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Carrera.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\TeleUsuario.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\NotificacionConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\FuncionarioDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\ITRConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\MainConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\SeguimientoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\ArchivoAdjuntoServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\CarreraServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\LoginDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\RolProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\TeleUsuarioProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\IncidenciaDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\InstanciaDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Rol.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\PerteneceConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\CarreraDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\InformeFinalDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\TeleUsuarioServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\PartSeguimientoDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Ciudad.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\FuncionarioConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\DireccionDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\FuncionarioDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Usuario.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\ITRServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\PartInstanciaDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\FuncionarioProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\GrupoDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\DireccionProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\InstanciaComunConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\InstanciaComunDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\Main.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\CarreraConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\PartSeguimientoDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\algoritmos\ValidadorCI.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\RecibeConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\UsuarioDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\InformeFinalConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\IncidenciaServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\NotificacionDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\PartInstancia.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\TeleITRDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\TeleITRProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\InterfazConsola\RolStrategy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\LoginConsola\LoginConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\TeleITRServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Pertenece.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\CarreraDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Funcionario.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Grupo.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\InformeFinal.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\CiudadConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\TeleUsuarioConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\SeguimientoDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\InformeFinalServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\ArchivoAdjuntoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\NotificacionServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\ITRDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\PerteneceServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\TeleITRDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Notificacion.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\EstudianteProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\InformeFinalDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\ITR.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\RolDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\InterfazConsola\UIMenu.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\SINGLETON\SesionSingleton.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\InstanciaComunConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\TelefonoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\InstanciaComun.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\LoginDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Seguimiento.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\ITRProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\ObservacionProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\PartInstanciaProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\FuncionarioConsolaMain.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\ArchivoAdjuntoDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\algoritmos\ValidadorPassword.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\ITRDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\FACADE\SesionFacade.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\PartInstanciaServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\TeleITRConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\GrupoProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\PartSeguimientoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\TeleUsuarioDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\UsuarioServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\PerteneceDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\ObservacionDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\ObservacionDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\RolServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\algoritmos\Encriptador.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\SINGLETON\ConexionSingleton.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\CiudadProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\RolDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\LoginServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\UsuarioDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\InterfazConsola\UIBase.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\StrategyConsola\EstudianteStrategyConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\CiudadServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\utils\CapturadoraDeErrores.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\utils\ValidarUsuario.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\PartInstanciaConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\IncidenciaConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\FuncionarioServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\ObservacionConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\StrategyConsola\FuncionarioStrategyConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\DireccionDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\GrupoServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\DireccionConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\algoritmos\ValidadorEdad.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\TeleUsuarioDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\NotificacionConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\InstanciaComunProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\EstudianteDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Direccion.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\EstudianteServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\CiudadDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Observacion.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\SeguimientoProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\StrategyConsola\RolStrategyFactoryConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\RecibeDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\SeguimientoServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\RecibeServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\CiudadDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\InformeFinalProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\GrupoDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\PartInstanciaDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\EstudianteConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Recibe.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\PartSeguimientoServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\SeguimientoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\PartSeguimiento.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\PerteneceProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\RolConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\ArchivoAdjuntoDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\servicios\InstanciaComunServicio.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\RecibeDAOImpl.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\EstudianteConsola\EstudianteConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\NotificacionProxy.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\consola\FuncionarioConsola\GrupoConsola.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\Incidencia.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\DAO\interfaz\SeguimientoDAO.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\modelo\TeleITR.java
+C:\Users\wilma\IdeaProjects\java_api\src\main\java\PROXY\RecibeProxy.java
