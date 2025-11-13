@@ -1,7 +1,9 @@
 package consola.FuncionarioConsola;
 
 import SINGLETON.SesionSingleton;
+import consola.Factory.FuncionarioFactory;
 import consola.InterfazConsola.UIBase;
+import consola.InterfazConsola.UIMenu;
 import modelo.Funcionario;
 import servicios.FuncionarioServicio;
 import FACADE.SesionFacade;
@@ -39,7 +41,6 @@ public class FuncionarioConsolaMain extends UIBase {
 
         super.iniciar();
 
-        // Cierre de sesión usando SesionFacade
         SesionFacade facade = new SesionFacade();
         facade.logout();
 
@@ -69,6 +70,7 @@ public class FuncionarioConsolaMain extends UIBase {
         System.out.println("18. Gestión de recibe (Notificación ↔ Usuario)");
         System.out.println("19. Gestión de teléfonos de ITR");
         System.out.println("20. Gestión de participantes en instancias");
+        System.out.println("21. Gestión de informes finales");
         System.out.println("0.  Cerrar sesión");
         System.out.println("=============================================");
     }
@@ -76,33 +78,21 @@ public class FuncionarioConsolaMain extends UIBase {
     @Override
     protected void manejarOpcion(int opcion) {
         try {
-            switch (opcion) {
-                case 1 -> new ArchivoAdjuntoConsola().iniciar();
-                case 2 -> new CarreraConsola().iniciar();
-                case 3 -> new CiudadConsola().iniciar();
-                case 4 -> new DireccionConsola().iniciar();
-                case 5 -> new EstudianteConsola().iniciar();
-                case 6 -> new FuncionarioConsola().iniciar();
-                case 7 -> new GrupoConsola().iniciar();
-                case 8 -> new ITRConsola().iniciar();
-                case 9 -> new IncidenciaConsola().iniciar();
-                case 10 -> new InstanciaComunConsola().iniciar();
-                case 11 -> new NotificacionConsola().iniciar();
-                case 12 -> new ObservacionConsola().iniciar();
-                case 13 -> new RolConsola().iniciar();
-                case 14 -> new SeguimientoConsola().iniciar();
-                case 15 -> new TeleUsuarioConsola().iniciar();
-                case 16 -> new PartSeguimientoConsola().iniciar();
-                case 17 -> new PerteneceConsola().iniciar();
-                case 18 -> new RecibeConsola().iniciar();
-                case 19 -> new TeleITRConsola().iniciar();
-                case 20 -> new PartInstanciaConsola().iniciar();
-                case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "...");
-                default -> mostrarError("Opción inválida. Intente nuevamente.");
+            if (opcion == 0) {
+                mostrarInfo("Cerrando sesión de " + rolActual + "...");
+                return;
             }
+
+            UIMenu consola = FuncionarioFactory.crearConsolaPorOpcion(opcion);
+            consola.iniciar();
+
+        } catch (IllegalArgumentException e) {
+            mostrarError("Opción inválida. Intente nuevamente.");
         } catch (Exception e) {
             mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 }
+
