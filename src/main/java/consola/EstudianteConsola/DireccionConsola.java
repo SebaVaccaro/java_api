@@ -12,21 +12,19 @@ import java.util.List;
 public class DireccionConsola extends UIBase {
 
     private final DireccionProxy direccionProxy;
-    private final int idUsuario; // usuario autenticado
+    private final int idEstudiante; // usuario autenticado
 
     // Inicialización de la consola del estudiante (direcciones)
     public DireccionConsola() throws SQLException {
-        // Verificar que haya sesión activa antes de permitir acciones
+
         if (!SesionSingleton.getInstance().haySesionActiva()) {
-            throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
+            throw new IllegalStateException("No hay sesión activa. Por favor inicia sesión.");
         }
-        // Obtener el ID del usuario actualmente autenticado
-        this.idUsuario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
-        // Inicializar el proxy encargado de las operaciones sobre direcciones
+        this.idEstudiante = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
+
         this.direccionProxy = new DireccionProxy();
     }
 
-    // Implementación de UIBase - Menú principal
     @Override
     protected void mostrarMenu() {
         System.out.println("\n===== MENÚ DE MIS DIRECCIONES =====");
@@ -60,7 +58,7 @@ public class DireccionConsola extends UIBase {
 
         try {
             Direccion d = direccionProxy.crearDireccion(
-                    idUsuario,
+                    idEstudiante,
                     calle,
                     numPuerta,
                     numApto.isBlank() ? null : numApto,
@@ -79,17 +77,13 @@ public class DireccionConsola extends UIBase {
     // Listar todas las direcciones activas pertenecientes al usuario autenticado
     private void listarMisDirecciones() {
         try {
-            List<Direccion> lista = direccionProxy.listarPorUsuario(idUsuario);
+            List<Direccion> lista = direccionProxy.listarPorUsuario(idEstudiante);
             if (lista.isEmpty()) {
                 mostrarInfo("No tienes direcciones registradas.");
             } else {
-                lista.forEach(d -> System.out.println(
-                        "ID: " + d.getIdDireccion() +
-                                " | CiudadID: " + d.getIdCiudad() +
-                                " | Calle: " + d.getCalle() +
-                                " | Puerta: " + d.getNumPuerta() +
-                                " | Apto: " + (d.getNumApto() == null ? "-" : d.getNumApto())
-                ));
+                for(Direccion d: lista){
+                    System.out.println(d);
+                }
             }
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
@@ -114,10 +108,10 @@ public class DireccionConsola extends UIBase {
             String campo = leerTexto("Campo a modificar: ").toLowerCase();
 
             boolean exito = switch (campo) {
-                case "calle" -> direccionProxy.actualizarDireccion(idUsuario, idDireccion, leerTexto("Nueva calle: "), null, null, 0);
-                case "numpuerta", "nupuerta" -> direccionProxy.actualizarDireccion(idUsuario, idDireccion, null, leerTexto("Nuevo número de puerta: "), null, 0);
-                case "numapto", "napto" -> direccionProxy.actualizarDireccion(idUsuario, idDireccion, null, null, leerTexto("Nuevo número de apto: "), 0);
-                case "idciudad" -> direccionProxy.actualizarDireccion(idUsuario, idDireccion, null, null, null, leerEntero("Nuevo ID de ciudad: "));
+                case "calle" -> direccionProxy.actualizarDireccion(idEstudiante, idDireccion, leerTexto("Nueva calle: "), null, null, 0);
+                case "numpuerta", "nupuerta" -> direccionProxy.actualizarDireccion(idEstudiante, idDireccion, null, leerTexto("Nuevo número de puerta: "), null, 0);
+                case "numapto", "napto" -> direccionProxy.actualizarDireccion(idEstudiante, idDireccion, null, null, leerTexto("Nuevo número de apto: "), 0);
+                case "idciudad" -> direccionProxy.actualizarDireccion(idEstudiante, idDireccion, null, null, null, leerEntero("Nuevo ID de ciudad: "));
                 default -> {
                     mostrarError("Campo inválido.");
                     yield false;
@@ -130,7 +124,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error al modificar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError(e.getMessage());
         }

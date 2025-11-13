@@ -17,7 +17,7 @@ public class FuncionarioConsolaMain extends UIBase {
         try {
             tempService = new FuncionarioServicio();
         } catch (Exception e) {
-            mostrarError("❌ Error al inicializar FuncionarioServicio: " + e.getMessage());
+            mostrarError("Error al inicializar FuncionarioServicio: " + e.getMessage());
         }
         this.funcionarioServicio = tempService;
     }
@@ -27,7 +27,7 @@ public class FuncionarioConsolaMain extends UIBase {
         SesionSingleton login = SesionSingleton.getInstance();
 
         if (!login.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -43,12 +43,12 @@ public class FuncionarioConsolaMain extends UIBase {
         SesionFacade facade = new SesionFacade();
         facade.logout();
 
-        mostrarInfo("👋 Sesión finalizada correctamente. Hasta pronto.");
+        mostrarInfo("Sesión finalizada correctamente. Hasta pronto.");
     }
 
     @Override
     protected void mostrarMenu() {
-        System.out.println("\n🧭 ===== MENÚ PRINCIPAL - " + rolActual.toUpperCase() + " =====");
+        System.out.println("\n===== MENÚ PRINCIPAL - " + rolActual.toUpperCase() + " =====");
         System.out.println("1.  Gestión de archivos adjuntos");
         System.out.println("2.  Gestión de carreras");
         System.out.println("3.  Gestión de ciudades");
@@ -68,6 +68,7 @@ public class FuncionarioConsolaMain extends UIBase {
         System.out.println("17. Gestión de pertenece (Carrera ↔ ITR)");
         System.out.println("18. Gestión de recibe (Notificación ↔ Usuario)");
         System.out.println("19. Gestión de teléfonos de ITR");
+        System.out.println("20. Gestión de participantes en instancias");
         System.out.println("0.  Cerrar sesión");
         System.out.println("=============================================");
     }
@@ -95,11 +96,12 @@ public class FuncionarioConsolaMain extends UIBase {
                 case 17 -> new PerteneceConsola().iniciar();
                 case 18 -> new RecibeConsola().iniciar();
                 case 19 -> new TeleITRConsola().iniciar();
-                case 0 -> mostrarInfo("🔒 Cerrando sesión de " + rolActual + "...");
-                default -> mostrarError("❌ Opción inválida. Intente nuevamente.");
+                case 20 -> new PartInstanciaConsola().iniciar();
+                case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "...");
+                default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
-            mostrarError("⚠️ Error al ejecutar la opción: " + e.getMessage());
+            mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }
     }

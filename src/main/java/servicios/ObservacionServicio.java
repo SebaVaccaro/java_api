@@ -39,7 +39,11 @@ public class ObservacionServicio {
 
     // Obtener observación por ID
     public Observacion obtenerObservacion(int id) throws SQLException {
-        return observacionDAOImpl.obtenerObservacion(id);
+        Observacion observacion = observacionDAOImpl.obtenerObservacion(id);
+        if (observacion == null) {
+            throw new IllegalArgumentException("No se encontró observación para el ID especificado.");
+        }
+        return observacion;
     }
 
     // Listar todas las observaciones
@@ -49,15 +53,19 @@ public class ObservacionServicio {
 
     // Actualizar observación existente
     public boolean actualizarObservacion(Observacion o) throws SQLException {
-        if (o.getIdObservacion() <= 0) {
-            throw new IllegalArgumentException("ID de observación inválido.");
+        Observacion existente = observacionDAOImpl.obtenerObservacion(o.getIdObservacion());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró observación para actualizar.");
         }
         return observacionDAOImpl.actualizarObservacion(o);
     }
 
     // Desactivar (baja lógica) observación
     public boolean desactivarObservacion(int id) throws SQLException {
+        Observacion existente = observacionDAOImpl.obtenerObservacion(id);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró observación para desactivar.");
+        }
         return observacionDAOImpl.eliminarObservacion(id);
     }
 }
-

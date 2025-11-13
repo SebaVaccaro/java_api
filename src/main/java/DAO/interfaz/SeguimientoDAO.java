@@ -21,6 +21,8 @@ public interface SeguimientoDAO {
     // Listar todos los seguimientos
     List<Seguimiento> listarTodos() throws SQLException;
 
+    List<Seguimiento> listarPorEstudiante(int idEstudiante) throws SQLException;
+
     // Verificar si un estudiante tiene un seguimiento activo
     boolean tieneSeguimientoActivo(int idEstudiante) throws SQLException;
 }

@@ -2,7 +2,6 @@ package PROXY;
 
 import modelo.InformeFinal;
 import servicios.InformeFinalServicio;
-import servicios.PartSeguimientoServicio;
 import utils.ValidarUsuario;
 
 import java.time.LocalDate;
@@ -19,9 +18,17 @@ public class InformeFinalProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // Obtener informe por ID (administrador, psicopedagogo)
+    // Crear informe final (solo psicopedagogos o administradores)
+    public InformeFinal crearInforme(int idSeguimiento, String contenido, int valoracion, LocalDate fecCreacion) throws Exception {
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("Solo el administrador o psicopedagogo puede crear informes finales.");
+        }
+        return informeService.crearInforme(idSeguimiento, contenido, valoracion, fecCreacion);
+    }
+
+    // Obtener informe por ID (solo administradores o psicopedagogos)
     public InformeFinal obtenerInforme(int idInfFinal) throws Exception {
-        if (!validarUsuario.esAdminOPsico()){
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo el administrador o psicopedagogo puede ver este informe.");
         }
         return informeService.obtenerInforme(idInfFinal);
@@ -51,4 +58,3 @@ public class InformeFinalProxy {
         return informeService.eliminarInforme(idInfFinal);
     }
 }
-

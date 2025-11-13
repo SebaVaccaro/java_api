@@ -18,14 +18,6 @@ public class CiudadProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // Crear ciudad (solo administradores)
-    public Ciudad crearCiudad(int codPostal, String nombre, String departamento) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden crear ciudades.");
-        }
-        return service.crearCiudad(codPostal, nombre, departamento);
-    }
-
     // Buscar ciudad por ID (sin restricción de permisos)
     public Ciudad buscarCiudadPorId(int idCiudad) throws SQLException {
         return service.obtenerPorId(idCiudad);
@@ -46,19 +38,4 @@ public class CiudadProxy {
         return service.listarPorDepartamento(departamento);
     }
 
-    // Actualizar ciudad completa (solo administradores)
-    public boolean actualizarCiudad(int idCiudad, int codPostal, String nombre, String departamento) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar ciudades.");
-        }
-        return service.actualizarCiudad(idCiudad, codPostal, nombre, departamento);
-    }
-
-    // Eliminar ciudad (solo administradores)
-    public boolean eliminarCiudad(int idCiudad) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden eliminar ciudades.");
-        }
-        return service.eliminarCiudad(idCiudad);
-    }
 }

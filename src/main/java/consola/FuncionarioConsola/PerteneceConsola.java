@@ -21,11 +21,9 @@ public class PerteneceConsola extends UIBase {
     @Override
     public void mostrarMenu() {
         System.out.println("\n===== MENÚ RELACIÓN CARRERA ↔ ITR =====");
-        System.out.println("1. Agregar relación");
-        System.out.println("2. Eliminar relación");
-        System.out.println("3. Listar todas las relaciones");
-        System.out.println("4. Listar ITRs de una carrera");
-        System.out.println("5. Listar carreras de un ITR");
+        System.out.println("1. Listar todas las relaciones");
+        System.out.println("2. Listar ITRs de una carrera");
+        System.out.println("3. Listar carreras de un ITR");
         System.out.println("0. Volver al menú principal");
         System.out.println("=======================================");
     }
@@ -35,48 +33,14 @@ public class PerteneceConsola extends UIBase {
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> agregarRelacion();
-                case 2 -> eliminarRelacion();
-                case 3 -> listarTodos();
-                case 4 -> listarItrPorCarrera();
-                case 5 -> listarCarrerasPorItr();
+                case 1 -> listarTodos();
+                case 2 -> listarItrPorCarrera();
+                case 3 -> listarCarrerasPorItr();
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
             mostrarError("Error inesperado al procesar la opción: " + e.getMessage());
-        }
-    }
-
-    // Agrega una nueva relación entre carrera e ITR
-    private void agregarRelacion() {
-        int idCarrera = leerEntero("ID de la carrera: ");
-        int idItr = leerEntero("ID del ITR: ");
-
-        try {
-            boolean exito = proxy.agregarPertenece(idCarrera, idItr);
-            if (exito) mostrarExito("Relación agregada correctamente.");
-            else mostrarError("No se pudo agregar la relación.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al agregar relación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al agregar relación: " + e.getMessage());
-        }
-    }
-
-    // Elimina una relación existente entre carrera e ITR
-    private void eliminarRelacion() {
-        int idCarrera = leerEntero("ID de la carrera: ");
-        int idItr = leerEntero("ID del ITR: ");
-
-        try {
-            boolean exito = proxy.eliminarPertenece(idCarrera, idItr);
-            if (exito) mostrarExito("Relación eliminada correctamente.");
-            else mostrarError("No se pudo eliminar la relación.");
-        } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar relación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error general al eliminar relación: " + e.getMessage());
         }
     }
 

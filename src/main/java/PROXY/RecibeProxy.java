@@ -20,7 +20,7 @@ public class RecibeProxy {
 
     // AGREGAR RELACIÓN NOTIFICACIÓN ↔ USUARIO
     public boolean agregarRecibe(int idNotificacion, int idUsuario) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo un administrador puede agregar relaciones notificación–usuario.");
         }
         return recibeServicio.agregarRecibe(idNotificacion, idUsuario);
@@ -29,7 +29,7 @@ public class RecibeProxy {
 
     // ELIMINAR RELACIÓN NOTIFICACIÓN ↔ USUARIO
     public boolean eliminarRecibe(int idNotificacion, int idUsuario) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo un administrador puede eliminar relaciones notificación–usuario.");
         }
         return recibeServicio.eliminarRecibe(idNotificacion, idUsuario);
@@ -37,7 +37,7 @@ public class RecibeProxy {
 
     // LISTAR TODAS LAS RELACIONES
     public List<Recibe> listarTodos() throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo un administrador puede listar todas las relaciones notificación–usuario.");
         }
         return recibeServicio.listarTodos();
@@ -45,7 +45,7 @@ public class RecibeProxy {
 
     // LISTAR USUARIOS QUE RECIBEN UNA NOTIFICACIÓN
     public List<Integer> listarUsuariosPorNotificacion(int idNotificacion) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo un administrador puede consultar los usuarios asociados a una notificación.");
         }
         return recibeServicio.listarUsuariosPorNotificacion(idNotificacion);
@@ -53,7 +53,7 @@ public class RecibeProxy {
 
     // LISTAR NOTIFICACIONES RECIBIDAS POR UN USUARIO
     public List<Integer> listarNotificacionesPorUsuario(int idUsuario) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
             throw new SecurityException("Solo un administrador puede consultar las notificaciones asociadas a un usuario.");
         }
         return recibeServicio.listarNotificacionesPorUsuario(idUsuario);

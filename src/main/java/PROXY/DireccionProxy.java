@@ -61,7 +61,8 @@ public class DireccionProxy {
 
     // Actualizar dirección (solo administradores, psicólogos o el propio usuario)
     public boolean actualizarDireccion(int idUsuario, int idDireccion, String calle, String numPuerta, String numApto, int idCiudad) throws Exception {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idUsuario)) {
+        Direccion d = direccionServicio.obtenerPorId(idDireccion);
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(d.getIdUsuario())) {
             throw new SecurityException("Solo administradores, psicólogos o el propietario pueden actualizar esta dirección.");
         }
         return direccionServicio.actualizarDireccion(idDireccion, calle, numPuerta, numApto, idCiudad, idUsuario);

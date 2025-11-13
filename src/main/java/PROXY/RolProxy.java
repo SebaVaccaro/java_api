@@ -18,7 +18,6 @@ public class RolProxy {
     public Rol buscarPorId(int idRol) throws SQLException {
         return rolServicio.buscarPorId(idRol);
     }
-
     // Listar todos los roles (sin restricción de permisos)
     public List<Rol> listarTodos() throws SQLException {
         return rolServicio.listarTodos();

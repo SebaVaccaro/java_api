@@ -18,22 +18,6 @@ public class PerteneceProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // Agregar relación Carrera ↔ ITR
-    public boolean agregarPertenece(int idCarrera, int idItr) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo un administrador puede agregar relaciones entre carrera e ITR.");
-        }
-        return perteneceServicio.agregarPertenece(idCarrera, idItr);
-    }
-
-    // Eliminar relación Carrera ↔ ITR
-    public boolean eliminarPertenece(int idCarrera, int idItr) throws SQLException {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo un administrador puede eliminar relaciones entre carrera e ITR.");
-        }
-        return perteneceServicio.eliminarPertenece(idCarrera, idItr);
-    }
-
     // Listar todas las relaciones
     public List<Pertenece> listarTodos() throws SQLException {
         if (!validarUsuario.esAdministrador()) {

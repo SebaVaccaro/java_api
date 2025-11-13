@@ -8,11 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad ITR.
- * Gestiona las operaciones CRUD sobre la tabla 'itr',
- * que almacena los registros de Institutos de Tecnología Regional.
- */
+
 public class ITRDAOImpl implements ITRDAO {
 
     // Conexión única a la base de datos mediante el Singleton

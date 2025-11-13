@@ -22,8 +22,8 @@ public class ObservacionProxy {
     // Crear observación (admin, psico o propietario)
     public Observacion crearObservacion(int idFuncionario, int idEstudiante, String titulo,
                                         String contenido, OffsetDateTime fecHora) throws SQLException {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idFuncionario)){
-            throw new SecurityException("No posees permiso para crear una observaciones");
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(idFuncionario)) {
+            throw new SecurityException("No posees permiso para crear una observación.");
         }
         return observacionServicio.crearObservacion(idFuncionario, idEstudiante, titulo, contenido, fecHora);
     }
@@ -31,34 +31,48 @@ public class ObservacionProxy {
     // Obtener observación por ID (admin, psico o propietario)
     public Observacion obtenerObservacion(int id) throws SQLException {
         Observacion observacion = observacionServicio.obtenerObservacion(id);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())){
-            throw new SecurityException("No puedes obtener esta observacion.");
+        if (observacion == null) {
+            throw new IllegalArgumentException("No se encontró observación para el ID especificado.");
+        }
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())) {
+            throw new SecurityException("No tienes permiso para acceder a esta observación.");
         }
         return observacion;
     }
 
     // Listar todas las observaciones (admin o psico)
     public List<Observacion> listarTodas() throws SQLException {
-        if (!validarUsuario.esAdminOPsico()){
-            throw new SecurityException("No puedes obtener estas observaciones.");
+        if (!validarUsuario.esAdminOPsico()) {
+            throw new SecurityException("No tienes permiso para listar observaciones.");
         }
         return observacionServicio.listarTodas();
     }
 
     // Actualizar observación (admin, psico o propietario)
     public boolean actualizarObservacion(Observacion observacion) throws SQLException {
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())){
-            throw new SecurityException("No puedes actualizar esta observacion.");
+        Observacion existente = observacionServicio.obtenerObservacion(observacion.getIdObservacion());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró observación para actualizar.");
         }
+
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())) {
+            throw new SecurityException("No tienes permiso para actualizar esta observación.");
+        }
+
         return observacionServicio.actualizarObservacion(observacion);
     }
 
     // Desactivar observación (admin, psico o propietario)
     public boolean desactivarObservacion(int id) throws SQLException {
         Observacion observacion = observacionServicio.obtenerObservacion(id);
-        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())){
-            throw new SecurityException("No puedes actualizar esta observacion.");
+        if (observacion == null) {
+            throw new IllegalArgumentException("No se encontró observación para desactivar.");
         }
+
+        if (!validarUsuario.tienePermisoAdminPsicoOPropietario(observacion.getIdFuncionario())) {
+            throw new SecurityException("No tienes permiso para desactivar esta observación.");
+        }
+
         return observacionServicio.desactivarObservacion(id);
     }
 }

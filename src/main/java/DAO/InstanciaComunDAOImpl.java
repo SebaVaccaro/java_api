@@ -122,6 +122,39 @@ public class InstanciaComunDAOImpl {
         return lista;
     }
 
+    // Listar todas las instancias comunes de un estudiante
+    public List<InstanciaComun> listarPorEstudiante(int idEstudiante) throws SQLException {
+        List<InstanciaComun> lista = new ArrayList<>();
+        String sql = """
+        SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo,
+               i.id_funcionario, ic.id_seguimiento
+        FROM instancias i
+        JOIN inst_comun ic ON i.id_instancia = ic.id_instancia
+        JOIN seguimientos s ON ic.id_seguimiento = s.id_seguimiento
+        WHERE s.id_estudiante = ?
+        ORDER BY i.id_instancia
+    """;
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idEstudiante);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                InstanciaComun ic = new InstanciaComun(
+                        rs.getInt("id_instancia"),
+                        rs.getString("titulo"),
+                        rs.getObject("fec_hora", OffsetDateTime.class),
+                        rs.getString("descripcion"),
+                        rs.getBoolean("est_activo"),
+                        rs.getInt("id_funcionario"),
+                        rs.getInt("id_seguimiento")
+                );
+                lista.add(ic);
+            }
+        }
+        return lista;
+    }
+
+
     // Actualizar los datos de una instancia común en la tabla 'inst_comun'
     public boolean actualizarInstanciaComun(InstanciaComun instanciaComun) throws SQLException {
         String sql = "UPDATE inst_comun SET id_seguimiento=? WHERE id_instancia=?";

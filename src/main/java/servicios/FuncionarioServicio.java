@@ -31,7 +31,7 @@ public class FuncionarioServicio {
 
     // Registrar funcionario con transacción
     public Funcionario registrarFuncionario(String ci, String nombre, String apellido,
-                                            String username, String password, int idRol,
+                                            String password, int idRol,
                                             LocalDate fechaNacimiento) throws Exception {
 
         // Validaciones
@@ -42,7 +42,7 @@ public class FuncionarioServicio {
         String correo = generarCorreoFuncionario(nombre, apellido);
         String passEnc = Encriptador.encriptar(password);
 
-        Funcionario f = new Funcionario(0, ci, nombre, apellido, username, passEnc, correo, idRol, false);
+        Funcionario f = new Funcionario(0, ci, nombre, apellido, nombre + "." + apellido, passEnc, correo, idRol, false);
 
         try {
             conn.setAutoCommit(false);
@@ -63,10 +63,24 @@ public class FuncionarioServicio {
         return f;
     }
 
-    // Actualizar funcionario con transacción
+    // Obtener funcionario por ID (valida existencia)
+    public Funcionario obtenerPorId(int idUsuario) throws SQLException {
+        Funcionario funcionario = funcionarioDAO.obtenerFuncionario(idUsuario);
+        if (funcionario == null) {
+            throw new IllegalArgumentException("No se encontró funcionario con esa ID.");
+        }
+        return funcionario;
+    }
+
+    // Actualizar funcionario con validación de existencia y transacción
     public boolean actualizarFuncionario(int idUsuario, String ci, String nombre, String apellido,
                                          String username, String password, String correo,
                                          int idRol, boolean activo) throws Exception {
+
+        Funcionario existente = funcionarioDAO.obtenerFuncionario(idUsuario);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró funcionario para actualizar.");
+        }
 
         if (!ValidadorCI.validarCI(ci)) throw new Exception("CI inválida");
         if (!ValidadorPassword.validar(password)) throw new Exception("La contraseña debe tener al menos 8 caracteres");
@@ -98,28 +112,31 @@ public class FuncionarioServicio {
         return exito;
     }
 
-    // Obtener funcionario por ID
-    public Funcionario obtenerPorId(int idUsuario) throws SQLException {
-        return funcionarioDAO.obtenerFuncionario(idUsuario);
-    }
-
     // Listar todos los funcionarios
     public List<Funcionario> listarTodos() throws SQLException {
         return funcionarioDAO.listarFuncionarios();
     }
 
-    // Desactivar funcionario
+    // Desactivar funcionario (valida existencia)
     public boolean desactivarFuncionario(int idUsuario) throws SQLException {
+        Funcionario existente = funcionarioDAO.obtenerFuncionario(idUsuario);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró funcionario para desactivar.");
+        }
         return funcionarioDAO.eliminarFuncionario(idUsuario);
     }
 
-    // Verificar si el funcionario está activo
+    // Verificar si el funcionario está activo (valida existencia)
     public boolean estaActivo(int idUsuario) throws SQLException {
+        Funcionario existente = funcionarioDAO.obtenerFuncionario(idUsuario);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró funcionario con esa ID.");
+        }
         return funcionarioDAO.estaActivo(idUsuario);
     }
 
     // Generar correo institucional
     private String generarCorreoFuncionario(String nombre, String apellido) {
-        return nombre.toLowerCase() + "." + apellido.toLowerCase() + "@funcionarios.utec.edu.uy";
+        return nombre.toLowerCase() + "." + apellido.toLowerCase() + "@utec.edu.uy";
     }
 }

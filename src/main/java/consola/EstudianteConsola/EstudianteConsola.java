@@ -1,19 +1,15 @@
 package consola.EstudianteConsola;
 
+import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
 import modelo.Estudiante;
-import SINGLETON.SesionSingleton;
 import FACADE.SesionFacade;
-
-import java.sql.SQLException;
 
 public class EstudianteConsola extends UIBase {
 
-    private Estudiante estudiante;
+    private Estudiante estudianteActual;
+    private String rolActual;
 
-    public EstudianteConsola() {
-        // Constructor vacío
-    }
 
     @Override
     public void iniciar() {
@@ -29,32 +25,33 @@ public class EstudianteConsola extends UIBase {
             return;
         }
 
-        // Inicializamos estudiante desde la sesión.
-        this.estudiante = (Estudiante) sesion.getUsuarioActual();
+        estudianteActual = (Estudiante) sesion.getUsuarioActual();
+        rolActual = sesion.getRolActual();
 
+        mostrarInfo("Bienvenido/a, " + estudianteActual.getNombre() + " " +
+                estudianteActual.getApellido() + " (" + rolActual + ")");
 
-        // Ejecutar menú heredado
-        super.iniciar();
+        super.iniciar(); // Ejecuta el bucle de menú heredado de UIBase
 
-        // Cerrar sesión usando la FACADE
+        // Al salir del menú, cerrar sesión usando la fachada
         SesionFacade facade = new SesionFacade();
         facade.logout();
 
-        mostrarInfo("Sesión del estudiante finalizada.\n");
+        mostrarInfo("Sesión finalizada correctamente. Hasta pronto, " +
+                estudianteActual.getNombre() + ".");
     }
 
     @Override
     protected void mostrarMenu() {
-        System.out.println("\n===== MENÚ ESTUDIANTE =====");
-        System.out.println("Bienvenido, " + estudiante.getNombre()  + " " + estudiante.getApellido());
-        System.out.println("====================================");
-        System.out.println("1. Ver información personal");
-        System.out.println("2. Consultar seguimiento");
+        System.out.println("\n===== MENÚ PRINCIPAL - " + rolActual.toUpperCase() + " =====");
+        System.out.println("1. Gestión de mi información personal");
+        System.out.println("2. Gestión de mis seguimientos");
         System.out.println("3. Gestión de mis instancias comunes");
-        System.out.println("4. Gestionar mis teléfonos");
-        System.out.println("5. Ver mis notificaciones");
+        System.out.println("4. Gestión de mis teléfonos");
+        System.out.println("5. Gestión de mis notificaciones");
+        System.out.println("6. Gestión de mis direcciones");
         System.out.println("0. Cerrar sesión");
-        System.out.println("====================================");
+        System.out.println("=============================================");
     }
 
     @Override
@@ -62,11 +59,12 @@ public class EstudianteConsola extends UIBase {
         try {
             switch (opcion) {
                 case 1 -> mostrarInformacionPersonal();
-                case 2 -> menuSeguimiento();
-                case 3 -> gestionarMisInstanciasComunes();
-                case 4 -> gestionarMisTelefonos();
-                case 5 -> gestionarMisNotificaciones();
-                case 0 -> mostrarInfo("Cerrando sesión del estudiante...");
+                case 2 -> new SeguimientoConsola().iniciar();
+                case 3 -> new InstanciaComunConsola().iniciar();
+                case 4 -> new TelefonoConsola().iniciar();
+                case 5 -> new NotificacionConsola().iniciar();
+                case 6 -> new DireccionConsola().iniciar();
+                case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
         } catch (Exception e) {
@@ -76,47 +74,11 @@ public class EstudianteConsola extends UIBase {
     }
 
     private void mostrarInformacionPersonal() {
-        mostrarInfo("--- Información personal ---");
-        System.out.println("ID: " + estudiante.getIdUsuario());
-        System.out.println("Nombre: " + estudiante.getNombre());
-        System.out.println("Apellido: " + estudiante.getApellido());
-        System.out.println("Correo: " + estudiante.getCorreo());
-    }
-
-    private void menuSeguimiento() {
-        try {
-            SeguimientoConsola ui = new SeguimientoConsola();
-            ui.iniciar();
-        } catch (SQLException e) {
-            mostrarError("Error en seguimiento: " + e.getMessage());
-        }
-    }
-
-    private void gestionarMisInstanciasComunes() {
-        try {
-            InstanciaComunConsola ui = new InstanciaComunConsola();
-            ui.iniciar();
-        } catch (SQLException e) {
-            mostrarError("Error en instancias comunes: " + e.getMessage());
-        }
-    }
-
-    private void gestionarMisTelefonos() {
-        try {
-            TelefonoConsola ui = new TelefonoConsola();
-            ui.iniciar();
-        } catch (SQLException e) {
-            mostrarError("Error al gestionar teléfonos: " + e.getMessage());
-        }
-    }
-
-    private void gestionarMisNotificaciones() throws Exception {
-        try {
-            NotificacionConsola ui = new NotificacionConsola();
-            ui.iniciar();
-        } catch (SQLException e) {
-            mostrarError("Error al inicializar notificaciones: " + e.getMessage());
-        }
+        mostrarInfo("\n--- Información Personal ---");
+        System.out.println("ID: " + estudianteActual.getIdUsuario());
+        System.out.println("Nombre: " + estudianteActual.getNombre());
+        System.out.println("Apellido: " + estudianteActual.getApellido());
+        System.out.println("Correo: " + estudianteActual.getCorreo());
+        System.out.println("=============================================");
     }
 }
-

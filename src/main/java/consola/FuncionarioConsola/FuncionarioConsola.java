@@ -52,23 +52,22 @@ public class FuncionarioConsola extends UIBase {
     // Crear un nuevo funcionario
     private void crearFuncionario() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
         String cedula = leerTexto("Cédula: ");
-        String nombre = leerTexto("Nombre: ");
-        String apellido = leerTexto("Apellido: ");
-        String username = leerTexto("Username: ");
+        String nombre = leerTextoNoNullNoNumero("Nombre: ");
+        String apellido = leerTextoNoNullNoNumero("Apellido: ");
         String password = leerTexto("Password: ");
         int idRol = leerEntero("ID de rol: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
             Funcionario f = proxy.crearFuncionario(
-                    cedula, nombre, apellido, username, password, idRol, fechaNacimiento
+                    cedula, nombre, apellido, password, idRol, fechaNacimiento
             );
-            mostrarExito("✅ Funcionario creado correctamente: " + f);
+            mostrarExito("Funcionario creado correctamente: " + f);
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
@@ -81,7 +80,7 @@ public class FuncionarioConsola extends UIBase {
     // Listar todos los funcionarios
     private void listarTodos() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -101,7 +100,7 @@ public class FuncionarioConsola extends UIBase {
     // Buscar funcionario por ID
     private void buscarPorId() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -122,7 +121,7 @@ public class FuncionarioConsola extends UIBase {
     // Modificar los datos de un funcionario existente
     private void modificarFuncionario() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -136,18 +135,16 @@ public class FuncionarioConsola extends UIBase {
             }
 
             System.out.println("Funcionario seleccionado: " + f);
-            System.out.println("Campos modificables: cedula, nombre, apellido, username, password, correo, idRol, activo");
+            System.out.println("Campos modificables: cedula, nombre, apellido, username, password, idRol, activo");
 
             String campo = leerTexto("Campo a modificar: ");
             boolean exito = false;
 
             switch (campo.toLowerCase()) {
                 case "cedula" -> f.setCedula(leerTexto("Nueva cédula: "));
-                case "nombre" -> f.setNombre(leerTexto("Nuevo nombre: "));
-                case "apellido" -> f.setApellido(leerTexto("Nuevo apellido: "));
-                case "username" -> f.setUsername(leerTexto("Nuevo username: "));
+                case "nombre" -> f.setNombre(leerTextoNoNullNoNumero("Nuevo nombre: "));
+                case "apellido" -> f.setApellido(leerTextoNoNullNoNumero("Nuevo apellido: "));
                 case "password" -> f.setPassword(leerTexto("Nuevo password: "));
-                case "correo" -> f.setCorreo(leerTexto("Nuevo correo: "));
                 case "idrol" -> f.setIdRol(leerEntero("Nuevo ID de rol: "));
                 case "activo" -> f.setActivo(leerBoolean("¿Activo? (true/false): "));
                 default -> {
@@ -162,7 +159,7 @@ public class FuncionarioConsola extends UIBase {
             );
 
             if (exito)
-                mostrarExito("✅ Funcionario modificado correctamente.");
+                mostrarExito("Funcionario modificado correctamente.");
             else
                 mostrarError("No se pudo modificar el funcionario.");
 
@@ -176,7 +173,7 @@ public class FuncionarioConsola extends UIBase {
     // Desactivar un funcionario (cambia su estado a inactivo)
     private void desactivarFuncionario() {
         if (!sesionSingleton.haySesionActiva()) {
-            mostrarError("❌ No hay sesión activa.");
+            mostrarError("No hay sesión activa.");
             return;
         }
 
@@ -184,7 +181,7 @@ public class FuncionarioConsola extends UIBase {
         try {
             boolean exito = proxy.desactivarFuncionario(idFuncionario);
             if (exito)
-                mostrarExito("✅ Funcionario desactivado correctamente.");
+                mostrarExito("Funcionario desactivado correctamente.");
             else
                 mostrarError("No se pudo desactivar el funcionario.");
         } catch (SecurityException se) {

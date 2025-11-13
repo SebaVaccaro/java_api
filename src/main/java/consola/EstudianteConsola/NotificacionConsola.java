@@ -14,11 +14,13 @@ public class NotificacionConsola extends UIBase {
 
     private final NotificacionProxy notiFacade;
     private final RecibeProxy recibeProxy;
+    private final int idEstudiante;
 
-    // Constructor: inicializa los proxies de notificaciones y recepción
+
     public NotificacionConsola() throws Exception {
         this.notiFacade = new NotificacionProxy();
         this.recibeProxy = new RecibeProxy();
+        this.idEstudiante = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
     }
 
     // Mostrar el menú principal de gestión de notificaciones
@@ -32,7 +34,6 @@ public class NotificacionConsola extends UIBase {
         System.out.println("\n===== MENÚ DE NOTIFICACIONES =====");
         System.out.println("1. Ver todas mis notificaciones");
         System.out.println("2. Buscar notificación por ID");
-        System.out.println("3. Eliminar o desactivar notificación");
         System.out.println("0. Volver al menú principal");
         System.out.println("==================================");
     }
@@ -42,9 +43,8 @@ public class NotificacionConsola extends UIBase {
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarMisNotificaciones(); // Listar todas las notificaciones del usuario actual
-            case 2 -> buscarPorId();             // Buscar una notificación específica por su ID
-            case 3 -> eliminarNotificacion();    // Desactivar una notificación existente
+            case 1 -> listarMisNotificaciones();
+            case 2 -> buscarPorId();
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
@@ -53,15 +53,14 @@ public class NotificacionConsola extends UIBase {
     // Listar todas las notificaciones activas pertenecientes al usuario autenticado
     private void listarMisNotificaciones() {
         try {
-            int idUsuario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
-            List<Integer> idsNotificaciones = recibeProxy.listarNotificacionesPorUsuario(idUsuario);
+            List<Integer> idsNotificaciones = recibeProxy.listarNotificacionesPorUsuario(idEstudiante);
 
             if (idsNotificaciones.isEmpty()) {
                 mostrarInfo("No tienes notificaciones.");
                 return;
             }
 
-            mostrarInfo("📋 Tus notificaciones:");
+            mostrarInfo("Tus notificaciones:");
             for (int idNoti : idsNotificaciones) {
                 try {
                     Notificacion n = notiFacade.obtenerNotificacion(idNoti);
@@ -86,7 +85,7 @@ public class NotificacionConsola extends UIBase {
         try {
             Notificacion n = notiFacade.obtenerNotificacion(id);
             if (n != null && n.isEstActivo()) {
-                mostrarInfo("📨 Detalles de la notificación:");
+                mostrarInfo("Detalles de la notificación:");
                 System.out.println(n);
             } else {
                 mostrarError("La notificación no existe o está desactivada.");
@@ -96,23 +95,6 @@ public class NotificacionConsola extends UIBase {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError("Error al buscar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
-        }
-    }
-
-    // Desactivar (eliminar lógicamente) una notificación existente
-    private void eliminarNotificacion() {
-        int id = leerEntero("Ingrese el ID de la notificación a eliminar: ");
-        try {
-            boolean exito = notiFacade.desactivarNotificacion(id);
-            if (exito) mostrarExito("Notificación desactivada correctamente.");
-            else mostrarError("No se pudo desactivar la notificación o no existe.");
-
-        } catch (SecurityException se) {
-            mostrarError(se.getMessage());
-        } catch (SQLException e) {
-            mostrarError("Error al eliminar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

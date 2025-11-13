@@ -5,10 +5,6 @@ public class PartInstancia {
     private int idParticipante;
     private int idInstancia;
 
-    // Constructor vacío
-    public PartInstancia() {
-    }
-
     // Constructor completo
     public PartInstancia(int idParticipante, int idInstancia) {
         this.idParticipante = idParticipante;

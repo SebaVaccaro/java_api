@@ -18,14 +18,6 @@ public class ITRProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // Crear ITR (solo administradores)
-    public ITR crearITR(ITR itr) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden crear ITRs.");
-        }
-        return itrServicio.crearITR(itr);
-    }
-
     // Obtener ITR por ID (sin restricción de permisos)
     public ITR obtenerITR(int idItr) throws SQLException {
         return itrServicio.obtenerITR(idItr);
@@ -34,21 +26,5 @@ public class ITRProxy {
     // Listar todos los ITRs (sin restricción de permisos)
     public List<ITR> listarTodos() throws SQLException {
         return itrServicio.listarTodos();
-    }
-
-    // Actualizar ITR (solo administradores)
-    public boolean actualizarITR(ITR itr) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar ITRs.");
-        }
-        return itrServicio.actualizarITR(itr);
-    }
-
-    // Eliminar ITR (solo administradores)
-    public boolean eliminarITR(int idItr) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden eliminar ITRs.");
-        }
-        return itrServicio.eliminarITR(idItr);
     }
 }

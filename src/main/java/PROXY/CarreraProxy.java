@@ -18,13 +18,6 @@ public class CarreraProxy {
         this.validarUsuario = new ValidarUsuario();
     }
 
-    // Crear carrera (solo administradores)
-    public Carrera crearCarrera(String codigo, String nombre, String plan) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden crear carreras.");
-        }
-        return service.crearCarrera(codigo, nombre, plan);
-    }
 
     // Buscar carrera por ID (sin restricción de permisos)
     public Carrera buscarCarreraPorId(int idCarrera) throws SQLException {
@@ -41,19 +34,4 @@ public class CarreraProxy {
         return service.listarTodas();
     }
 
-    // Actualizar carrera (solo administradores)
-    public boolean actualizarCarrera(int idCarrera, String codigo, String nombre, String plan) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden actualizar carreras.");
-        }
-        return service.actualizarCarrera(idCarrera, codigo, nombre, plan);
-    }
-
-    // Eliminar carrera (solo administradores)
-    public boolean eliminarCarrera(int idCarrera) throws Exception {
-        if (!validarUsuario.esAdministrador()) {
-            throw new SecurityException("Solo administradores pueden eliminar carreras.");
-        }
-        return service.eliminarCarrera(idCarrera);
-    }
 }

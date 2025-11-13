@@ -7,11 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Implementación del DAO para la entidad Funcionario.
- * Esta clase gestiona las operaciones CRUD sobre la tabla 'funcionarios'
- * y sus relaciones con la tabla 'usuarios'.
- */
+
 public class FuncionarioDAOImpl implements FuncionarioDAO {
 
     // Conexión a la base de datos, inyectada desde el exterior

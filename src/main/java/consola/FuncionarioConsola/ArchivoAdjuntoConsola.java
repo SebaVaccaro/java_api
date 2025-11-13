@@ -11,12 +11,12 @@ import java.util.List;
 
 public class ArchivoAdjuntoConsola extends UIBase {
 
-    private final ArchivoAdjuntoProxy facade;
+    private final ArchivoAdjuntoProxy proxy;
     private final SesionSingleton sesionSingleton;
 
     // Constructor: inicializa el proxy para manejar las operaciones de archivos adjuntos
     public ArchivoAdjuntoConsola() throws Exception {
-        this.facade = new ArchivoAdjuntoProxy();
+        this.proxy = new ArchivoAdjuntoProxy();
         this.sesionSingleton = SesionSingleton.getInstance();
     }
 
@@ -60,7 +60,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         String categoria = leerTexto("Categoría: ");
 
         try {
-            ArchivoAdjunto archivo = facade.crearArchivo(idUsuario, idEstudiante, ruta, categoria);
+            ArchivoAdjunto archivo = proxy.crearArchivo(idUsuario, idEstudiante, ruta, categoria);
             mostrarExito("Archivo creado con éxito: " + archivo);
         } catch (SecurityException | IllegalArgumentException e) {
             mostrarError(e.getMessage());
@@ -74,7 +74,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
     // Listar todos los archivos adjuntos activos
     private void listarActivos() {
         try {
-            List<ArchivoAdjunto> list = facade.listarActivos();
+            List<ArchivoAdjunto> list = proxy.listarActivos();
 
             if (list.isEmpty())
                 mostrarInfo("No hay archivos activos.");
@@ -97,7 +97,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         int idEstudiante = leerEntero("ID del estudiante: ");
 
         try {
-            List<ArchivoAdjunto> list = facade.listarPorEstudiante(idUsuario, idEstudiante);
+            List<ArchivoAdjunto> list = proxy.listarPorEstudiante(idUsuario, idEstudiante);
 
             if (list.isEmpty())
                 mostrarInfo("No hay archivos para este estudiante.");
@@ -124,7 +124,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         int idArchivo = leerEntero("ID del archivo a modificar: ");
 
         try {
-            ArchivoAdjunto a = facade.obtenerPorId(idUsuario, idArchivo);
+            ArchivoAdjunto a = proxy.obtenerPorId(idArchivo);
 
             if (a == null) {
                 mostrarInfo("El archivo no existe.");
@@ -142,22 +142,22 @@ public class ArchivoAdjuntoConsola extends UIBase {
                 case "ruta" -> {
                     String nuevaRuta = leerTexto("Nueva ruta: ");
                     a.setRuta(nuevaRuta);
-                    exito = facade.actualizarArchivo(a);
+                    exito = proxy.actualizarArchivo(a);
                 }
                 case "categoria" -> {
                     String nuevaCat = leerTexto("Nueva categoría: ");
                     a.setCategoria(nuevaCat);
-                    exito = facade.actualizarArchivo(a);
+                    exito = proxy.actualizarArchivo(a);
                 }
                 case "idusuario" -> {
                     int nuevoId = leerEntero("Nuevo ID Usuario: ");
                     a.setIdUsuario(nuevoId);
-                    exito = facade.actualizarArchivo(a);
+                    exito = proxy.actualizarArchivo(a);
                 }
                 case "idestudiante" -> {
                     int nuevoId = leerEntero("Nuevo ID Estudiante: ");
                     a.setIdEstudiante(nuevoId);
-                    exito = facade.actualizarArchivo(a);
+                    exito = proxy.actualizarArchivo(a);
                 }
                 default -> mostrarError("Campo inválido.");
             }
@@ -181,7 +181,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         int idArchivo = leerEntero("ID del archivo a eliminar: ");
 
         try {
-            boolean eliminado = facade.eliminar(idArchivo);
+            boolean eliminado = proxy.eliminar(idArchivo);
 
             if (eliminado)
                 mostrarExito("Archivo eliminado correctamente.");

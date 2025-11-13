@@ -12,16 +12,16 @@ import java.util.List;
 
 public class InstanciaComunConsola extends UIBase {
 
-    private final InstanciaComunProxy instanciaFacade;
-    private final int idFuncionario;
+    private final InstanciaComunProxy instanciaProxy;
+    private final int idEstudiante;
 
     // Constructor: valida la sesión y obtiene el usuario autenticado
     public InstanciaComunConsola() throws SQLException {
         if (!SesionSingleton.getInstance().haySesionActiva()) {
-            throw new IllegalStateException("❌ No hay sesión activa. Por favor inicia sesión.");
+            throw new IllegalStateException("No hay sesión activa. Por favor inicia sesión.");
         }
-        this.idFuncionario = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
-        this.instanciaFacade = new InstanciaComunProxy();
+        this.idEstudiante = SesionSingleton.getInstance().getUsuarioActual().getIdUsuario();
+        this.instanciaProxy = new InstanciaComunProxy();
     }
 
     // Mostrar el menú principal de gestión de instancias comunes
@@ -31,9 +31,6 @@ public class InstanciaComunConsola extends UIBase {
         System.out.println("1. Listar todas las instancias");
         System.out.println("2. Listar por seguimiento");
         System.out.println("3. Buscar por ID");
-        System.out.println("4. Crear nueva instancia común");
-        System.out.println("5. Actualizar instancia común");
-        System.out.println("6. Eliminar (desactivar) instancia común");
         System.out.println("0. Volver al menú principal");
     }
 
@@ -41,12 +38,9 @@ public class InstanciaComunConsola extends UIBase {
     @Override
     protected void manejarOpcion(int opcion) {
         switch (opcion) {
-            case 1 -> listarInstancias();         // Listar todas las instancias comunes
-            case 2 -> listarPorSeguimiento();     // Listar instancias por ID de seguimiento
-            case 3 -> buscarPorId();              // Buscar una instancia común por su ID
-            case 4 -> crearInstanciaComun();      // Crear una nueva instancia común
-            case 5 -> actualizarInstanciaComun(); // Actualizar los datos de una instancia
-            case 6 -> eliminarInstanciaComun();   // Eliminar (desactivar) una instancia común
+            case 1 -> listarInstancias();
+            case 2 -> listarPorSeguimiento();
+            case 3 -> buscarPorId();
             case 0 -> mostrarInfo("Volviendo al menú principal...");
             default -> mostrarError("Opción inválida.");
         }
@@ -55,15 +49,18 @@ public class InstanciaComunConsola extends UIBase {
     // Listar todas las instancias comunes existentes
     private void listarInstancias() {
         try {
-            List<InstanciaComun> lista = instanciaFacade.listarInstanciasComunes();
-            if (lista.isEmpty()) {
+            List<InstanciaComun> lista = instanciaProxy.listarPorEstudiante(idEstudiante);
+            if (lista == null || lista.isEmpty()) {
                 mostrarInfo("No hay instancias comunes registradas.");
                 return;
             }
-            mostrarInfo("📋 Instancias Comunes:");
-            lista.forEach(System.out::println);
+            for (InstanciaComun i : lista) {
+                System.out.println(i);
+            }
         } catch (SQLException e) {
             mostrarError("Error al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar instancias: " + e.getMessage());
         }
     }
 
@@ -71,15 +68,19 @@ public class InstanciaComunConsola extends UIBase {
     private void listarPorSeguimiento() {
         int idSeg = leerEntero("Ingrese el ID del seguimiento: ");
         try {
-            List<InstanciaComun> lista = instanciaFacade.listarPorSeguimiento(idSeg);
+            List<InstanciaComun> lista = instanciaProxy.listarPorSeguimiento(idSeg);
             if (lista.isEmpty()) {
                 mostrarInfo("No hay instancias comunes para este seguimiento.");
                 return;
             }
-            mostrarInfo("📋 Instancias Comunes del seguimiento " + idSeg + ":");
+            mostrarInfo("Instancias Comunes del seguimiento " + idSeg + ":");
             lista.forEach(System.out::println);
         } catch (SQLException e) {
             mostrarError("Error al listar por seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (IllegalArgumentException e) {
+            mostrarError(e.getMessage());
+        } catch (Exception e) {
+            mostrarError("Error inesperado al listar por seguimiento: " + e.getMessage());
         }
     }
 
@@ -87,66 +88,20 @@ public class InstanciaComunConsola extends UIBase {
     private void buscarPorId() {
         int id = leerEntero("Ingrese el ID de la instancia: ");
         try {
-            InstanciaComun ic = instanciaFacade.obtenerInstanciaComun(id);
+            InstanciaComun ic = instanciaProxy.obtenerInstanciaComun(id);
             if (ic != null) {
-                mostrarInfo("📄 Detalles de la instancia común:");
+                mostrarInfo("Detalles de la instancia común:");
                 System.out.println(ic);
             } else {
                 mostrarError("No se encontró la instancia común con ID " + id);
             }
         } catch (SQLException e) {
             mostrarError("Error al buscar instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (IllegalArgumentException e) {
+            mostrarError(e.getMessage());
+        } catch (Exception e) {
+            mostrarError("Error inesperado al buscar la instancia: " + e.getMessage());
         }
     }
 
-    // Crear una nueva instancia común asociada a un seguimiento
-    private void crearInstanciaComun() {
-        mostrarInfo("🆕 Crear nueva instancia común");
-        String titulo = leerTexto("Título: ");
-        String descripcion = leerTexto("Descripción: ");
-        int idSeg = leerEntero("ID de seguimiento: ");
-        boolean estActivo = true;
-
-        try {
-            OffsetDateTime fecha = OffsetDateTime.now();
-            InstanciaComun nueva = instanciaFacade.crearInstanciaComun(
-                    titulo, fecha, descripcion, estActivo, idFuncionario, idSeg
-            );
-            mostrarExito("Instancia común creada correctamente:");
-            System.out.println(nueva);
-        } catch (SQLException e) {
-            mostrarError("Error al crear instancia común: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
-
-    // Actualizar la información de una instancia común existente
-    private void actualizarInstanciaComun() {
-        int id = leerEntero("Ingrese el ID de la instancia a actualizar: ");
-        String titulo = leerTexto("Nuevo título: ");
-        String descripcion = leerTexto("Nueva descripción: ");
-        boolean estActivo = leerBoolean("¿Está activa? (true/false): ");
-        int idSeg = leerEntero("Nuevo ID de seguimiento: ");
-
-        try {
-            boolean exito = instanciaFacade.actualizarInstanciaComun(
-                    id, titulo, OffsetDateTime.now(), descripcion, estActivo, idFuncionario, idSeg
-            );
-            if (exito) mostrarExito("Instancia actualizada correctamente.");
-            else mostrarError("No se pudo actualizar la instancia.");
-        } catch (SQLException e) {
-            mostrarError("Error al actualizar instancia común: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
-
-    // Eliminar (desactivar) una instancia común por su ID
-    private void eliminarInstanciaComun() {
-        int id = leerEntero("Ingrese el ID de la instancia a eliminar: ");
-        try {
-            boolean exito = instanciaFacade.eliminarInstanciaComun(id);
-            if (exito) mostrarExito("Instancia común desactivada correctamente.");
-            else mostrarError("No se pudo eliminar la instancia.");
-        } catch (SQLException e) {
-            mostrarError("Error al eliminar instancia común: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
 }

@@ -34,7 +34,7 @@ public class LoginConsola extends UIBase {
                 String rol = sesion.getRolActual();
 
                 if (usuario != null && rol != null) {
-                    mostrarInfo("\n✅ Inicio de sesión exitoso.");
+                    mostrarInfo("\nInicio de sesión exitoso.");
                     System.out.println("---------------------------------------");
                     System.out.println("Usuario actual: " + usuario.getNombre() + " " + usuario.getApellido());
                     System.out.println("Correo: " + usuario.getCorreo());

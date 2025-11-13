@@ -11,7 +11,6 @@ public class InstanciaComun extends Instancia {
         super();
     }
 
-    // Constructor sin ID (para insertar en la BD)
     public InstanciaComun(String titulo, OffsetDateTime fecHora, String descripcion, boolean estActivo, int idFuncionario, int idSeguimiento) {
         super(titulo, fecHora, descripcion, estActivo, idFuncionario);
         this.idSeguimiento = idSeguimiento;

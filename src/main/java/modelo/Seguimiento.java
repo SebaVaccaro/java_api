@@ -11,9 +11,6 @@ public class Seguimiento {
     private LocalDate fecCierre;
     private boolean estActivo;
 
-    // Constructor vacío
-    public Seguimiento() {
-    }
 
     // Constructor sin ID (para insertar en la BD)
     public Seguimiento(Integer idInforme, int idEstudiante, LocalDate fecInicio, LocalDate fecCierre, boolean estActivo) {

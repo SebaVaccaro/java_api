@@ -23,18 +23,48 @@ public abstract class UIBase implements UIMenu {
             opcion = leerEntero("Seleccione una opción: ");
             manejarOpcion(opcion);
         } while (opcion != 0);
-        System.out.println("🔒 Saliendo del menú...");
+        System.out.println("Saliendo del menú...");
     }
 
     // Lee un número entero del usuario
-    protected int leerEntero(String mensaje) {
+    protected Integer leerEntero(String mensaje) {
         System.out.print(mensaje);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Ingrese un número válido: ");
-            scanner.next();
+        String entrada = scanner.nextLine().trim();
+
+        if (entrada.isEmpty()) {
+            return null;
         }
-        int valor = scanner.nextInt();
-        scanner.nextLine(); // limpiar buffer
+
+        while (true) {
+            try {
+                return Integer.parseInt(entrada);
+            } catch (NumberFormatException e) {
+                System.out.print("Ingrese un número válido (o deje vacío para null): ");
+                entrada = scanner.nextLine().trim();
+                if (entrada.isEmpty()) {
+                    return null;
+                }
+            }
+        }
+    }
+    protected int leerEnteroNoNull(String mensaje) {
+        int valor;
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = scanner.nextLine().trim();
+
+            if (entrada.isEmpty()) {
+                System.out.println("El valor no puede estar vacío. Intente de nuevo.");
+                continue;
+            }
+
+            try {
+                valor = Integer.parseInt(entrada);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Ingrese un número válido.");
+            }
+        }
         return valor;
     }
 
@@ -42,6 +72,38 @@ public abstract class UIBase implements UIMenu {
     protected String leerTexto(String mensaje) {
         System.out.print(mensaje);
         return scanner.nextLine();
+    }
+
+    // Leer texto obligatorio
+    protected String leerTextoNoNull(String mensaje) {
+        String input;
+        do {
+            System.out.print(mensaje);
+            input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Este campo no puede estar vacío. Intente de nuevo.");
+            }
+        } while (input.isEmpty());
+        return input;
+    }
+
+    protected String leerTextoNoNullNoNumero(String mensaje) {
+        String input;
+        do {
+            System.out.print(mensaje);
+            input = scanner.nextLine().trim();
+            if (input.isEmpty()) {
+                System.out.println("Este campo no puede estar vacío. Intente de nuevo.");
+                continue;
+            }
+            // Verifica si es solo un número
+            if (input.matches("\\d+")) {
+                System.out.println("El texto no puede ser solo números. Intente de nuevo.");
+                continue;
+            }
+            break;
+        } while (true);
+        return input;
     }
 
     // Lee un valor booleano (true/false)
@@ -91,12 +153,12 @@ public abstract class UIBase implements UIMenu {
     }
 
     // Lee entero opcional
-    protected int leerEntero(String mensaje, int valorActual) {
+    protected Integer leerEntero(String mensaje, Integer valorActual) {
         System.out.print(mensaje);
         String input = scanner.nextLine();
-        if (input.isBlank()) return valorActual;
+        if (input.isBlank()) return valorActual; // conserva null si valorActual es null
         try {
-            return Integer.parseInt(input);
+            return Integer.valueOf(input.trim());
         } catch (NumberFormatException e) {
             return valorActual;
         }
@@ -140,16 +202,16 @@ public abstract class UIBase implements UIMenu {
 
     // Muestra un mensaje de éxito
     protected void mostrarExito(String mensaje) {
-        System.out.println("✅ " + mensaje);
+        System.out.println(mensaje);
     }
 
     // Muestra un mensaje de error
     protected void mostrarError(String mensaje) {
-        System.out.println("❌ " + mensaje);
+        System.out.println(mensaje);
     }
 
     // Muestra un mensaje informativo
     protected void mostrarInfo(String mensaje) {
-        System.out.println("ℹ️ " + mensaje);
+        System.out.println(mensaje);
     }
 }

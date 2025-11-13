@@ -44,10 +44,16 @@ public class SeguimientoConsola extends UIBase {
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción no válida. Intente nuevamente.");
             }
+        } catch (SecurityException e) {
+            mostrarError("Permiso denegado: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            mostrarError("Datos inválidos: " + e.getMessage());
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     // Agrega un nuevo seguimiento
     private void agregarSeguimiento() {
@@ -136,7 +142,9 @@ public class SeguimientoConsola extends UIBase {
             if (exito) mostrarExito("Seguimiento actualizado correctamente.");
             else mostrarError("No se pudo actualizar el seguimiento.");
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError("Error al modificar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e){
+            mostrarError(e.getMessage());
         }
     }
 
@@ -149,16 +157,6 @@ public class SeguimientoConsola extends UIBase {
             else mostrarError("No se pudo eliminar el seguimiento.");
         } catch (SQLException e) {
             mostrarError("Error SQL al eliminar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        }
-    }
-
-    // Permite ejecutar directamente el módulo
-    public static void main(String[] args) {
-        try {
-            SeguimientoConsola ui = new SeguimientoConsola();
-            ui.iniciar();
-        } catch (Exception e) {
-            System.err.println("Error al iniciar consola de Seguimientos: " + e.getMessage());
         }
     }
 }

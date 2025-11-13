@@ -15,7 +15,7 @@ public class NotificacionProxy {
     private final RecibeServicio recibeServicio;
     private final ValidarUsuario validarUsuario;
 
-    // Constructor: inicializa los servicios de notificación, recibe y el validador de usuario
+    // Constructor
     public NotificacionProxy() throws SQLException, Exception {
         this.notificacionServicio = new NotificacionServicio();
         this.recibeServicio = new RecibeServicio();
@@ -34,9 +34,10 @@ public class NotificacionProxy {
     // Obtener notificación por ID (solo administradores, psicopedagogos o propietario)
     public Notificacion obtenerNotificacion(int id) throws SQLException, Exception {
         Notificacion notificacion = notificacionServicio.obtenerNotificacion(id);
-        if (notificacion == null) return null;
+        if (notificacion == null) {
+            throw new IllegalArgumentException("No se encontró notificación para el ID especificado.");
+        }
 
-        // Obtenemos el propietario de la notificación
         List<Integer> usuarios = recibeServicio.listarUsuariosPorNotificacion(id);
         Integer idPropietario = usuarios.isEmpty() ? -1 : usuarios.get(0);
 
@@ -60,15 +61,27 @@ public class NotificacionProxy {
         if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores o psicopedagogos pueden actualizar notificaciones.");
         }
+
+        // Validar que la notificación exista antes de actualizar
+        Notificacion existente = notificacionServicio.obtenerNotificacion(notificacion.getIdNotificacion());
+        if (existente == null) {
+            throw new IllegalArgumentException("No se encontró notificación para actualizar.");
+        }
+
         return notificacionServicio.actualizarNotificacion(notificacion);
     }
 
-    // Desactivar notificación (solo administradores, psicopedagogos)
+    // Desactivar notificación (solo administradores o psicopedagogos)
     public boolean desactivarNotificacion(int id) throws SQLException, Exception {
         if (!validarUsuario.esAdminOPsico()) {
             throw new SecurityException("Solo administradores o psicopedagogos pueden desactivar esta notificación.");
         }
+
+        Notificacion notificacion = notificacionServicio.obtenerNotificacion(id);
+        if (notificacion == null) {
+            throw new IllegalArgumentException("No se encontró notificación para desactivar.");
+        }
+
         return notificacionServicio.desactivarNotificacion(id);
     }
 }
-

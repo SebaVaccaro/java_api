@@ -3,8 +3,8 @@ package servicios;
 import DAO.IncidenciaDAOImpl;
 import DAO.InstanciaDAOImpl;
 import modelo.Incidencia;
-
 import SINGLETON.ConexionSingleton;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -26,6 +26,17 @@ public class IncidenciaServicio {
     // Crear nueva incidencia
     public Incidencia crearIncidencia(String titulo, OffsetDateTime fecHora, String descripcion,
                                       boolean estActivo, int idFuncionario, String lugar) throws SQLException {
+
+        // Validaciones básicas
+        if (titulo == null || titulo.trim().isEmpty())
+            throw new IllegalArgumentException("El título no puede estar vacío.");
+        if (fecHora == null)
+            throw new IllegalArgumentException("La fecha y hora no pueden ser nulas.");
+        if (descripcion == null || descripcion.trim().isEmpty())
+            throw new IllegalArgumentException("La descripción no puede estar vacía.");
+        if (lugar == null || lugar.trim().isEmpty())
+            throw new IllegalArgumentException("El lugar no puede estar vacío.");
+
         Incidencia incidencia = new Incidencia(0, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
 
         try {
@@ -39,32 +50,51 @@ public class IncidenciaServicio {
             conn.commit();
             return incidencia;
         } catch (SQLException e) {
-            conn.rollback();
-            throw new SQLException("Error al crear Incidencia: " + e.getMessage(), e);
+            if (conn != null) conn.rollback();
+            throw new SQLException("Error al crear incidencia: " + e.getMessage(), e);
         } finally {
-            conn.setAutoCommit(true);
+            if (conn != null) conn.setAutoCommit(true);
         }
     }
 
     // Obtener incidencia por ID
     public Incidencia obtenerIncidencia(int idInstancia) throws SQLException {
-        return incidenciaDao.obtenerIncidencia(idInstancia);
+        Incidencia incidencia = incidenciaDao.obtenerIncidencia(idInstancia);
+        if (incidencia == null) {
+            throw new IllegalArgumentException("La incidencia con ID " + idInstancia + " no existe.");
+        }
+        return incidencia;
     }
 
     // Listar todas las incidencias
     public List<Incidencia> listarIncidencias() throws SQLException {
-        return incidenciaDao.listarIncidencias();
+        List<Incidencia> lista = incidenciaDao.listarIncidencias();
+        if (lista == null || lista.isEmpty()) {
+            throw new IllegalStateException("No existen incidencias registradas en el sistema.");
+        }
+        return lista;
     }
 
     // Listar incidencias por funcionario
     public List<Incidencia> listarPorFuncionario(int idFuncionario) throws SQLException {
-        return incidenciaDao.listarPorFuncionario(idFuncionario);
+        List<Incidencia> lista = incidenciaDao.listarPorFuncionario(idFuncionario);
+        if (lista == null || lista.isEmpty()) {
+            throw new IllegalStateException("El funcionario con ID " + idFuncionario + " no tiene incidencias registradas.");
+        }
+        return lista;
     }
 
-    // Actualizar incidencia
+    // Actualizar incidencia (verifica existencia antes de modificar)
     public boolean actualizarIncidencia(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion,
                                         boolean estActivo, int idFuncionario, String lugar) throws SQLException {
+
+        Incidencia existente = incidenciaDao.obtenerIncidencia(idInstancia);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede actualizar: la incidencia con ID " + idInstancia + " no existe.");
+        }
+
         Incidencia incidencia = new Incidencia(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
+
         try {
             conn.setAutoCommit(false);
 
@@ -76,18 +106,27 @@ public class IncidenciaServicio {
                 return true;
             } else {
                 conn.rollback();
-                return false;
+                throw new SQLException("Error: no se pudo actualizar completamente la incidencia con ID " + idInstancia + ".");
             }
         } catch (SQLException e) {
-            conn.rollback();
+            if (conn != null) conn.rollback();
             throw e;
         } finally {
-            conn.setAutoCommit(true);
+            if (conn != null) conn.setAutoCommit(true);
         }
     }
 
-    // Eliminar incidencia (baja lógica)
+    // Eliminar incidencia (baja lógica, con validación previa)
     public boolean eliminarIncidencia(int idInstancia) throws SQLException {
-        return baseDao.desactivarInstancia(idInstancia);
+        Incidencia existente = incidenciaDao.obtenerIncidencia(idInstancia);
+        if (existente == null) {
+            throw new IllegalArgumentException("No se puede eliminar: la incidencia con ID " + idInstancia + " no existe.");
+        }
+
+        try {
+            return baseDao.desactivarInstancia(idInstancia);
+        } catch (SQLException e) {
+            throw new SQLException("Error al eliminar incidencia con ID " + idInstancia + ": " + e.getMessage(), e);
+        }
     }
 }
