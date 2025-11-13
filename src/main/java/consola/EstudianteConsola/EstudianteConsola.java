@@ -1,7 +1,9 @@
 package consola.EstudianteConsola;
 
 import SINGLETON.SesionSingleton;
+import consola.Factory.EstudianteFactory;
 import consola.InterfazConsola.UIBase;
+import consola.InterfazConsola.UIMenu;
 import modelo.Estudiante;
 import FACADE.SesionFacade;
 
@@ -31,9 +33,8 @@ public class EstudianteConsola extends UIBase {
         mostrarInfo("Bienvenido/a, " + estudianteActual.getNombre() + " " +
                 estudianteActual.getApellido() + " (" + rolActual + ")");
 
-        super.iniciar(); // Ejecuta el bucle de menú heredado de UIBase
+        super.iniciar();
 
-        // Al salir del menú, cerrar sesión usando la fachada
         SesionFacade facade = new SesionFacade();
         facade.logout();
 
@@ -59,19 +60,21 @@ public class EstudianteConsola extends UIBase {
         try {
             switch (opcion) {
                 case 1 -> mostrarInformacionPersonal();
-                case 2 -> new SeguimientoConsola().iniciar();
-                case 3 -> new InstanciaComunConsola().iniciar();
-                case 4 -> new TelefonoConsola().iniciar();
-                case 5 -> new NotificacionConsola().iniciar();
-                case 6 -> new DireccionConsola().iniciar();
                 case 0 -> mostrarInfo("Cerrando sesión de " + rolActual + "...");
-                default -> mostrarError("Opción inválida. Intente nuevamente.");
+                default -> {
+                    // Usamos el Factory
+                    UIMenu consola = EstudianteFactory.crearConsolaPorOpcion(opcion);
+                    consola.iniciar();
+                }
             }
+        } catch (IllegalArgumentException e) {
+            mostrarError("Opción inválida. Intente nuevamente.");
         } catch (Exception e) {
             mostrarError("Error al ejecutar la opción: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
 
     private void mostrarInformacionPersonal() {
         mostrarInfo("\n--- Información Personal ---");

@@ -71,9 +71,9 @@ public class FuncionarioConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -91,9 +91,9 @@ public class FuncionarioConsola extends UIBase {
             else
                 lista.forEach(System.out::println);
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar funcionarios: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -112,9 +112,9 @@ public class FuncionarioConsola extends UIBase {
             else
                 mostrarInfo("No se encontró ningún funcionario con ese ID.");
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -164,9 +164,9 @@ public class FuncionarioConsola extends UIBase {
                 mostrarError("No se pudo modificar el funcionario.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 
@@ -187,9 +187,9 @@ public class FuncionarioConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al desactivar funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado: " + e.getMessage());
+            mostrarError(e.getMessage());
         }
     }
 }

@@ -22,19 +22,16 @@ public class EstudianteServicio {
     private final EstudianteDAO estudianteDAO;
     private final Connection conn;
 
-    // Constructor: inicializa DAOs y conexión
     public EstudianteServicio() throws SQLException {
         this.usuarioDAO = new UsuarioDAOImpl();
         this.estudianteDAO = new EstudianteDAOImpl();
         this.conn = ConexionSingleton.getInstance().getConexion();
     }
 
-    // Registrar estudiante con inserción en usuario y estudiante
     public Estudiante registrarEstudiante(String ci, String password,
                                           String nombre, String apellido, LocalDate fechaNacimiento,
                                           int idGrupo) throws Exception {
 
-        // Validar CI, edad y contraseña
         if (!ValidadorCI.validarCI(ci)) throw new Exception("CI inválida");
         if (!ValidadorEdad.esMayorDe18(fechaNacimiento)) throw new Exception("Debe ser mayor de 18 años");
         if (!ValidadorPassword.validar(password)) throw new Exception("La contraseña debe tener al menos 8 caracteres");
@@ -44,7 +41,6 @@ public class EstudianteServicio {
 
         Estudiante est = new Estudiante(0, ci, nombre, apellido, nombre + "." + apellido, passEnc, correo, idGrupo, false);
 
-        // Transacción atómica
         try {
             conn.setAutoCommit(false);
 
@@ -56,7 +52,7 @@ public class EstudianteServicio {
             conn.commit();
         } catch (SQLException e) {
             if (conn != null) conn.rollback();
-            throw new SQLException("Error al crear estudiante: " + e.getMessage(), e);
+            throw e;
         } finally {
             if (conn != null) conn.setAutoCommit(true);
         }
@@ -64,26 +60,19 @@ public class EstudianteServicio {
         return est;
     }
 
-    // Obtener estudiante por ID (valida existencia)
     public Estudiante obtenerPorId(int idUsuario) throws SQLException {
-        Estudiante estudiante = estudianteDAO.obtenerEstudiante(idUsuario);
-        if (estudiante == null) {
-            throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
-        }
-        return estudiante;
+        Estudiante est = estudianteDAO.obtenerEstudiante(idUsuario);
+        if (est == null) throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
+        return est;
     }
 
-    // Listar todos los estudiantes
     public List<Estudiante> listarTodos() throws SQLException {
         return estudianteDAO.listarEstudiantes();
     }
 
-    // Actualizar estudiante con validación de existencia
     public boolean actualizarEstudiante(Estudiante est) throws SQLException {
         Estudiante existente = estudianteDAO.obtenerEstudiante(est.getIdUsuario());
-        if (existente == null) {
-            throw new IllegalArgumentException("No se encontró estudiante para actualizar.");
-        }
+        if (existente == null) throw new IllegalArgumentException("No se encontró estudiante para actualizar.");
 
         boolean exito = false;
         try {
@@ -99,33 +88,26 @@ public class EstudianteServicio {
                 conn.rollback();
             }
         } catch (SQLException e) {
-            conn.rollback();
+            if (conn != null) conn.rollback();
             throw e;
         } finally {
-            conn.setAutoCommit(true);
+            if (conn != null) conn.setAutoCommit(true);
         }
         return exito;
     }
 
-    // Desactivar estudiante con validación de existencia
     public boolean desactivarEstudiante(int idUsuario) throws SQLException {
         Estudiante existente = estudianteDAO.obtenerEstudiante(idUsuario);
-        if (existente == null) {
-            throw new IllegalArgumentException("No se encontró estudiante para desactivar.");
-        }
+        if (existente == null) throw new IllegalArgumentException("No se encontró estudiante para desactivar.");
         return estudianteDAO.eliminarEstudiante(idUsuario);
     }
 
-    // Verificar si el estudiante está activo (valida existencia)
     public boolean estaActivo(int idUsuario) throws SQLException {
         Estudiante existente = estudianteDAO.obtenerEstudiante(idUsuario);
-        if (existente == null) {
-            throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
-        }
+        if (existente == null) throw new IllegalArgumentException("No se encontró estudiante con esa ID.");
         return estudianteDAO.estaActivo(idUsuario);
     }
 
-    // Generar correo institucional para el estudiante
     private String generarCorreoEstudiante(String nombre, String apellido) {
         return nombre.toLowerCase() + "." + apellido.toLowerCase() + "@estudiantes.utec.edu.uy";
     }
