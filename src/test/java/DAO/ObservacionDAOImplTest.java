@@ -133,7 +133,7 @@ class ObservacionDAOImplTest {
     }
 
     @Test
-    void testObtenerObservacion_lanzaSQLException() throws SQLException {
+    void testObtenerObservacionLanzaSQLException() throws SQLException {
         when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error al obtener observacion"));
 
         SQLException ex = assertThrows(SQLException.class, () -> observacionDAO.obtenerObservacion(1));
@@ -182,11 +182,12 @@ class ObservacionDAOImplTest {
         SQLException ex = assertThrows(SQLException.class, () -> observacionDAO.listarTodas());
         assertEquals("Error al listar observaciones", ex.getMessage());
         verify(statement).executeQuery(anyString());
+        verify(statement).close();
     }
 
 
     @Test
-    void testActualizarObservacion_exito() throws SQLException {
+    void testActualizarObservacionExito() throws SQLException {
         Observacion obs = new Observacion(1, 10, 20, "Titulo", "Cont", OffsetDateTime.now(), true);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
@@ -197,38 +198,48 @@ class ObservacionDAOImplTest {
         verify(preparedStatement).setInt(2, 20);
         verify(preparedStatement).setString(3, "Titulo");
         verify(preparedStatement).setString(4, "Cont");
+        verify(preparedStatement).setObject(eq(5), any(OffsetDateTime.class));
+        verify(preparedStatement).setBoolean(6, true);
         verify(preparedStatement).setInt(7, 1);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
     }
 
     @Test
-    void testActualizarObservacion_noActualiza() throws SQLException {
+    void testActualizarObservacionNoActualiza() throws SQLException {
         Observacion obs = new Observacion(1, 10, 20, "Titulo", "Cont", OffsetDateTime.now(), true);
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
         boolean resultado = observacionDAO.actualizarObservacion(obs);
 
         assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
-    void testActualizarObservacion_lanzaSQLException() throws SQLException {
+    void testActualizarObservacionLanzaSQLException() throws SQLException {
         Observacion obs = new Observacion(1, 10, 20, "Titulo", "Cont", OffsetDateTime.now(), true);
         when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error al actualizar observacion"));
 
         SQLException ex = assertThrows(SQLException.class, () -> observacionDAO.actualizarObservacion(obs));
         assertEquals("Error al actualizar observacion", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
-    // ---------- TEST eliminarObservacion ----------
 
     @Test
-    void testEliminarObservacion_exito() throws SQLException {
+    void testEliminarObservacionExito() throws SQLException {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
         boolean resultado = observacionDAO.eliminarObservacion(5);
 
         assertTrue(resultado);
         verify(preparedStatement).setInt(1, 5);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
@@ -238,6 +249,8 @@ class ObservacionDAOImplTest {
         boolean resultado = observacionDAO.eliminarObservacion(5);
 
         assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
@@ -246,5 +259,7 @@ class ObservacionDAOImplTest {
 
         SQLException ex = assertThrows(SQLException.class, () -> observacionDAO.eliminarObservacion(5));
         assertEquals("Error al eliminar observacion", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 }

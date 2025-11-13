@@ -29,6 +29,8 @@ public class InformeFinalDAOImpl implements InformeFinalDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 informe.setIdInfFinal(rs.getInt("id_inf_final"));
+            } else {
+                throw new SQLException("No se devolvió el ID generado para el informe final.");
             }
         }
         return informe;
