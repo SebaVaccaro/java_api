@@ -6,11 +6,6 @@ import modelo.Instancia;
 import java.sql.*;
 import java.time.OffsetDateTime;
 
-/**
- * Implementación del DAO para la entidad Instancia.
- * Gestiona las operaciones CRUD sobre la tabla base 'instancias',
- * que almacena la información general de todas las instancias del sistema.
- */
 public class InstanciaDAOImpl {
 
     // Conexión única a la base de datos mediante el Singleton

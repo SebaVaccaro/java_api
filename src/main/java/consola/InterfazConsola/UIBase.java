@@ -106,6 +106,31 @@ public abstract class UIBase implements UIMenu {
         return input;
     }
 
+    protected String leerNombreApellido(String mensaje) {
+        String input;
+        do {
+            System.out.print(mensaje);
+            input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) {
+                System.out.println("Este campo no puede estar vacío. Intente de nuevo.");
+                continue;
+            }
+
+            if (!input.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
+                System.out.println("El apellido solo puede contener letras. Intente de nuevo.");
+                continue;
+            }
+
+            input = input.replaceAll(" ", "").toLowerCase();
+
+            break;
+        } while (true);
+
+        return input;
+    }
+
+
     // Lee un valor booleano (true/false)
     protected boolean leerBoolean(String mensaje) {
         System.out.print(mensaje);

@@ -57,8 +57,8 @@ public class FuncionarioConsola extends UIBase {
         }
 
         String cedula = leerTexto("Cédula: ");
-        String nombre = leerTextoNoNullNoNumero("Nombre: ");
-        String apellido = leerTextoNoNullNoNumero("Apellido: ");
+        String nombre = leerNombreApellido("Nombre: ");
+        String apellido = leerNombreApellido("Apellido: ");
         String password = leerTexto("Password: ");
         int idRol = leerEntero("ID de rol: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
@@ -142,8 +142,8 @@ public class FuncionarioConsola extends UIBase {
 
             switch (campo.toLowerCase()) {
                 case "cedula" -> f.setCedula(leerTexto("Nueva cédula: "));
-                case "nombre" -> f.setNombre(leerTextoNoNullNoNumero("Nuevo nombre: "));
-                case "apellido" -> f.setApellido(leerTextoNoNullNoNumero("Nuevo apellido: "));
+                case "nombre" -> f.setNombre(leerNombreApellido("Nuevo nombre: "));
+                case "apellido" -> f.setApellido(leerNombreApellido("Nuevo apellido: "));
                 case "password" -> f.setPassword(leerTexto("Nuevo password: "));
                 case "idrol" -> f.setIdRol(leerEntero("Nuevo ID de rol: "));
                 case "activo" -> f.setActivo(leerBoolean("¿Activo? (true/false): "));
