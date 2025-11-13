@@ -118,7 +118,7 @@ public abstract class UIBase implements UIMenu {
             }
 
             if (!input.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+")) {
-                System.out.println("El apellido solo puede contener letras. Intente de nuevo.");
+                System.out.println("El nombre o apellido solo puede contener letras. Intente de nuevo.");
                 continue;
             }
 
