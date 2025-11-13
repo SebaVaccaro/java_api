@@ -58,7 +58,7 @@ public class UsuarioDAOImplTest {
     }
 
     @Test
-    public void testInsertarEstudianteExitoso() throws SQLException {
+    public void testInsertarUsuarioExitoso() throws SQLException {
         //preparamos los datos de prueba
         Usuario usuario = new Estudiante(0, "11111111", "Pepe", "Perez", "pperez", "123456", "pperez@gmail.com", 1, true);
 
@@ -83,7 +83,7 @@ public class UsuarioDAOImplTest {
     }
 
     @Test
-    public void insertarEstudianteLanzaSQLException() throws SQLException{
+    public void testInsertarUsuarioLanzaSQLException() throws SQLException{
         Usuario usuario = new Estudiante(0, "11111111", "Pepe", "Perez", "pperez", "123456", "pperez@gmail.com", 1, true);
         when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error de base de datos"));
 
@@ -94,7 +94,7 @@ public class UsuarioDAOImplTest {
     }
 
     @Test
-    public void testInsertarEstudianteNoDevuelveIdLanzaSQL() throws SQLException {
+    public void testInsertarUsuarioNoDevuelveIdLanzaSQL() throws SQLException {
         //preparamos los datos de prueba
         Usuario usuario = new Estudiante(0, "11111111", "Pepe", "Perez", "pperez", "123456", "pperez@gmail.com", 1, true);
         when(resultSet.next()).thenReturn(false);

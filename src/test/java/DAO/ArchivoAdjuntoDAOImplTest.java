@@ -66,7 +66,7 @@ public class ArchivoAdjuntoDAOImplTest {
 
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt("id_archivo_adjunto")).thenReturn(1);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
 
 
         ArchivoAdjunto resultado = archivoAdjuntoDAO.crearArchivoAdjunto(archivo);
