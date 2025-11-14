@@ -58,7 +58,7 @@ public class CiudadConsola extends UIBase {
                 lista.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar ciudades: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -76,7 +76,7 @@ public class CiudadConsola extends UIBase {
                 mostrarInfo("No se encontró ninguna ciudad con ese ID.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -94,7 +94,7 @@ public class CiudadConsola extends UIBase {
                 mostrarInfo("No se encontró ninguna ciudad con ese nombre.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -112,7 +112,7 @@ public class CiudadConsola extends UIBase {
                 lista.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar ciudades por departamento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError( CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

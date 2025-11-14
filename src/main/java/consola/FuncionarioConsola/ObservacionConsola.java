@@ -60,10 +60,12 @@ public class ObservacionConsola extends UIBase {
         try {
             Observacion nueva = proxy.crearObservacion(idFuncionario, idEstudiante, titulo, contenido, fecHora);
             mostrarExito("Observación creada correctamente: " + nueva);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al crear observación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -73,10 +75,12 @@ public class ObservacionConsola extends UIBase {
             List<Observacion> lista = proxy.listarTodas();
             if (lista.isEmpty()) mostrarInfo("No hay observaciones registradas.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar observaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar observaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -87,10 +91,12 @@ public class ObservacionConsola extends UIBase {
             Observacion obs = proxy.obtenerObservacion(id);
             if (obs != null) System.out.println(obs);
             else mostrarInfo("Observación no encontrada.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al buscar observación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -123,10 +129,12 @@ public class ObservacionConsola extends UIBase {
             boolean exito = proxy.actualizarObservacion(actualizada);
             if (exito) mostrarExito("Observación modificada correctamente.");
             else mostrarError("No se pudo modificar la observación.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al modificar observación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -137,10 +145,12 @@ public class ObservacionConsola extends UIBase {
             boolean exito = proxy.desactivarObservacion(id);
             if (exito) mostrarExito("Observación desactivada correctamente.");
             else mostrarError("No se pudo desactivar la observación.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al desactivar observación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al desactivar observación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

@@ -57,10 +57,12 @@ public class RecibeConsola extends UIBase {
             boolean exito = proxy.agregarRecibe(idNotificacion, idUsuario);
             if (exito) mostrarExito("Relación agregada correctamente.");
             else mostrarError("No se pudo agregar la relación.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al agregar relación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al agregar relación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -73,10 +75,12 @@ public class RecibeConsola extends UIBase {
             boolean exito = proxy.eliminarRecibe(idNotificacion, idUsuario);
             if (exito) mostrarExito("Relación eliminada correctamente.");
             else mostrarError("No se pudo eliminar la relación.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar relación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al eliminar relación: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -86,10 +90,12 @@ public class RecibeConsola extends UIBase {
             List<Recibe> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar relaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -100,10 +106,12 @@ public class RecibeConsola extends UIBase {
             List<Integer> usuarios = proxy.listarUsuariosPorNotificacion(idNotificacion);
             if (usuarios.isEmpty()) mostrarInfo("La notificación no tiene usuarios asociados.");
             else mostrarInfo("Usuarios asociados: " + usuarios);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar usuarios: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar usuarios: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -114,10 +122,12 @@ public class RecibeConsola extends UIBase {
             List<Integer> notificaciones = proxy.listarNotificacionesPorUsuario(idUsuario);
             if (notificaciones.isEmpty()) mostrarInfo("El usuario no tiene notificaciones asociadas.");
             else mostrarInfo("Notificaciones recibidas: " + notificaciones);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar notificaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar notificaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

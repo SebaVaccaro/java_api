@@ -2,8 +2,10 @@ package consola.FuncionarioConsola;
 
 import consola.InterfazConsola.UIBase;
 import PROXY.FuncionarioProxy;
+import PROXY.RolProxy;
 import SINGLETON.SesionSingleton;
 import modelo.Funcionario;
+import modelo.Rol;
 import utils.CapturadoraDeErrores;
 
 import java.sql.SQLException;
@@ -13,11 +15,13 @@ import java.util.List;
 public class FuncionarioConsola extends UIBase {
 
     private final FuncionarioProxy proxy;
+    private final RolProxy rolProxy;
     private final SesionSingleton sesionSingleton;
 
-    // Constructor: inicializa el proxy y la sesión del usuario
+    // Constructor: inicializa proxy y sesión
     public FuncionarioConsola() throws Exception {
         this.proxy = new FuncionarioProxy();
+        this.rolProxy = new RolProxy();
         this.sesionSingleton = SesionSingleton.getInstance();
     }
 
@@ -33,7 +37,6 @@ public class FuncionarioConsola extends UIBase {
         System.out.println("0. Volver al menú principal");
         System.out.println("==========================================");
     }
-
 
     // Manejar opción seleccionada
     @Override
@@ -60,7 +63,18 @@ public class FuncionarioConsola extends UIBase {
         String nombre = leerNombreApellido("Nombre: ");
         String apellido = leerNombreApellido("Apellido: ");
         String password = leerTexto("Password: ");
-        int idRol = leerEntero("ID de rol: ");
+
+        try {
+            List<Rol> roles = rolProxy.listarTodos();
+            System.out.println("\n--- ROLES DISPONIBLES ---");
+            roles.forEach(System.out::println);
+            System.out.println("-------------------------");
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            return;
+        }
+
+        int idRol = leerEnteroNoNull("ID de rol: ");
         LocalDate fechaNacimiento = leerFecha("Fecha de nacimiento (YYYY-MM-DD): ");
 
         try {
@@ -86,14 +100,17 @@ public class FuncionarioConsola extends UIBase {
 
         try {
             List<Funcionario> lista = proxy.listarTodos();
-            if (lista.isEmpty())
+            if (lista.isEmpty()) {
                 mostrarInfo("No hay funcionarios registrados.");
-            else
+            } else {
                 lista.forEach(System.out::println);
+            }
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -107,18 +124,21 @@ public class FuncionarioConsola extends UIBase {
         int idFuncionario = leerEntero("ID del funcionario: ");
         try {
             Funcionario f = proxy.obtenerPorId(idFuncionario);
-            if (f != null)
+            if (f != null) {
                 System.out.println(f);
-            else
+            } else {
                 mostrarInfo("No se encontró ningún funcionario con ese ID.");
+            }
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Modificar los datos de un funcionario existente
+    // Modificar funcionario
     private void modificarFuncionario() {
         if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
@@ -138,7 +158,7 @@ public class FuncionarioConsola extends UIBase {
             System.out.println("Campos modificables: cedula, nombre, apellido, username, password, idRol, activo");
 
             String campo = leerTexto("Campo a modificar: ");
-            boolean exito = false;
+            boolean exito;
 
             switch (campo.toLowerCase()) {
                 case "cedula" -> f.setCedula(leerTexto("Nueva cédula: "));
@@ -158,19 +178,22 @@ public class FuncionarioConsola extends UIBase {
                     f.getUsername(), f.getPassword(), f.getCorreo(), f.getIdRol(), f.isActivo()
             );
 
-            if (exito)
+            if (exito) {
                 mostrarExito("Funcionario modificado correctamente.");
-            else
+            } else {
                 mostrarError("No se pudo modificar el funcionario.");
+            }
 
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
             mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError(e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
-    // Desactivar un funcionario (cambia su estado a inactivo)
+    // Desactivar funcionario
     private void desactivarFuncionario() {
         if (!sesionSingleton.haySesionActiva()) {
             mostrarError("No hay sesión activa.");
@@ -180,10 +203,11 @@ public class FuncionarioConsola extends UIBase {
         int idFuncionario = leerEntero("ID del funcionario a desactivar: ");
         try {
             boolean exito = proxy.desactivarFuncionario(idFuncionario);
-            if (exito)
+            if (exito) {
                 mostrarExito("Funcionario desactivado correctamente.");
-            else
+            } else {
                 mostrarError("No se pudo desactivar el funcionario.");
+            }
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {

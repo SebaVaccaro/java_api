@@ -63,10 +63,12 @@ public class InstanciaComunConsola extends UIBase {
         try {
             InstanciaComun ic = proxy.crearInstanciaComun(titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
             mostrarExito("Instancia común creada: " + ic);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al crear instancia: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -76,10 +78,12 @@ public class InstanciaComunConsola extends UIBase {
             List<InstanciaComun> lista = proxy.listarInstanciasComunes();
             if (lista.isEmpty()) mostrarInfo("No hay instancias comunes registradas.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar instancias: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -90,10 +94,12 @@ public class InstanciaComunConsola extends UIBase {
             InstanciaComun ic = proxy.obtenerInstanciaComun(id);
             if (ic != null) System.out.println(ic);
             else mostrarInfo("Instancia no encontrada.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar instancia: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al buscar instancia: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -104,10 +110,12 @@ public class InstanciaComunConsola extends UIBase {
             List<InstanciaComun> lista = proxy.listarPorSeguimiento(idSeg);
             if (lista.isEmpty()) mostrarInfo("No hay instancias para este seguimiento.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar por seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar por seguimiento: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -131,10 +139,12 @@ public class InstanciaComunConsola extends UIBase {
             boolean exito = proxy.actualizarInstanciaComun(id, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
             if (exito) mostrarExito("Instancia común modificada correctamente.");
             else mostrarError("No se pudo modificar la instancia común.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al modificar instancia: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -145,10 +155,12 @@ public class InstanciaComunConsola extends UIBase {
             boolean exito = proxy.eliminarInstanciaComun(id);
             if (exito) mostrarExito("Instancia común eliminada correctamente.");
             else mostrarError("No se pudo eliminar la instancia común.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al eliminar instancia: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

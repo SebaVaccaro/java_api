@@ -7,6 +7,9 @@ import consola.InterfazConsola.UIMenu;
 import modelo.Funcionario;
 import servicios.FuncionarioServicio;
 import FACADE.SesionFacade;
+import utils.CapturadoraDeErrores;
+
+import java.sql.SQLException;
 
 public class FuncionarioConsolaMain extends UIBase {
 
@@ -88,9 +91,12 @@ public class FuncionarioConsolaMain extends UIBase {
 
         } catch (IllegalArgumentException e) {
             mostrarError("Opción inválida. Intente nuevamente.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error al ejecutar la opción: " + e.getMessage());
-            e.printStackTrace();
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 

@@ -63,7 +63,7 @@ public class NotificacionConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al crear notificación: " + e.getMessage());
         }
@@ -78,7 +78,7 @@ public class NotificacionConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar notificaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al listar notificaciones: " + e.getMessage());
         }
@@ -94,7 +94,7 @@ public class NotificacionConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al buscar notificación: " + e.getMessage());
         }
@@ -132,7 +132,7 @@ public class NotificacionConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al modificar notificación: " + e.getMessage());
         }
@@ -148,7 +148,7 @@ public class NotificacionConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al desactivar notificación: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error general al desactivar notificación: " + e.getMessage());
         }

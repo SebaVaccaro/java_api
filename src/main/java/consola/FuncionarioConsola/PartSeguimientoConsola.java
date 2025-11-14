@@ -56,10 +56,12 @@ public class PartSeguimientoConsola extends UIBase {
             boolean exito = proxy.agregarParticipante(idParticipante, idSeguimiento);
             if (exito) mostrarExito("Participante agregado correctamente al seguimiento.");
             else mostrarError("No se pudo agregar el participante.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al agregar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al agregar participante: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -71,10 +73,12 @@ public class PartSeguimientoConsola extends UIBase {
             boolean exito = proxy.eliminarParticipante(idParticipante, idSeguimiento);
             if (exito) mostrarExito("Participante eliminado correctamente del seguimiento.");
             else mostrarError("No se pudo eliminar el participante.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al eliminar participante: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -84,10 +88,12 @@ public class PartSeguimientoConsola extends UIBase {
             List<PartSeguimiento> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar relaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -98,10 +104,12 @@ public class PartSeguimientoConsola extends UIBase {
             List<Integer> seguimientos = proxy.listarSeguimientosPorParticipante(idParticipante);
             if (seguimientos.isEmpty()) mostrarInfo("El participante no tiene seguimientos asociados.");
             else mostrarInfo("Seguimientos del participante: " + seguimientos);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar seguimientos: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -112,10 +120,12 @@ public class PartSeguimientoConsola extends UIBase {
             List<Integer> participantes = proxy.listarParticipantesPorSeguimiento(idSeguimiento);
             if (participantes.isEmpty()) mostrarInfo("No hay participantes registrados para este seguimiento.");
             else mostrarInfo("Participantes del seguimiento: " + participantes);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar participantes: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

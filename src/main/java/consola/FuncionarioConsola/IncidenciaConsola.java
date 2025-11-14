@@ -66,7 +66,7 @@ public class IncidenciaConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al crear incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al crear incidencia: " + ex.getMessage());
         }
@@ -81,10 +81,12 @@ public class IncidenciaConsola extends UIBase {
             } else {
                 lista.forEach(System.out::println);
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al listar incidencias: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al listar incidencias: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -98,10 +100,12 @@ public class IncidenciaConsola extends UIBase {
             } else {
                 mostrarInfo("Incidencia no encontrada.");
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al buscar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al buscar incidencia: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -115,10 +119,12 @@ public class IncidenciaConsola extends UIBase {
             } else {
                 lista.forEach(System.out::println);
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al listar incidencias por funcionario: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al listar incidencias por funcionario: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -142,7 +148,7 @@ public class IncidenciaConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al modificar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al modificar incidencia: " + ex.getMessage());
         }
@@ -161,7 +167,7 @@ public class IncidenciaConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al eliminar incidencia: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al eliminar incidencia: " + ex.getMessage());
         }

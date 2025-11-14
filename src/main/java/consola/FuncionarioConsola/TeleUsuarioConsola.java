@@ -62,7 +62,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al agregar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al agregar teléfono: " + e.getMessage());
         }
@@ -81,7 +81,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar teléfonos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError( CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al listar teléfonos: " + e.getMessage());
         }
@@ -101,7 +101,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al buscar teléfono: " + e.getMessage());
         }
@@ -132,7 +132,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al modificar teléfono: " + e.getMessage());
         }
@@ -148,7 +148,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar teléfono: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al eliminar teléfono: " + e.getMessage());
         }
@@ -168,7 +168,7 @@ public class TeleUsuarioConsola extends UIBase {
         } catch (SecurityException e) {
             mostrarInfo("Permiso denegado: " + e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar teléfonos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado al listar teléfonos: " + e.getMessage());
         }

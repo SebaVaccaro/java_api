@@ -57,10 +57,12 @@ public class PartInstanciaConsola extends UIBase {
             boolean exito = proxy.agregarParticipante(idParticipante, idInstancia);
             if (exito) mostrarExito("Participante agregado correctamente a la instancia.");
             else mostrarError("No se pudo agregar el participante.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al agregar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al agregar participante: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -73,10 +75,12 @@ public class PartInstanciaConsola extends UIBase {
             boolean exito = proxy.eliminarParticipante(idParticipante, idInstancia);
             if (exito) mostrarExito("Participante eliminado correctamente de la instancia.");
             else mostrarError("No se pudo eliminar el participante.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar participante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al eliminar participante: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -86,10 +90,12 @@ public class PartInstanciaConsola extends UIBase {
             List<PartInstancia> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar relaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -100,10 +106,12 @@ public class PartInstanciaConsola extends UIBase {
             List<Integer> instancias = proxy.listarInstanciasPorParticipante(idParticipante);
             if (instancias.isEmpty()) mostrarInfo("El participante no tiene instancias asociadas.");
             else mostrarInfo("Instancias del participante: " + instancias);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar instancias: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar instancias: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -114,10 +122,12 @@ public class PartInstanciaConsola extends UIBase {
             List<Integer> participantes = proxy.listarParticipantesPorInstancia(idInstancia);
             if (participantes.isEmpty()) mostrarInfo("No hay participantes registrados para esta instancia.");
             else mostrarInfo("Participantes de la instancia: " + participantes);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar participantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar participantes: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

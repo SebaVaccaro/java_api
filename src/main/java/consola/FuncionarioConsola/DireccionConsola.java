@@ -69,7 +69,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError( CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -86,7 +86,7 @@ public class DireccionConsola extends UIBase {
                 lista.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar direcciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -107,7 +107,7 @@ public class DireccionConsola extends UIBase {
                 mostrarInfo("No se encontró ninguna dirección con ese ID.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError( CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -127,8 +127,10 @@ public class DireccionConsola extends UIBase {
             else
                 lista.forEach(System.out::println);
 
+        }  catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar direcciones por usuario: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -150,7 +152,7 @@ public class DireccionConsola extends UIBase {
                 lista.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar direcciones por ciudad: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -250,7 +252,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException s) {
             mostrarError(s.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -271,8 +273,10 @@ public class DireccionConsola extends UIBase {
             else
                 mostrarError("No se pudo eliminar la dirección.");
 
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

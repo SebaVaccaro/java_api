@@ -4,6 +4,9 @@ import modelo.Usuario;
 import FACADE.SesionFacade;
 import SINGLETON.SesionSingleton;
 import consola.InterfazConsola.UIBase;
+import utils.CapturadoraDeErrores;
+
+import java.sql.SQLException;
 
 public class LoginConsola extends UIBase {
 
@@ -44,9 +47,10 @@ public class LoginConsola extends UIBase {
                     mostrarError("Error inesperado: no se estableció la sesión.");
                 }
 
+            } catch (SQLException e) {
+                mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
             } catch (Exception e) {
-                mostrarError("Error de inicio de sesión: " + e.getMessage());
-                mostrarInfo("Por favor, inténtelo nuevamente.\n");
+                mostrarError("Error inesperado: " + e.getMessage());
             }
         }
     }

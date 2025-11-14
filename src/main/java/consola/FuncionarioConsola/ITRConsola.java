@@ -50,10 +50,12 @@ public class ITRConsola extends UIBase {
             List<ITR> lista = proxy.listarTodos();
             if (lista.isEmpty()) mostrarInfo("No hay ITRs registrados.");
             else lista.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar ITRs: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar ITRs: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -64,10 +66,12 @@ public class ITRConsola extends UIBase {
             ITR itr = proxy.obtenerITR(idItr);
             if (itr != null) System.out.println(itr);
             else mostrarInfo("ITR no encontrado.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar ITR: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al buscar ITR: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

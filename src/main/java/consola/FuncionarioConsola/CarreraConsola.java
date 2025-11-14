@@ -57,7 +57,7 @@ public class CarreraConsola extends UIBase {
                 list.forEach(System.out::println);
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar carreras: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -75,7 +75,7 @@ public class CarreraConsola extends UIBase {
                 mostrarInfo("No se encontró ninguna carrera con ese ID.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -93,7 +93,7 @@ public class CarreraConsola extends UIBase {
                 mostrarInfo("No se encontró ninguna carrera con ese código.");
 
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

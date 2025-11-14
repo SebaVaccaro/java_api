@@ -65,7 +65,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         } catch (SecurityException | IllegalArgumentException e) {
             mostrarError(e.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError( CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -107,7 +107,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar archivos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -170,7 +170,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -191,7 +191,7 @@ public class ArchivoAdjuntoConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar archivo: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

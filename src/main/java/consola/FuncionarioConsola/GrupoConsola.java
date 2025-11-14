@@ -60,7 +60,7 @@ public class GrupoConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al crear grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al crear grupo: " + ex.getMessage());
         }
@@ -75,10 +75,12 @@ public class GrupoConsola extends UIBase {
             } else {
                 lista.forEach(System.out::println);
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al listar grupos: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al listar grupos: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -92,10 +94,12 @@ public class GrupoConsola extends UIBase {
             } else {
                 mostrarInfo("Grupo no encontrado.");
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al buscar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al buscar grupo: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -109,10 +113,12 @@ public class GrupoConsola extends UIBase {
             } else {
                 lista.forEach(System.out::println);
             }
-        } catch (SQLException ex) {
-            mostrarError("Error SQL al listar grupos por carrera: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
-        } catch (Exception ex) {
-            mostrarError("Error general al listar grupos por carrera: " + ex.getMessage());
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
+        } catch (SQLException e) {
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -131,7 +137,7 @@ public class GrupoConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al modificar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al modificar grupo: " + ex.getMessage());
         }
@@ -150,7 +156,7 @@ public class GrupoConsola extends UIBase {
         } catch (SecurityException ex) {
             mostrarError(ex.getMessage());
         } catch (SQLException ex) {
-            mostrarError("Error SQL al eliminar grupo: " + CapturadoraDeErrores.obtenerMensajeAmigable(ex));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(ex));
         } catch (Exception ex) {
             mostrarError("Error general al eliminar grupo: " + ex.getMessage());
         }

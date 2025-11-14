@@ -50,10 +50,12 @@ public class RolConsola extends UIBase {
             List<Rol> roles = proxy.listarTodos();
             if (roles.isEmpty()) mostrarInfo("No hay roles registrados.");
             else roles.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar roles: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado al listar roles: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -65,10 +67,12 @@ public class RolConsola extends UIBase {
             Rol rol = proxy.buscarPorId(idRol);
             if (rol != null) System.out.println(rol);
             else mostrarError("No se encontró un rol con ese ID.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar rol: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error inesperado al buscar rol: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

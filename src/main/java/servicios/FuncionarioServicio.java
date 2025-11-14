@@ -38,6 +38,11 @@ public class FuncionarioServicio {
         if (!ValidadorEdad.esMayorDe18(fechaNacimiento)) throw new Exception("Debe ser mayor de 18 años");
         if (!ValidadorPassword.validar(password)) throw new Exception("La contraseña debe tener al menos 8 caracteres");
 
+        RolServicio rolServicio = new RolServicio();
+        if (rolServicio.buscarPorId(idRol) == null) {
+            throw new Exception("El rol especificado no existe.");
+        }
+
         String correo = generarCorreoFuncionario(nombre, apellido);
         String passEnc = Encriptador.encriptar(password);
 

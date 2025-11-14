@@ -50,10 +50,12 @@ public class PerteneceConsola extends UIBase {
             List<Pertenece> relaciones = proxy.listarTodos();
             if (relaciones.isEmpty()) mostrarInfo("No hay relaciones registradas.");
             else relaciones.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar relaciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar relaciones: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -64,10 +66,12 @@ public class PerteneceConsola extends UIBase {
             List<Integer> itrs = proxy.listarItrPorCarrera(idCarrera);
             if (itrs.isEmpty()) mostrarInfo("La carrera no tiene ITRs asociados.");
             else mostrarInfo("ITRs asociados a la carrera: " + itrs);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar ITRs: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar ITRs: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -78,10 +82,12 @@ public class PerteneceConsola extends UIBase {
             List<Integer> carreras = proxy.listarCarrerasPorItr(idItr);
             if (carreras.isEmpty()) mostrarInfo("El ITR no tiene carreras asociadas.");
             else mostrarInfo("Carreras asociadas al ITR: " + carreras);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar carreras: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
-            mostrarError("Error general al listar carreras: " + e.getMessage());
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

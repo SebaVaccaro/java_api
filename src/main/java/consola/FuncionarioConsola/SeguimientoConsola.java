@@ -65,10 +65,12 @@ public class SeguimientoConsola extends UIBase {
             boolean exito = proxy.agregarSeguimiento(null, idEstudiante, fecInicio, null, estActivo);
             if (exito) mostrarExito("Seguimiento agregado correctamente.");
             else mostrarError("No se pudo agregar el seguimiento.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al agregar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (IllegalArgumentException e) {
-            mostrarError("Datos inválidos: " + e.getMessage());
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -82,8 +84,12 @@ public class SeguimientoConsola extends UIBase {
                 mostrarInfo("=== LISTA DE SEGUIMIENTOS ===");
                 seguimientos.forEach(System.out::println);
             }
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar seguimientos: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -98,8 +104,12 @@ public class SeguimientoConsola extends UIBase {
             } else {
                 mostrarError("No se encontró un seguimiento con ese ID.");
             }
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -141,10 +151,12 @@ public class SeguimientoConsola extends UIBase {
 
             if (exito) mostrarExito("Seguimiento actualizado correctamente.");
             else mostrarError("No se pudo actualizar el seguimiento.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error al modificar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
-        } catch (Exception e){
-            mostrarError(e.getMessage());
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 
@@ -155,8 +167,12 @@ public class SeguimientoConsola extends UIBase {
             boolean exito = proxy.eliminarSeguimiento(id);
             if (exito) mostrarExito("Seguimiento eliminado correctamente.");
             else mostrarError("No se pudo eliminar el seguimiento.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar seguimiento: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
+        } catch (Exception e) {
+            mostrarError("Error inesperado: " + e.getMessage());
         }
     }
 }

@@ -71,7 +71,7 @@ public class EstudianteConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -90,8 +90,10 @@ public class EstudianteConsola extends UIBase {
                 mostrarInfo("No hay estudiantes registrados.");
             else
                 lista.forEach(System.out::println);
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar estudiantes: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -111,8 +113,10 @@ public class EstudianteConsola extends UIBase {
                 System.out.println(e);
             else
                 mostrarInfo("No se encontró ningún estudiante con ese ID.");
+        } catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al buscar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -158,8 +162,10 @@ public class EstudianteConsola extends UIBase {
             else
                 mostrarError("No se pudo modificar el estudiante.");
 
+        }  catch (SecurityException se) {
+            mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al modificar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }
@@ -182,7 +188,7 @@ public class EstudianteConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al desactivar estudiante: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError("Error inesperado: " + e.getMessage());
         }

@@ -20,7 +20,7 @@ public abstract class UIBase implements UIMenu {
         int opcion;
         do {
             mostrarMenu();
-            opcion = leerEntero("Seleccione una opción: ");
+            opcion = leerEnteroNoNull("Seleccione una opción: ");
             manejarOpcion(opcion);
         } while (opcion != 0);
         System.out.println("Saliendo del menú...");
@@ -31,20 +31,18 @@ public abstract class UIBase implements UIMenu {
         System.out.print(mensaje);
         String entrada = scanner.nextLine().trim();
 
-        if (entrada.isEmpty()) {
-            return null;
-        }
-
         while (true) {
-            try {
-                return Integer.parseInt(entrada);
-            } catch (NumberFormatException e) {
-                System.out.print("Ingrese un número válido (o deje vacío para null): ");
-                entrada = scanner.nextLine().trim();
-                if (entrada.isEmpty()) {
-                    return null;
+            if (!entrada.isEmpty()) {
+                try {
+                    return Integer.parseInt(entrada);
+                } catch (NumberFormatException e) {
+                    System.out.print("Ingrese un número válido: ");
                 }
+            } else {
+                System.out.print("El valor no puede estar vacío. Intente nuevamente: ");
             }
+
+            entrada = scanner.nextLine().trim();
         }
     }
     protected int leerEnteroNoNull(String mensaje) {

@@ -68,7 +68,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al crear dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError(e.getMessage());
         }
@@ -88,7 +88,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al listar direcciones: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError(e.getMessage());
         }
@@ -147,7 +147,7 @@ public class DireccionConsola extends UIBase {
         } catch (SecurityException se) {
             mostrarError(se.getMessage());
         } catch (SQLException e) {
-            mostrarError("Error SQL al eliminar dirección: " + CapturadoraDeErrores.obtenerMensajeAmigable(e));
+            mostrarError(CapturadoraDeErrores.obtenerMensajeAmigable(e));
         } catch (Exception e) {
             mostrarError(e.getMessage());
         }
