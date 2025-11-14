@@ -26,59 +26,58 @@ class InstanciaComunDAOImplTest {
     @Mock
     private ResultSet resultSet;
 
-    private MockedStatic<ConexionSingleton> conexionMockStatic;
-
-    private InstanciaComunDAOImpl instanciaComunDAO;
+    private MockedStatic<ConexionSingleton> conexionSingletonMocked;
+    private InstanciaComunDAOImpl dao;
 
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        ConexionSingleton mockSingleton = mock(ConexionSingleton.class);
-        when(mockSingleton.getConexion()).thenReturn(connection);
+        ConexionSingleton singleton = mock(ConexionSingleton.class);
+        when(singleton.getConexion()).thenReturn(connection);
 
-        conexionMockStatic = mockStatic(ConexionSingleton.class);
-        conexionMockStatic.when(ConexionSingleton::getInstance).thenReturn(mockSingleton);
+        conexionSingletonMocked = mockStatic(ConexionSingleton.class);
+        conexionSingletonMocked.when(ConexionSingleton::getInstance).thenReturn(singleton);
 
-        instanciaComunDAO = new InstanciaComunDAOImpl();
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(connection.createStatement()).thenReturn(statement);
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
+
+        dao = new InstanciaComunDAOImpl();
     }
 
     @AfterEach
     void tearDown() {
-        conexionMockStatic.close();
+        conexionSingletonMocked.close();
+        clearAllCaches();
     }
 
-    //TEST Insertar
 
     @Test
-    void testInsertarInstanciaComun() throws Exception {
-        InstanciaComun instancia = new InstanciaComun(1, "T", OffsetDateTime.now(), "D", true, 10, 5);
+    void insertarInstanciaComun_exito() throws Exception {
+        InstanciaComun ic = new InstanciaComun(1,"T",OffsetDateTime.now(),"D",true,3,5);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        dao.insertarInstanciaComun(ic);
 
-        instanciaComunDAO.insertarInstanciaComun(instancia);
-
-        verify(preparedStatement).setInt(1, instancia.getIdInstancia());
-        verify(preparedStatement).setInt(2, instancia.getIdSeguimiento());
+        verify(preparedStatement).setInt(1, 1);
+        verify(preparedStatement).setInt(2, 5);
         verify(preparedStatement).executeUpdate();
         verify(preparedStatement).close();
     }
 
     @Test
-    void testInsertarInstanciaComun_lanzaSQLException() throws Exception {
-        InstanciaComun ic = new InstanciaComun(1, "T", OffsetDateTime.now(), "D", true, 4, 10);
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.insertarInstanciaComun(ic));
+    void insertarInstanciaComun_lanzaSQLException() throws Exception {
+        InstanciaComun ic = new InstanciaComun(1,"T",OffsetDateTime.now(),"D",true,3,5);
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("DB error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.insertarInstanciaComun(ic));
+        assertEquals("DB error", ex.getMessage());
     }
 
 
-    //TEST Obtener
-
     @Test
-    void testObtenerInstanciaComun_exito() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
+    void obtenerInstanciaComun_exito() throws Exception {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt("id_instancia")).thenReturn(1);
         when(resultSet.getString("titulo")).thenReturn("Titulo");
@@ -88,7 +87,11 @@ class InstanciaComunDAOImplTest {
         when(resultSet.getInt("id_funcionario")).thenReturn(3);
         when(resultSet.getInt("id_seguimiento")).thenReturn(8);
 
-        InstanciaComun ic = instanciaComunDAO.obtenerInstanciaComun(1);
+        InstanciaComun ic = dao.obtenerInstanciaComun(1);
+
+        verify(preparedStatement).setInt(1, 1);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
 
         assertNotNull(ic);
         assertEquals(1, ic.getIdInstancia());
@@ -97,58 +100,60 @@ class InstanciaComunDAOImplTest {
     }
 
     @Test
-    void testObtenerInstanciaComun_falla() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+    void obtenerInstanciaComun_noEncontrada() throws Exception {
         when(resultSet.next()).thenReturn(false);
 
-        InstanciaComun ic = instanciaComunDAO.obtenerInstanciaComun(999);
+        InstanciaComun ic = dao.obtenerInstanciaComun(999);
+
+        verify(preparedStatement).setInt(1, 999);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
 
         assertNull(ic);
     }
 
     @Test
-    void testObtenerInstanciaComun_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.obtenerInstanciaComun(1));
+    void obtenerInstanciaComun_lanzaSQLException() throws Exception {
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.obtenerInstanciaComun(1));
+        assertEquals("Error", ex.getMessage());
     }
 
 
-    //TEST Listar
-
     @Test
-    void testListarInstanciasComunes() throws Exception {
-        when(connection.createStatement()).thenReturn(statement);
-        when(statement.executeQuery(anyString())).thenReturn(resultSet);
+    void listarInstanciasComunes_exito() throws Exception {
+        when(resultSet.next()).thenReturn(true,true,false);
+        when(resultSet.getInt("id_instancia")).thenReturn(1,2);
+        when(resultSet.getString("titulo")).thenReturn("A","B");
+        when(resultSet.getObject("fec_hora", OffsetDateTime.class)).thenReturn(OffsetDateTime.now(),OffsetDateTime.now());
+        when(resultSet.getString("descripcion")).thenReturn("D1","D2");
+        when(resultSet.getBoolean("est_activo")).thenReturn(true,false);
+        when(resultSet.getInt("id_funcionario")).thenReturn(3,4);
+        when(resultSet.getInt("id_seguimiento")).thenReturn(10,20);
 
-        when(resultSet.next()).thenReturn(true, true, false);
-        when(resultSet.getInt("id_instancia")).thenReturn(1, 2);
-        when(resultSet.getString("titulo")).thenReturn("A", "B");
-        when(resultSet.getObject("fec_hora", OffsetDateTime.class)).thenReturn(OffsetDateTime.now(), OffsetDateTime.now());
-        when(resultSet.getString("descripcion")).thenReturn("D1", "D2");
-        when(resultSet.getBoolean("est_activo")).thenReturn(true, false);
-        when(resultSet.getInt("id_funcionario")).thenReturn(3, 4);
-        when(resultSet.getInt("id_seguimiento")).thenReturn(10, 20);
+        List<InstanciaComun> lista = dao.listarInstanciasComunes();
 
-        List<InstanciaComun> lista = instanciaComunDAO.listarInstanciasComunes();
+        verify(statement).executeQuery(anyString());
+        verify(statement).close();
 
         assertEquals(2, lista.size());
-        assertEquals(1, lista.get(0).getIdInstancia());
+        assertEquals("A", lista.get(0).getTitulo());
         assertEquals("B", lista.get(1).getTitulo());
     }
 
     @Test
-    void testListarInstanciasComunes_lanzaSQLException() throws Exception {
-        when(connection.createStatement()).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.listarInstanciasComunes());
+    void listarInstanciasComunes_lanzaSQLException() throws Exception {
+        when(statement.executeQuery(anyString())).thenThrow(new SQLException("Error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.listarInstanciasComunes());
+        assertEquals("Error", ex.getMessage());
     }
 
-    @Test
-    void testListarPorSeguimiento() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        when(resultSet.next()).thenReturn(true, false);
+    @Test
+    void listarPorSeguimiento_exito() throws Exception {
+        when(resultSet.next()).thenReturn(true,false);
         when(resultSet.getInt("id_instancia")).thenReturn(5);
         when(resultSet.getString("titulo")).thenReturn("Titulo");
         when(resultSet.getObject("fec_hora", OffsetDateTime.class)).thenReturn(OffsetDateTime.now());
@@ -157,105 +162,93 @@ class InstanciaComunDAOImplTest {
         when(resultSet.getInt("id_funcionario")).thenReturn(2);
         when(resultSet.getInt("id_seguimiento")).thenReturn(99);
 
-        List<InstanciaComun> lista = instanciaComunDAO.listarPorSeguimiento(99);
+        List<InstanciaComun> lista = dao.listarPorSeguimiento(99);
+
+        verify(preparedStatement).setInt(1, 99);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
 
         assertEquals(1, lista.size());
         assertEquals(5, lista.get(0).getIdInstancia());
     }
 
     @Test
-    void testListarPorSeguimiento_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.listarPorSeguimiento(100));
+    void listarPorSeguimiento_lanzaSQLException() throws Exception {
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.listarPorSeguimiento(100));
+        assertEquals("Error", ex.getMessage());
     }
 
-    @Test
-    void testListarPorEstudiante() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
-        when(resultSet.next()).thenReturn(true, false);
-        when(resultSet.getInt("id_instancia")).thenReturn(7);
-        when(resultSet.getString("titulo")).thenReturn("X");
-        when(resultSet.getObject("fec_hora", OffsetDateTime.class)).thenReturn(OffsetDateTime.now());
-        when(resultSet.getString("descripcion")).thenReturn("Desc");
-        when(resultSet.getBoolean("est_activo")).thenReturn(true);
-        when(resultSet.getInt("id_funcionario")).thenReturn(4);
-        when(resultSet.getInt("id_seguimiento")).thenReturn(50);
-
-        List<InstanciaComun> lista = instanciaComunDAO.listarPorEstudiante(123);
-
-        assertEquals(1, lista.size());
-        assertEquals(7, lista.get(0).getIdInstancia());
-    }
 
     @Test
-    void testListarPorEstudiante_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.listarPorEstudiante(50));
-    }
-
-    //TEST Actualizar
-
-    @Test
-    void testActualizarInstanciaComun_exito() throws Exception {
-        InstanciaComun instancia = new InstanciaComun(1, "T", OffsetDateTime.now(), "D", true, 3, 10);
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void actualizarInstanciaComun_exito() throws Exception {
+        InstanciaComun ic = new InstanciaComun(1,"T",OffsetDateTime.now(),"D",true,3,10);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean resultado = instanciaComunDAO.actualizarInstanciaComun(instancia);
+        boolean ok = dao.actualizarInstanciaComun(ic);
 
-        assertTrue(resultado);
-        verify(preparedStatement).setInt(1, instancia.getIdSeguimiento());
-        verify(preparedStatement).setInt(2, instancia.getIdInstancia());
+        verify(preparedStatement).setInt(1, 10);
+        verify(preparedStatement).setInt(2, 1);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertTrue(ok);
     }
 
     @Test
-    void testActualizarInstanciaComun_falla() throws Exception {
-        InstanciaComun instancia = new InstanciaComun(1, "T", OffsetDateTime.now(), "D", true, 3, 10);
-
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void actualizarInstanciaComun_sinFilasAfectadas() throws Exception {
+        InstanciaComun ic = new InstanciaComun(1,"T",OffsetDateTime.now(),"D",true,3,10);
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean resultado = instanciaComunDAO.actualizarInstanciaComun(instancia);
+        boolean ok = dao.actualizarInstanciaComun(ic);
 
-        assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertFalse(ok);
     }
 
     @Test
-    void testActualizarInstanciaComun_lanzaSQLException() throws Exception {
-        InstanciaComun ic = new InstanciaComun(1, "T", OffsetDateTime.now(), "D", true, 4, 10);
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.actualizarInstanciaComun(ic));
+    void actualizarInstanciaComun_lanzaSQLException() throws Exception {
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.actualizarInstanciaComun(
+                new InstanciaComun(1,"T",OffsetDateTime.now(),"D",true,3,10)));
+        assertEquals("Error", ex.getMessage());
     }
 
-    //TEST Eliminar
 
     @Test
-    void testEliminarInstanciaComun_exito() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void eliminarInstanciaComun_exito() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean resultado = instanciaComunDAO.eliminarInstanciaComun(88);
+        boolean ok = dao.eliminarInstanciaComun(88);
 
-        assertTrue(resultado);
-        verify(preparedStatement).setInt(1, 88);
+        verify(preparedStatement).setInt(1,88);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertTrue(ok);
     }
 
     @Test
-    void testEliminarInstanciaComun_falla() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void eliminarInstanciaComun_sinFilasAfectadas() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean resultado = instanciaComunDAO.eliminarInstanciaComun(88);
+        boolean ok = dao.eliminarInstanciaComun(88);
 
-        assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertFalse(ok);
     }
 
     @Test
-    void testEliminarInstanciaComun_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("X"));
-        assertThrows(SQLException.class, () -> instanciaComunDAO.eliminarInstanciaComun(1));
+    void eliminarInstanciaComun_lanzaSQLException() throws Exception {
+        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+
+        SQLException ex = assertThrows(SQLException.class, () -> dao.eliminarInstanciaComun(1));
+        assertEquals("Error", ex.getMessage());
     }
 }

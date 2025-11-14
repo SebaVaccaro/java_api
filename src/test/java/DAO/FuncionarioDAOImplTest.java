@@ -328,23 +328,3 @@ public class FuncionarioDAOImplTest {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

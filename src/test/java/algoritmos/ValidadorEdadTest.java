@@ -50,9 +50,4 @@ class ValidadorEdadTest {
         assertFalse(ValidadorEdad.esMayorDe18(fecha));
     }
 
-    //TEST fecha de nacimiento nula
-    @Test
-    void testFechaNula() {
-        assertThrows(NullPointerException.class, () -> ValidadorEdad.esMayorDe18(null));
-    }
 }

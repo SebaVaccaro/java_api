@@ -121,7 +121,6 @@ public class ArchivoAdjuntoDAOImplTest {
     public void obtenerArchivoAdjuntoExito() throws SQLException {
         int idArchivo = 5;
 
-
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt("id_archivo_adjunto")).thenReturn(5);
         when(resultSet.getInt("id_usuario")).thenReturn(1);

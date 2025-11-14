@@ -4,6 +4,7 @@ public class ValidadorCI {
 
     // Validar un número de cédula de identidad (CI) uruguaya
     public static boolean validarCI(String ci) {
+
         // Limpiar puntos y guiones del CI
         ci = ci.replace(".", "").replace("-", "");
 

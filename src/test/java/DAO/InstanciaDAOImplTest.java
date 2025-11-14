@@ -14,142 +14,172 @@ import static org.mockito.Mockito.*;
 
 class InstanciaDAOImplTest {
 
-    @Mock
-    private Connection connection;
+    @Mock private Connection connection;
+    @Mock private PreparedStatement preparedStatement;
+    @Mock private ResultSet resultSet;
 
-    @Mock
-    private PreparedStatement preparedStatement;
-
-    @Mock
-    private ResultSet resultSet;
-
-    private MockedStatic<ConexionSingleton> conexionSingletonStatic;
-
-    private InstanciaDAOImpl instanciaDAO;
+    private MockedStatic<ConexionSingleton> conexionSingletonMocked;
+    private InstanciaDAOImpl dao;
 
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        conexionSingletonStatic = mockStatic(ConexionSingleton.class);
-        ConexionSingleton mockSingleton = mock(ConexionSingleton.class);
-        conexionSingletonStatic.when(ConexionSingleton::getInstance).thenReturn(mockSingleton);
-        when(mockSingleton.getConexion()).thenReturn(connection);
+        ConexionSingleton singleton = mock(ConexionSingleton.class);
+        when(singleton.getConexion()).thenReturn(connection);
+
+        conexionSingletonMocked = mockStatic(ConexionSingleton.class);
+        conexionSingletonMocked.when(ConexionSingleton::getInstance).thenReturn(singleton);
 
         when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
 
-        instanciaDAO = new InstanciaDAOImpl();
+        dao = new InstanciaDAOImpl();
     }
 
     @AfterEach
     void tearDown() {
-
-        conexionSingletonStatic.close();
+        conexionSingletonMocked.close();
         clearAllCaches();
     }
 
 
-    //TEST Insertar Instancia
     @Test
-    void testInsertarInstancia_exito() throws Exception {
+    void insertarInstancia_exito() throws Exception {
         Instancia instancia = new Incidencia("Título test", OffsetDateTime.now(), "Desc test", true, 1, "Montevideo");
 
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt("id_instancia")).thenReturn(15);
 
-        int id = instanciaDAO.insertarInstancia(instancia);
-
-        assertEquals(15, id);
+        int id = dao.insertarInstancia(instancia);
 
         verify(preparedStatement).setString(1, instancia.getTitulo());
         verify(preparedStatement).setObject(2, instancia.getFecHora());
         verify(preparedStatement).setString(3, instancia.getDescripcion());
         verify(preparedStatement).setBoolean(4, instancia.isEstActivo());
         verify(preparedStatement).setInt(5, instancia.getIdFuncionario());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
+
+        assertEquals(15, id);
     }
 
-
     @Test
-    void testInsertarInstancia_falla() throws Exception {
+    void insertarInstancia_falla() throws Exception {
         Instancia instancia = new Incidencia("Fallida", OffsetDateTime.now(), "Desc", true, 2, "Salto");
 
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(false);
 
-        assertThrows(SQLException.class, () -> instanciaDAO.insertarInstancia(instancia));
+        SQLException ex = assertThrows(SQLException.class,
+                () -> dao.insertarInstancia(instancia));
+
+        assertEquals("No se pudo insertar la instancia", ex.getMessage());
+
+        verify(preparedStatement).setString(1, instancia.getTitulo());
+        verify(preparedStatement).setObject(2, instancia.getFecHora());
+        verify(preparedStatement).setString(3, instancia.getDescripcion());
+        verify(preparedStatement).setBoolean(4, instancia.isEstActivo());
+        verify(preparedStatement).setInt(5, instancia.getIdFuncionario());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 
-
     @Test
-    void testInsertarInstancia_throwSQLException() throws Exception {
+    void insertarInstancia_throwSQLException() throws Exception {
         Instancia instancia = new Incidencia("Error", OffsetDateTime.now(), "Desc", true, 3, "Paysandú");
 
         when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error SQL"));
 
-        assertThrows(SQLException.class, () -> instanciaDAO.insertarInstancia(instancia));
+        SQLException ex = assertThrows(SQLException.class,
+                () -> dao.insertarInstancia(instancia));
+
+        assertEquals("Error SQL", ex.getMessage());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 
-    //TEST Actualizar Instancia
+
     @Test
-    void testActualizarInstancia_exito() throws Exception {
+    void actualizarInstancia_exito() throws Exception {
         Instancia instancia = new Incidencia(5, "Nuevo", OffsetDateTime.now(), "Actualizado", true, 4, "Rocha");
 
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean resultado = instanciaDAO.actualizarInstancia(instancia);
+        boolean resultado = dao.actualizarInstancia(instancia);
+
+        verify(preparedStatement).setString(1, instancia.getTitulo());
+        verify(preparedStatement).setObject(2, instancia.getFecHora());
+        verify(preparedStatement).setString(3, instancia.getDescripcion());
+        verify(preparedStatement).setBoolean(4, instancia.isEstActivo());
+        verify(preparedStatement).setInt(5, instancia.getIdFuncionario());
+        verify(preparedStatement).setInt(6, instancia.getIdInstancia());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
 
         assertTrue(resultado);
     }
 
-
     @Test
-    void testActualizarInstancia_falla() throws Exception {
+    void actualizarInstancia_falla() throws Exception {
         Instancia instancia = new Incidencia(9, "Sin cambios", OffsetDateTime.now(), "Desc", true, 6, "Canelones");
 
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean resultado = instanciaDAO.actualizarInstancia(instancia);
+        boolean resultado = dao.actualizarInstancia(instancia);
+
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
 
         assertFalse(resultado);
     }
 
-
     @Test
-    void testActualizarInstancia_throwSQLException() throws Exception {
+    void actualizarInstancia_throwSQLException() throws Exception {
         Instancia instancia = new Incidencia(11, "Err", OffsetDateTime.now(), "Desc", true, 1, "Tacuarembó");
 
         when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error SQL"));
 
-        assertThrows(SQLException.class, () -> instanciaDAO.actualizarInstancia(instancia));
+        SQLException ex = assertThrows(SQLException.class,
+                () -> dao.actualizarInstancia(instancia));
+
+        assertEquals("Error SQL", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
-    //TEST desactivarInstancia
+
     @Test
-    void testDesactivarInstancia_exito() throws Exception {
+    void desactivarInstancia_exito() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean resultado = instanciaDAO.desactivarInstancia(3);
+        boolean resultado = dao.desactivarInstancia(3);
+
+        verify(preparedStatement).setInt(1, 3);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
 
         assertTrue(resultado);
-        verify(preparedStatement).setInt(1, 3);
     }
 
-
     @Test
-    void testDesactivarInstancia_falla() throws Exception {
+    void desactivarInstancia_falla() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean resultado = instanciaDAO.desactivarInstancia(99);
+        boolean resultado = dao.desactivarInstancia(99);
+
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
 
         assertFalse(resultado);
     }
 
-
     @Test
-    void testDesactivarInstancia_throwSQLException() throws Exception {
+    void desactivarInstancia_throwSQLException() throws Exception {
         when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error SQL"));
 
-        assertThrows(SQLException.class, () -> instanciaDAO.desactivarInstancia(7));
+        SQLException ex = assertThrows(SQLException.class,
+                () -> dao.desactivarInstancia(7));
+
+        assertEquals("Error SQL", ex.getMessage());
     }
 }

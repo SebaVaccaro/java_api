@@ -34,7 +34,7 @@ public class NotificacionDAOImpl implements NotificacionDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 n.setIdNotificacion(rs.getInt("id_notificacion"));
-            }
+            } else throw new SQLException("No se obtuvo el id generado de Notificacion");
         }
         return n;
     }

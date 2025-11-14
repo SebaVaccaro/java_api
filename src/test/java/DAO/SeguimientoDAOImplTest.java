@@ -1,36 +1,52 @@
 package DAO;
 
+import DAO.interfaz.SeguimientoDAO;
 import SINGLETON.ConexionSingleton;
 import modelo.Seguimiento;
+
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class SeguimientoDAOImplTest {
+public class SeguimientoDAOImplTest {
 
-    @Mock private Connection connection;
-    @Mock private PreparedStatement preparedStatement;
-    @Mock private Statement statement;
-    @Mock private ResultSet resultSet;
+    @Mock
+    private Connection connection;
+
+    @Mock
+    private PreparedStatement preparedStatement;
+
+    @Mock
+    private Statement statement;
+
+    @Mock
+    private ResultSet resultSet;
 
     private MockedStatic<ConexionSingleton> conexionMockStatic;
-    private SeguimientoDAOImpl seguimientoDAO;
+
+    private SeguimientoDAO seguimientoDAO;
 
     @BeforeEach
-    void setUp() throws Exception {
+    public void setup() throws Exception {
         MockitoAnnotations.openMocks(this);
 
-        ConexionSingleton singleton = mock(ConexionSingleton.class);
-        when(singleton.getConexion()).thenReturn(connection);
-
+        ConexionSingleton mockedSingleton = mock(ConexionSingleton.class);
         conexionMockStatic = mockStatic(ConexionSingleton.class);
-        conexionMockStatic.when(ConexionSingleton::getInstance).thenReturn(singleton);
+        conexionMockStatic.when(ConexionSingleton::getInstance).thenReturn(mockedSingleton);
+        when(mockedSingleton.getConexion()).thenReturn(connection);
+
+        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+
+        when(connection.createStatement()).thenReturn(statement);
+        when(statement.executeQuery(anyString())).thenReturn(resultSet);
 
         seguimientoDAO = new SeguimientoDAOImpl();
     }
@@ -38,137 +54,192 @@ class SeguimientoDAOImplTest {
     @AfterEach
     void tearDown() {
         conexionMockStatic.close();
+        clearAllCaches();
     }
 
-    //TEST agregar
+    // ============================================================
+    //                           AGREGAR
+    // ============================================================
+
     @Test
-    void testAgregar_exito() throws Exception {
+    void testAgregarExito() throws Exception {
         Seguimiento s = new Seguimiento(1, 10, LocalDate.now(), null, true);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean ok = seguimientoDAO.agregar(s);
+        boolean resultado = seguimientoDAO.agregar(s);
 
-        assertTrue(ok);
         verify(preparedStatement).setInt(2, s.getIdEstudiante());
         verify(preparedStatement).setBoolean(5, s.isEstActivo());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertTrue(resultado);
     }
 
     @Test
-    void testAgregar_falla() throws Exception {
+    void testAgregarSinFilasAfectadas() throws Exception {
         Seguimiento s = new Seguimiento(null, 11, LocalDate.now(), null, true);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean ok = seguimientoDAO.agregar(s);
+        boolean resultado = seguimientoDAO.agregar(s);
 
-        assertFalse(ok);
+        assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
-    void testAgregar_lanzaSQLException() throws Exception {
+    void testAgregarLanzaSQLException() throws Exception {
         Seguimiento s = new Seguimiento(null, 12, LocalDate.now(), null, true);
 
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("DB error"));
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("DB error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.agregar(s));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.agregar(s));
+
+        assertEquals("DB error", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
-    //TEST actualizar
+    // ============================================================
+    //                          ACTUALIZAR
+    // ============================================================
+
     @Test
-    void testActualizar_exito() throws Exception {
+    void testActualizarExito() throws Exception {
         Seguimiento s = new Seguimiento(5, 2, 10, LocalDate.now(), null, true);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean ok = seguimientoDAO.actualizar(s);
+        boolean resultado = seguimientoDAO.actualizar(s);
 
-        assertTrue(ok);
         verify(preparedStatement).setInt(6, s.getIdSeguimiento());
         verify(preparedStatement).setBoolean(5, s.isEstActivo());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertTrue(resultado);
     }
 
     @Test
-    void testActualizar_falla() throws Exception {
+    void testActualizarSinFilasAfectadas() throws Exception {
         Seguimiento s = new Seguimiento(6, null, 15, LocalDate.now(), null, true);
 
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean ok = seguimientoDAO.actualizar(s);
+        boolean resultado = seguimientoDAO.actualizar(s);
 
-        assertFalse(ok);
+        assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
-    void testActualizar_lanzaSQLException() throws Exception {
+    void testActualizarLanzaSQLException() throws Exception {
         Seguimiento s = new Seguimiento(7, 3, 20, LocalDate.now(), null, false);
 
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.actualizar(s));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.actualizar(s));
+
+        assertEquals("Error", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
-    //TEST eliminar
+    // ============================================================
+    //                           ELIMINAR
+    // ============================================================
+
     @Test
-    void testEliminar_exito() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void testEliminarExito() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(1);
 
-        boolean ok = seguimientoDAO.eliminar(33);
+        boolean resultado = seguimientoDAO.eliminar(33);
 
-        assertTrue(ok);
         verify(preparedStatement).setInt(1, 33);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
+
+        assertTrue(resultado);
     }
 
     @Test
-    void testEliminar_falla() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
+    void testEliminarSinFilasAfectadas() throws Exception {
         when(preparedStatement.executeUpdate()).thenReturn(0);
 
-        boolean ok = seguimientoDAO.eliminar(33);
+        boolean resultado = seguimientoDAO.eliminar(33);
 
-        assertFalse(ok);
+        assertFalse(resultado);
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
     @Test
-    void testEliminar_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+    void testEliminarLanzaSQLException() throws Exception {
+        when(preparedStatement.executeUpdate()).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.eliminar(3));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.eliminar(3));
+
+        assertEquals("Error", ex.getMessage());
+        verify(preparedStatement).executeUpdate();
+        verify(preparedStatement).close();
     }
 
-    //TEST buscarPorId
-
+    // ============================================================
+    //                        BUSCAR POR ID
+    // ============================================================
 
     @Test
-    void testBuscarPorId_falla() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+    void testBuscarPorIdExito() throws Exception {
+        when(resultSet.next()).thenReturn(true);
+        when(resultSet.getInt("id_seguimiento")).thenReturn(1);
+        when(resultSet.getObject("id_informe")).thenReturn(2);
+        when(resultSet.getInt("id_estudiante")).thenReturn(10);
+        when(resultSet.getDate("fec_inicio")).thenReturn(Date.valueOf(LocalDate.now()));
+        when(resultSet.getDate("fec_cierre")).thenReturn(null);
+        when(resultSet.getBoolean("est_activo")).thenReturn(true);
+
+        Seguimiento resultado = seguimientoDAO.buscarPorId(1);
+
+        verify(preparedStatement).setInt(1, 1);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getIdSeguimiento());
+    }
+
+    @Test
+    void testBuscarPorIdNoExiste() throws Exception {
         when(resultSet.next()).thenReturn(false);
 
-        Seguimiento s = seguimientoDAO.buscarPorId(999);
+        Seguimiento resultado = seguimientoDAO.buscarPorId(999);
 
-        assertNull(s);
+        assertNull(resultado);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 
     @Test
-    void testBuscarPorId_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+    void testBuscarPorIdLanzaSQLException() throws Exception {
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.buscarPorId(1));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.buscarPorId(1));
+
+        assertEquals("Error", ex.getMessage());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 
-    //TEST listarTodos
-    @Test
-    void testListarTodos_exito() throws Exception {
-        String sql = "SELECT id_seguimiento, id_informe, id_estudiante, fec_inicio, fec_cierre, est_activo FROM seguimientos";
-        when(connection.createStatement()).thenReturn(statement);
-        when(statement.executeQuery(anyString())).thenReturn(resultSet);
+    // ============================================================
+    //                        LISTAR TODOS
+    // ============================================================
 
+    @Test
+    void testListarTodosExito() throws Exception {
         when(resultSet.next()).thenReturn(true, true, false);
         when(resultSet.getInt("id_seguimiento")).thenReturn(1, 2);
         when(resultSet.getObject("id_informe")).thenReturn(3, null);
@@ -179,23 +250,30 @@ class SeguimientoDAOImplTest {
 
         List<Seguimiento> lista = seguimientoDAO.listarTodos();
 
+        verify(statement).executeQuery(anyString());
+        verify(statement).close();
+
         assertEquals(2, lista.size());
         assertEquals(1, lista.get(0).getIdSeguimiento());
     }
 
     @Test
-    void testListarTodos_lanzaSQLException() throws Exception {
-        when(connection.createStatement()).thenThrow(new SQLException("Error"));
+    void testListarTodosLanzaSQLException() throws Exception {
+        when(statement.executeQuery(anyString())).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.listarTodos());
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.listarTodos());
+
+        assertEquals("Error", ex.getMessage());
+        verify(statement).executeQuery(anyString());
+        verify(statement).close();
     }
 
-    //TEST listarPorEstudiante
-    @Test
-    void testListarPorEstudiante_exito() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+    // ============================================================
+    //                   LISTAR POR ESTUDIANTE
+    // ============================================================
 
+    @Test
+    void testListarPorEstudianteExito() throws Exception {
         when(resultSet.next()).thenReturn(true, false);
         when(resultSet.getInt("id_seguimiento")).thenReturn(5);
         when(resultSet.getObject("id_informe")).thenReturn(4);
@@ -206,23 +284,31 @@ class SeguimientoDAOImplTest {
 
         List<Seguimiento> lista = seguimientoDAO.listarPorEstudiante(10);
 
+        verify(preparedStatement).setInt(1, 10);
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
+
         assertEquals(1, lista.size());
         assertEquals(5, lista.get(0).getIdSeguimiento());
     }
 
     @Test
-    void testListarPorEstudiante_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+    void testListarPorEstudianteLanzaSQLException() throws Exception {
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.listarPorEstudiante(10));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.listarPorEstudiante(10));
+
+        assertEquals("Error", ex.getMessage());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 
-    //TEST tieneSeguimientoActivo
-    @Test
-    void testTieneSeguimientoActivo_true() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+    // ============================================================
+    //                  TIENE SEGUIMIENTO ACTIVO
+    // ============================================================
 
+    @Test
+    void testTieneSeguimientoActivoTrue() throws Exception {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt(1)).thenReturn(1);
 
@@ -230,10 +316,7 @@ class SeguimientoDAOImplTest {
     }
 
     @Test
-    void testTieneSeguimientoActivo_false() throws Exception {
-        when(connection.prepareStatement(anyString())).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
-
+    void testTieneSeguimientoActivoFalse() throws Exception {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getInt(1)).thenReturn(0);
 
@@ -241,9 +324,13 @@ class SeguimientoDAOImplTest {
     }
 
     @Test
-    void testTieneSeguimientoActivo_lanzaSQLException() throws Exception {
-        when(connection.prepareStatement(anyString())).thenThrow(new SQLException("Error"));
+    void testTieneSeguimientoActivoLanzaSQLException() throws Exception {
+        when(preparedStatement.executeQuery()).thenThrow(new SQLException("Error"));
 
-        assertThrows(SQLException.class, () -> seguimientoDAO.tieneSeguimientoActivo(10));
+        SQLException ex = assertThrows(SQLException.class, () -> seguimientoDAO.tieneSeguimientoActivo(10));
+
+        assertEquals("Error", ex.getMessage());
+        verify(preparedStatement).executeQuery();
+        verify(preparedStatement).close();
     }
 }
