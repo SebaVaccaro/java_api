@@ -34,7 +34,7 @@ public class IncidenciaDAOImpl {
             SELECT i.id_instancia, i.titulo, i.fec_hora, i.descripcion, i.est_activo, i.id_funcionario,
                    inc.lugar
             FROM instancias i
-            JOIN incidencia inc ON i.id_instancia = inc.id_instancia
+            JOIN incidencias inc ON i.id_instancia = inc.id_instancia
             WHERE i.id_instancia = ?
         """;
 

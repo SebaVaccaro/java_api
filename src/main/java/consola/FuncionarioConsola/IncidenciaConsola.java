@@ -24,7 +24,7 @@ public class IncidenciaConsola extends UIBase {
         System.out.println("\n===== MENÚ INCIDENCIAS =====");
         System.out.println("1. Crear incidencia");
         System.out.println("2. Listar todas");
-        System.out.println("3. Buscar por instancia");
+        System.out.println("3. Buscar por ID");
         System.out.println("4. Listar por funcionario");
         System.out.println("5. Modificar incidencia");
         System.out.println("6. Eliminar incidencia");
@@ -37,12 +37,12 @@ public class IncidenciaConsola extends UIBase {
     public void manejarOpcion(int opcion) {
         try {
             switch (opcion) {
-                case 1 -> crearIncidencia();       // Crear nueva incidencia
-                case 2 -> listarTodas();           // Listar todas las incidencias
-                case 3 -> buscarPorInstancia();    // Buscar incidencia por instancia
-                case 4 -> listarPorFuncionario();  // Listar incidencias por funcionario
-                case 5 -> modificarIncidencia();   // Modificar una incidencia existente
-                case 6 -> eliminarIncidencia();    // Eliminar incidencia
+                case 1 -> crearIncidencia();
+                case 2 -> listarTodas();
+                case 3 -> buscarPorId();
+                case 4 -> listarPorFuncionario();
+                case 5 -> modificarIncidencia();
+                case 6 -> eliminarIncidencia();
                 case 0 -> mostrarInfo("Volviendo al menú principal...");
                 default -> mostrarError("Opción inválida. Intente nuevamente.");
             }
@@ -91,8 +91,8 @@ public class IncidenciaConsola extends UIBase {
     }
 
     // Buscar una incidencia por su instancia asociada
-    private void buscarPorInstancia() {
-        int idInstancia = leerEntero("ID de la instancia: ");
+    private void buscarPorId() {
+        int idInstancia = leerEntero("ID de la incidencia: ");
         try {
             Incidencia i = proxy.obtenerIncidencia(idInstancia);
             if (i != null) {
