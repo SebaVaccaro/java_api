@@ -86,14 +86,13 @@ public abstract class Instancia {
     // Representación en texto
     @Override
     public String toString() {
-        return "Instancia{" +
-                "idInstancia=" + idInstancia +
-                ", titulo='" + titulo + '\'' +
-                ", fecHora=" + fecHora +
-                ", descripcion='" + descripcion + '\'' +
-                ", estActivo=" + estActivo +
-                ", idFuncionario=" + idFuncionario +
-                '}';
+        return "idInstancia=" + idInstancia + "\n" +
+                "titulo='" + titulo + '\'' + "\n" +
+                "fecHora=" + fecHora + "\n" +
+                "descripcion='" + descripcion + '\'' + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "idFuncionario=" + idFuncionario + "\n";
     }
+
 }
 

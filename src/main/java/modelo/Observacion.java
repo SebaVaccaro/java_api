@@ -97,14 +97,14 @@ public class Observacion {
     // Representación en texto
     @Override
     public String toString() {
-        return "Observacion{" +
-                "idObservacion=" + idObservacion +
-                ", idFuncionario=" + idFuncionario +
-                ", idEstudiante=" + idEstudiante +
-                ", titulo='" + titulo + '\'' +
-                ", contenido='" + contenido + '\'' +
-                ", fecHora=" + fecHora +
-                ", estActivo=" + estActivo +
-                '}';
+        return "idObservacion=" + idObservacion + "\n" +
+                "idFuncionario=" + idFuncionario + "\n" +
+                "idEstudiante=" + idEstudiante + "\n" +
+                "titulo='" + titulo + '\'' + "\n" +
+                "contenido='" + contenido + '\'' + "\n" +
+                "fecHora=" + fecHora + "\n" +
+                "estActivo=" + estActivo + "\n" +
+                "----------";
     }
+
 }

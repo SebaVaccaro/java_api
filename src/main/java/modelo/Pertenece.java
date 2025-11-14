@@ -35,10 +35,10 @@ public class Pertenece {
     // Representación en texto
     @Override
     public String toString() {
-        return "Pertenece{" +
-                "idCarrera=" + idCarrera +
-                ", idItr=" + idItr +
-                '}';
+        return "idCarrera=" + idCarrera + "\n" +
+                "idItr=" + idItr + "\n" +
+                "----------";
     }
+
 }
 

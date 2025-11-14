@@ -62,11 +62,12 @@ public class Carrera {
     // Representación en texto
     @Override
     public String toString() {
-        return "Carrera{" +
-                "idCarrera=" + idCarrera +
-                ", codigo='" + codigo + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", plan='" + plan + '\'' +
-                '}';
+        return  "idCarrera=" + idCarrera + "\n" +
+                "codigo='" + codigo + '\'' + "\n" +
+                "nombre='" + nombre + '\'' + "\n" +
+                "plan='" + plan + '\'' + "\n" +
+                "----------";
     }
+
+
 }
