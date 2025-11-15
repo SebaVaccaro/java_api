@@ -34,6 +34,7 @@ class ValidarUsuarioTest {
     @AfterEach
     void tearDown() {
         sesionStaticMock.close();
+        clearAllCaches();
     }
 
 
