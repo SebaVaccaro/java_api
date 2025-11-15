@@ -32,7 +32,8 @@ public class InstanciaComunServicio {
         }
         if (fecHora == null) {
             throw new IllegalArgumentException("La fecha y hora de la instancia no pueden ser nulas.");
-        }
+        }if (fecHora.isBefore(OffsetDateTime.now()))
+            throw new IllegalArgumentException("La fecha y hora no pueden ser pasadas.");
 
         InstanciaComun instancia = new InstanciaComun(0, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
 
@@ -97,7 +98,8 @@ public class InstanciaComunServicio {
         InstanciaComun existente = comunDao.obtenerInstanciaComun(idInstancia);
         if (existente == null) {
             throw new IllegalArgumentException("No se puede actualizar: la instancia común con ID " + idInstancia + " no existe.");
-        }
+        }if (fecHora.isBefore(OffsetDateTime.now()))
+            throw new IllegalArgumentException("La fecha y hora no pueden ser pasadas.");
 
         InstanciaComun instancia = new InstanciaComun(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, idSeguimiento);
 
