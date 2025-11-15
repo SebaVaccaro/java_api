@@ -56,7 +56,7 @@ public class EstudianteConsola extends UIBase {
             return;
         }
 
-        String cedula = leerTextoNoNull("Cédula: ");
+        String cedula = leerSoloNumeros("Cédula: ");
         String nombre = leerNombreApellido("Nombre: ");
         String apellido = leerNombreApellido("Apellido: ");
         String password = leerTextoNoNull("Password: ");

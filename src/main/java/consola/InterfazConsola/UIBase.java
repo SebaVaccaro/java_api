@@ -104,6 +104,30 @@ public abstract class UIBase implements UIMenu {
         return input;
     }
 
+
+    protected String leerSoloNumeros(String mensaje) {
+        String entrada;
+
+        while (true) {
+            System.out.print(mensaje);
+            entrada = scanner.nextLine().trim();
+
+            if (entrada.isEmpty()) {
+                System.out.println("El valor no puede estar vacío. Intente de nuevo.");
+                continue;
+            }
+
+            // Validación: solo números (uno o más dígitos)
+            if (!entrada.matches("\\d+")) {
+                System.out.println("Ingrese solo números (sin letras ni símbolos).");
+                continue;
+            }
+
+            return entrada;
+        }
+    }
+
+
     protected String leerNombreApellido(String mensaje) {
         String input;
         do {
