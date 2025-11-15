@@ -36,6 +36,8 @@ public class IncidenciaServicio {
             throw new IllegalArgumentException("La descripción no puede estar vacía.");
         if (lugar == null || lugar.trim().isEmpty())
             throw new IllegalArgumentException("El lugar no puede estar vacío.");
+        if (fecHora.isAfter(OffsetDateTime.now()))
+            throw new IllegalArgumentException("La fecha y hora no pueden ser futuras.");
 
         Incidencia incidencia = new Incidencia(0, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
 
