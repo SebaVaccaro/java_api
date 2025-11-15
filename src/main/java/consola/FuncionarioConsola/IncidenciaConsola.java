@@ -132,14 +132,12 @@ public class IncidenciaConsola extends UIBase {
     private void modificarIncidencia() {
         int id = leerEntero("ID de la incidencia a modificar: ");
         String titulo = leerTexto("Nuevo título: ");
-        OffsetDateTime fecha = leerFechaHora("Nueva fecha y hora (YYYY-MM-DDTHH:MM): ");
         String descripcion = leerTexto("Nueva descripción: ");
         boolean activo = leerBoolean("¿Está activa? (true/false): ");
-        int idFuncionario = leerEntero("Nuevo ID del funcionario: ");
         String lugar = leerTexto("Nuevo lugar: ");
 
         try {
-            boolean exito = proxy.actualizarIncidencia(id, titulo, fecha, descripcion, activo, idFuncionario, lugar);
+            boolean exito = proxy.actualizarIncidencia(id, titulo, descripcion, activo, lugar);
             if (exito) {
                 mostrarExito("Incidencia modificada correctamente.");
             } else {

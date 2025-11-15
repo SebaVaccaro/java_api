@@ -87,7 +87,8 @@ public class FuncionarioServicio {
 
         String passEnc = Encriptador.encriptar(password);
         Funcionario f = new Funcionario(idUsuario, ci, nombre, apellido, username, passEnc, correo, idRol, activo);
-
+        f.setUsername(f.getNombre() + "." + f.getApellido());
+        f.setCorreo(f.getUsername() + "@utec.edu.uy");
         boolean exito = false;
         try {
             conn.setAutoCommit(false);

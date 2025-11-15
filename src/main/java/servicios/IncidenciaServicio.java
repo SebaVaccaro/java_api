@@ -36,6 +36,8 @@ public class IncidenciaServicio {
             throw new IllegalArgumentException("La descripción no puede estar vacía.");
         if (lugar == null || lugar.trim().isEmpty())
             throw new IllegalArgumentException("El lugar no puede estar vacío.");
+        if (fecHora.isAfter(OffsetDateTime.now()))
+            throw new IllegalArgumentException("La fecha y hora no pueden ser futuras.");
 
         Incidencia incidencia = new Incidencia(0, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
 
@@ -85,15 +87,15 @@ public class IncidenciaServicio {
     }
 
     // Actualizar incidencia (verifica existencia antes de modificar)
-    public boolean actualizarIncidencia(int idInstancia, String titulo, OffsetDateTime fecHora, String descripcion,
-                                        boolean estActivo, int idFuncionario, String lugar) throws SQLException {
+    public boolean actualizarIncidencia(int idInstancia, String titulo, String descripcion,
+                                        boolean estActivo, String lugar) throws SQLException {
 
         Incidencia existente = incidenciaDao.obtenerIncidencia(idInstancia);
         if (existente == null) {
             throw new IllegalArgumentException("No se puede actualizar: la incidencia con ID " + idInstancia + " no existe.");
         }
 
-        Incidencia incidencia = new Incidencia(idInstancia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
+        Incidencia incidencia = new Incidencia(idInstancia, titulo, existente.getFecHora(), descripcion, estActivo, existente.getIdFuncionario(), lugar);
 
         try {
             conn.setAutoCommit(false);

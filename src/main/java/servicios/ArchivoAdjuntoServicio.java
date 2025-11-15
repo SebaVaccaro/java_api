@@ -2,6 +2,8 @@ package servicios;
 
 import DAO.ArchivoAdjuntoDAOImpl;
 import modelo.ArchivoAdjunto;
+import modelo.Estudiante;
+import modelo.Funcionario;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -53,6 +55,20 @@ public class ArchivoAdjuntoServicio {
         if (existente == null) {
             throw new IllegalArgumentException("No se encontró archivo para esa ID.");
         }
+        Estudiante est = estudianteServicio.obtenerPorId(archivo.getIdEstudiante());
+        if (est == null) {
+            throw new IllegalArgumentException("El estudiante no existe.");
+        }
+        if(est.isActivo() == false){
+            throw new IllegalArgumentException("El estudiante no esta activo.");
+        }
+        Funcionario fun = funcionarioServicio.obtenerPorId(archivo.getIdUsuario());
+        if (fun == null) {
+            throw new IllegalArgumentException("El funcionario no existe.");
+        }
+        if(fun.isActivo() == false){
+            throw new IllegalArgumentException("El funcionario no esta activo.");
+        }
         return archivoDAO.actualizarArchivoAdjunto(archivo);
     }
 
@@ -69,8 +85,12 @@ public class ArchivoAdjuntoServicio {
 
     // Validar que el estudiante exista
     private void validarEstudianteExiste(int idEstudiante) throws SQLException {
-        if (estudianteServicio.obtenerPorId(idEstudiante) == null) {
+        Estudiante est = estudianteServicio.obtenerPorId(idEstudiante);
+        if (est == null) {
             throw new IllegalArgumentException("El estudiante no existe.");
+        }
+        if(est.isActivo() == false){
+            throw new IllegalArgumentException("El estudiante no esta activo.");
         }
     }
 

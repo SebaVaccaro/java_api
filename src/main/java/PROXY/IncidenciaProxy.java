@@ -64,17 +64,13 @@ public class IncidenciaProxy {
     // Actualizar incidencia (solo propietario)
     public boolean actualizarIncidencia(int idIncidencia,
                                         String titulo,
-                                        OffsetDateTime fecHora,
                                         String descripcion,
                                         boolean estActivo,
-                                        int idFuncionario,
                                         String lugar) throws Exception {
 
-        if (!validarUsuario.esPropietario(idFuncionario) || validarUsuario.esEstudiante()) {
-            throw new SecurityException("Solo el propietario puede actualizar esta incidencia.");
-        }
 
-        return incidenciaServicio.actualizarIncidencia(idIncidencia, titulo, fecHora, descripcion, estActivo, idFuncionario, lugar);
+
+        return incidenciaServicio.actualizarIncidencia(idIncidencia, titulo, descripcion, estActivo, lugar);
     }
 
     // Eliminar incidencia (solo administradores)

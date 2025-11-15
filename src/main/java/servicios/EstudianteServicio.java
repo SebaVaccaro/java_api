@@ -72,6 +72,8 @@ public class EstudianteServicio {
 
     public boolean actualizarEstudiante(Estudiante est) throws SQLException {
         Estudiante existente = estudianteDAO.obtenerEstudiante(est.getIdUsuario());
+        est.setUsername(est.getNombre() + "." +est.getApellido());
+        est.setCorreo(est.getUsername() + "@estudiantes.utec.edu.uy");
         if (existente == null) throw new IllegalArgumentException("No se encontró estudiante para actualizar.");
 
         boolean exito = false;
